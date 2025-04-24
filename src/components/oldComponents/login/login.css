@@ -1,0 +1,21 @@
+.logBut{
+    width: 50%;
+    border: rgb(253, 163, 135) 1px  solid;
+    height: 4vh;
+}
+.inDiv{
+    height:25vh;
+    width: 25%;
+    padding-top: 50px;
+    border-radius: 15%;
+
+}
+.login{
+    margin-top: 15px;
+    color:rgb(102, 161, 142) ;
+    font-size: large;
+    border:rgb(102, 161, 142) 1px solid ;
+}
+a{
+    cursor: pointer;
+}

@@ -1,0 +1,69 @@
+.search {
+    border: rgb(102, 161, 142) 1px dashed;
+    background-color: white;
+    width: 50%;
+    height: 70vh;
+    border-radius: 3%;
+}
+
+.butx {
+    border: none;
+    height: 8%;
+    color: rgb(253, 163, 135);
+    margin-top: 0px;
+    padding-top: 0%;
+}
+
+.butx:hover {
+    color: rgb(102, 161, 142);
+    background-color: white;
+    margin-top: 0px;
+    padding-top: 0%;
+
+}
+
+.date {
+    border: rgb(253, 163, 135) 1px solid;
+    text-align: center;
+    height: 4vh;
+    width: 50%;
+}
+
+.textToSearch {
+    border: rgb(253, 163, 135) 1px solid;
+    text-align: center;
+    height: 4vh;
+    width: 50%;
+}
+
+.saveBut {
+    margin-top: 10px;
+    font-size: large;
+}
+
+.tab {
+    /* align-items: center; */
+    text-align: center;
+    /* padding-left: 25%; */
+    margin-left: 5%;
+    /* border: rgb(253, 163, 135) 2px double; */
+    width: 85%;
+    padding-bottom: 3%;
+}
+th{
+    color: rgb(253, 163, 135);
+    padding: 2%;
+    width: 22%;
+    text-align: left;
+    border-left: rgb(102, 161, 142) 2px double;
+    border-radius: 5%;
+
+}
+td{
+    padding-left: 2%;
+    width: 22%;
+    text-align: left;
+    border-left: rgb(253, 163, 135) 2px double;
+
+
+}

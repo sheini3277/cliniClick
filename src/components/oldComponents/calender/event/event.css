@@ -1,0 +1,35 @@
+.dialogShow{
+    border:rgb(102, 161, 142) 1px dashed;
+    background-color: white;
+    width: 50%;
+    height: 80vh;
+    border-radius: 3%;
+  }
+  .butx{
+    border: none;
+    color: rgb(253, 163, 135);
+    margin-top: 10px;
+  }
+  .butx:hover{
+    border: none;
+    background-color: rgb(253, 163, 135);
+    color: white;
+    margin-top: 10px;
+
+  }
+  .inputEvent{
+    border:rgb(253, 163, 135) 1px  solid;
+    text-align: center;
+    height:4vh;
+    width: 50%;
+  }
+  .inputEvent2{
+    border:rgb(253, 163, 135) 1px  solid;
+    text-align: center;
+    height:10vh;
+    width: 50%;
+  }
+  .saveBut{
+    margin-top: 10px;
+    font-size: large;
+  }

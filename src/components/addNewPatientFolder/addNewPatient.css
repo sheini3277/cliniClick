@@ -1,0 +1,58 @@
+.logBut {
+    width: 42%;
+    border: rgb(172, 36, 84) 2px solid;
+    height: 4vh;
+    margin: 1%;
+}
+
+.inDiv {
+    height:45vh;
+    width: 45%;
+    padding: 0%;
+    border: none;
+    border: black 2px solid;
+    /* box-sizing: border-box; */
+    margin: 1%;
+    display: block;
+}
+
+.login {
+    margin-top: 15px;
+    color: white;
+    font-size: large;
+    background-color: rgb(172, 36, 84);
+    border: none;
+    height: 9%;
+    border-radius: 5%;
+    /* border:rgb(102, 161, 142) 2px solid ; */
+}
+
+.login:hover {
+    background-color: rgba(172, 36, 84, 0.765);
+}
+
+.login:active {
+    border-radius: 10%;
+
+}
+
+.fieldset3 {
+    border-radius: 1%;
+    font-size: large;
+    margin: 0.5%;
+    /* background-color: rgba(0, 0, 0, 0.156); */
+
+}
+
+.imgLogin {
+    background-color: black;
+    height: 100%;
+    /* width: 72%;     */
+}
+
+/* .formLogin {
+    margin-top: 5%;
+    margin-right: 1%;
+    margin-left: 1%;
+
+} */

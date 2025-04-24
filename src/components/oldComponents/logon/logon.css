@@ -1,0 +1,19 @@
+.logBut{
+    width: 50%;
+    border: rgb(253, 163, 135) 2px  solid;
+    height: 4vh;
+    margin-top: 3%;
+}
+.inDiv{
+    height:35vh;
+    width: 25%;
+    padding-top: 50px;
+    border-radius: 15%;
+
+}
+.login{
+    margin-top: 15px;
+    color:rgb(102, 161, 142) ;
+    font-size: large;
+    border:rgb(102, 161, 142) 2px solid ;
+}

@@ -1,0 +1,44 @@
+#inDiv {
+    height: 50vh;
+    width: 30%;
+    padding-top: 50px;
+    border-radius: 15%;
+    font-size: large;
+
+}
+
+.text {
+    border: none;
+    border-bottom: rgb(253, 163, 135) solid 2px;
+    width: 50%;
+    height: 3vh;
+    text-align: center;
+    margin-bottom: 3%;
+    
+}
+
+.texta {
+    border: none;
+    border-bottom: rgb(253, 163, 135) solid 2px;
+    width: 50%;
+    height: max-content;
+    text-align: center;
+    margin-bottom: 3%;
+}
+
+.butt {
+    margin-top: 3%;
+}
+
+.xxx {
+    border: none;
+    height: 8%;
+    color: rgb(253, 163, 135);
+    margin-top: 0px;
+    padding-top: 0%;
+}
+
+.xxx:hover {
+    color: rgb(102, 161, 142);
+    background-color: white;
+}
