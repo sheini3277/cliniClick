@@ -1,0 +1,23 @@
+D:\Shaina Perkal\פרויקט גמר\program\Bl\bin\Debug\net7.0\Bl.deps.json
+D:\Shaina Perkal\פרויקט גמר\program\Bl\bin\Debug\net7.0\Bl.dll
+D:\Shaina Perkal\פרויקט גמר\program\Bl\bin\Debug\net7.0\Bl.pdb
+D:\Shaina Perkal\פרויקט גמר\program\Bl\bin\Debug\net7.0\Dal.dll
+D:\Shaina Perkal\פרויקט גמר\program\Bl\bin\Debug\net7.0\Dal.pdb
+D:\Shaina Perkal\פרויקט גמר\program\Bl\obj\Debug\net7.0\Bl.csproj.AssemblyReference.cache
+D:\Shaina Perkal\פרויקט גמר\program\Bl\obj\Debug\net7.0\Bl.GeneratedMSBuildEditorConfig.editorconfig
+D:\Shaina Perkal\פרויקט גמר\program\Bl\obj\Debug\net7.0\Bl.AssemblyInfoInputs.cache
+D:\Shaina Perkal\פרויקט גמר\program\Bl\obj\Debug\net7.0\Bl.AssemblyInfo.cs
+D:\Shaina Perkal\פרויקט גמר\program\Bl\obj\Debug\net7.0\Bl.csproj.CoreCompileInputs.cache
+D:\Shaina Perkal\פרויקט גמר\program\Bl\obj\Debug\net7.0\Bl.csproj.CopyComplete
+D:\Shaina Perkal\פרויקט גמר\program\Bl\obj\Debug\net7.0\Bl.dll
+D:\Shaina Perkal\פרויקט גמר\program\Bl\obj\Debug\net7.0\refint\Bl.dll
+D:\Shaina Perkal\פרויקט גמר\program\Bl\obj\Debug\net7.0\Bl.pdb
+D:\Shaina Perkal\פרויקט גמר\program\Bl\obj\Debug\net7.0\ref\Bl.dll
+D:\פרויקט גמר\program\Bl\obj\Debug\net7.0\Bl.csproj.AssemblyReference.cache
+D:\פרויקט גמר\program\Bl\obj\Debug\net7.0\Bl.GeneratedMSBuildEditorConfig.editorconfig
+D:\פרויקט גמר\program\Bl\obj\Debug\net7.0\Bl.AssemblyInfoInputs.cache
+D:\פרויקט גמר\program\Bl\obj\Debug\net7.0\Bl.AssemblyInfo.cs
+D:\פרויקט גמר\program\Bl\obj\Debug\net7.0\Bl.csproj.CoreCompileInputs.cache
+D:\פרויקט גמר\program\Bl\obj\Debug\net7.0\Bl.dll
+D:\פרויקט גמר\program\Bl\obj\Debug\net7.0\refint\Bl.dll
+D:\פרויקט גמר\program\Bl\obj\Debug\net7.0\Bl.pdb

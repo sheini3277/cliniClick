@@ -1,0 +1,14 @@
+D:\Shaina Perkal\פרויקט גמר\program\Dal\bin\Debug\net7.0\Dal.deps.json
+D:\Shaina Perkal\פרויקט גמר\program\Dal\bin\Debug\net7.0\Dal.runtimeconfig.json
+D:\Shaina Perkal\פרויקט גמר\program\Dal\bin\Debug\net7.0\Dal.dll
+D:\Shaina Perkal\פרויקט גמר\program\Dal\bin\Debug\net7.0\Dal.pdb
+D:\Shaina Perkal\פרויקט גמר\program\Dal\obj\Debug\net7.0\Dal.csproj.AssemblyReference.cache
+D:\Shaina Perkal\פרויקט גמר\program\Dal\obj\Debug\net7.0\Dal.GeneratedMSBuildEditorConfig.editorconfig
+D:\Shaina Perkal\פרויקט גמר\program\Dal\obj\Debug\net7.0\Dal.AssemblyInfoInputs.cache
+D:\Shaina Perkal\פרויקט גמר\program\Dal\obj\Debug\net7.0\Dal.AssemblyInfo.cs
+D:\Shaina Perkal\פרויקט גמר\program\Dal\obj\Debug\net7.0\Dal.csproj.CoreCompileInputs.cache
+D:\Shaina Perkal\פרויקט גמר\program\Dal\obj\Debug\net7.0\Dal.dll
+D:\Shaina Perkal\פרויקט גמר\program\Dal\obj\Debug\net7.0\refint\Dal.dll
+D:\Shaina Perkal\פרויקט גמר\program\Dal\obj\Debug\net7.0\Dal.pdb
+D:\Shaina Perkal\פרויקט גמר\program\Dal\obj\Debug\net7.0\Dal.genruntimeconfig.cache
+D:\Shaina Perkal\פרויקט גמר\program\Dal\obj\Debug\net7.0\ref\Dal.dll
