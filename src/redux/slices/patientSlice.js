@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getPatientByUserIdThunk } from "./getPatientByUserId";
 import { addPatientThunk } from "./addPatientFetch";
+import { getPatientByIdThunk } from "./getPatientById";
 
 const INITIAL_STATE = {
     patientList: [],
@@ -52,6 +53,17 @@ export const patientSlice = createSlice({
             state.patientList.push(action.payload);
         });
         builder.addCase(addPatientThunk.rejected, (state, action) => {
+            console.log("action: ", action);
+            state.route = "Failed to get data";
+            state.loading = false;
+        });
+        builder.addCase(getPatientByIdThunk.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getPatientByIdThunk.fulfilled, (state, action) => {
+            state.currentPatient = action.payload;
+        });
+        builder.addCase(getPatientByIdThunk.rejected, (state, action) => {
             console.log("action: ", action);
             state.route = "Failed to get data";
             state.loading = false;

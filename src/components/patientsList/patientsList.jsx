@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPatientByUserIdThunk } from "../../redux/slices/getPatientByUserId";
 import { newCurrentpatient } from "../../redux/slices/patientSlice";
 import { useNavigate } from "react-router-dom";
+import "./pationtList.css"
 
 export const PatientsList = () => {
     const patients = useSelector(state => state.patient.patientList);
@@ -29,16 +30,16 @@ export const PatientsList = () => {
     }, [currentPatient])
 
     return <div>
-        <div onClick={() => navigate("/addPatient")}>הוספת מטופל</div>
+        <div className="butaddPationt" onClick={() => navigate("/addPatient")}>הוספת מטופל</div>
+        <div className="patient" >
         {patients.map(p => p != null ?
-            <div className="patient" onClick={() => setCurrentPatient(p)}>
-                <fieldset className="fieldset1">
-                    <legend>{p.firstName} {p.lastName} {p.age}</legend>
-                    <div onClick={() => { showDetailsForPatient(p) }}>הצגת פרטי מטופל</div>
+            <div className="inPationt"  onClick={() => setCurrentPatient(p)}>
+                <fieldset className="fieldsetP">
+                    <legend onClick={() => { showDetailsForPatient(p) }}>{p.firstName} {p.lastName} {p.age}</legend>
                     <div onClick={()=> navigate(`/calender/${p.pationtId}`)}>מעבר לתור הקרוב</div>
                     <div onClick={ ()=> navigate(`/calender/addNewTreatment/${p.pationtId}`)}>יצירת תור חדש</div>
                     <div>דוח סיום טיפול</div>
                     <div>דוח חודשי</div>
-                </fieldset> </div> : null)}
+                </fieldset> </div> : null)}</div>
     </div>
 }

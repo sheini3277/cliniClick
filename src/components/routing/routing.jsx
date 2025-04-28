@@ -7,6 +7,7 @@ import { PatientDetails } from "../patientDetails/patientDetails"
 import { AddNewPatient } from "../addNewPatientFolder/addNewPatient"
 import { Calender } from "../calender/calender"
 import { AddNewTreatment } from "../addNewTreatment/addNewTreatment"
+import { TreatmentReport } from "../treatmentReport/treatmentReport"
 
 export const Routing = () => {
 
@@ -18,6 +19,7 @@ export const Routing = () => {
             <Route path={'/logon'} element={<AddNewUser />} />
             <Route path={'/home'} element={<Home/>} />
             <Route path={'/login'} element={<FindUser />} />
+            <Route path={`/login/:new`} element={<FindUser />} />
             <Route path={'/patientList'} element={<PatientsList />} />
             <Route path={'/patientDetails'} element={<PatientDetails />} />
             <Route path={'/addPatient'} element={<AddNewPatient />} />
@@ -26,10 +28,7 @@ export const Routing = () => {
                 <Route path={'addNewTreatment/:pationtId'} element={<AddNewTreatment />} />
                 <Route path={'addNewTreatment'} element={<AddNewTreatment />} />
             </Route>
-            
-            
-            {/* <Route path={''} element={<Navigate to="/login"/> }/> */}
-
+            <Route path={'/treatmentReport/:treatmentId'} element={<TreatmentReport />} />
         </Routes>
     </>
 }

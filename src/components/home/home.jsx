@@ -43,7 +43,8 @@ export const Home = () => {
         </div>
         {/* <img src="child.gif" alt=""  className="backgraundHome"/> */}
 
-        {openDetails && <div className="accaunt">לחשבון שלי</div>}
+        {openDetails && <><div className="accaunt">לחשבון שלי</div>
+        <div onClick={() => navigate(`/login/${true}`)}>רישום מחדש</div></>}
         <Routing />
         {/* <ShowUsers></ShowUsers> */}
 

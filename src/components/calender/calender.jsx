@@ -177,26 +177,26 @@ export const Calender = () => {
     }
 
     //#endregion
-    return <div onClick={() => {setShowMenu([false, false, false, false, false, false, false])}}>
+    return <div onClick={() => { setShowMenu([false, false, false, false, false, false, false]) }}>
         <Outlet></Outlet>
         {logedJustNow && <div className="wellcome" style={{ position: "absolute", top: 850, left: 1500 }}>שלום!!! <br /> {current.firstName}, בואו נתחיל</div>}
         <div className="theboard">
             <div className="menuButtons">
-            <Button onClick={() => goToAnotherWeek(- 7)} variant="text" color="rgb(172, 36, 84)">לשבוע הקודם</Button><br />
-            <Button onClick={() => goToAnotherWeek(7)} variant="text" color="rgb(172, 36, 84)">לשבוע הבא</Button><br />
-            <Button onClick={() => navigate('/calender/addNewTreatment')} variant="text" color="rgb(172, 36, 84)">טיפול חדש</Button><br />
-            <Button onClick={() => setWeek(0)} variant="text" color="rgb(172, 36, 84)">עבור להיום</Button><br />
-            <Button onClick={() => searchTurns()} variant="text" color="rgb(172, 36, 84)">חיפוש תורים</Button><br />
+                <Button onClick={() => goToAnotherWeek(- 7)} variant="text" className="colorDesign" >לשבוע הקודם</Button><br />
+                <Button onClick={() => goToAnotherWeek(7)} variant="text" className="colorDesign" >לשבוע הבא</Button><br />
+                <Button onClick={() => navigate('/calender/addNewTreatment')} variant="text" className="colorDesign" >טיפול חדש</Button><br />
+                <Button onClick={() => setWeek(0)} variant="text" className="colorDesign" >עבור להיום</Button><br />
+                <Button onClick={() => searchTurns()} variant="text" className="colorDesign" >חיפוש תורים</Button><br />
             </div>
             {dates?.map((e, ind) => {
-                return <div className={dates[ind] === today ? "today" : "day"} onClick={e => {e.preventDefault(rightClick); dispatch(changeDateForTreatment(dates[ind]))}} onContextMenu={(e) => { openDailyMenu(ind, e); }}>
-
+                return <div className={dates[ind] === today ? "today" : "day"} onClick={e => { e.preventDefault(rightClick); dispatch(changeDateForTreatment(dates[ind])) }}
+                    onContextMenu={(e) => { openDailyMenu(ind, e); }}>
                     <div>{showDateName[ind]} {e}</div>
                     {treatments && treatments.length > 0 && treatments.map((tt) => {
                         return new Date(tt?.treatmentDate).toLocaleDateString() == dates[ind] ? <><div className="myEvent">
-                            <button className="myEvent" onClick={() => { optionEvent(tt) }}>{tt.escort} - {tt.pationtId} : {tt.treatmentDate} : {tt.nextMeetingPlanning}</button>
-                            {dates[ind] <= today  && <Button>סיכום טיפול</Button>}
-                            </div>
+                            <div className="myEvent" onClick={() => { optionEvent(tt) }}>{tt.escort} - {tt.pationtId} : {tt.treatmentDate} : {tt.nextMeetingPlanning}</div>
+                            {dates[ind] <= today && <Button onClick={() => navigate(`/treatmentReport/${tt.treatmentId}`)} className="colorDesign" >סיכום טיפול</Button>}
+                        </div>
                         </> : null
 
                     })}
@@ -207,5 +207,5 @@ export const Calender = () => {
                 </div>
             })}
         </div>
-</div>
+    </div>
 }

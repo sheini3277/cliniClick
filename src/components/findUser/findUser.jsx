@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import "./findUser.css"
 import { findUserByIdThunk } from "../../redux/slices/findUserByIdThunk";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 export const FindUser = () => {
     const dispatch = useDispatch();
     const [currentUser, setCurrentUser] = useState({
@@ -20,7 +20,7 @@ export const FindUser = () => {
     const cuser = useSelector(state => state.user.currentUser)
     const [big, setBig] = useState(false)
     const [not, setNot] = useState(false)
-
+const param = useParams()
     useEffect(() => {
         refDialog.current.showModal();
 
@@ -32,7 +32,7 @@ export const FindUser = () => {
 
     }
     useEffect(() => {
-        if (cuser?.userId != "") {
+        if (cuser?.userId != "" && !param.new) {
             if (currentUser.password == cuser.password) {
                 navigate(`../`)
             }

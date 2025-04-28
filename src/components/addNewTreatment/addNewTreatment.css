@@ -1,10 +1,11 @@
-.logBut{
+.logBut {
     width: 58%;
-    border: rgb(172, 36, 84) 2px  solid;
+    border: rgb(172, 36, 84) 2px solid;
     height: 4vh;
     margin: 1%;
 }
-.inDiv3 {
+
+.inDivv {
     height: 45vh;
     width: 22%;
     display: flex;
@@ -14,11 +15,12 @@
     padding-right: 10%;
     padding-top: 13px;
 }
-.login{
+
+.login {
     margin-top: 5px;
-    color:white ;
+    color: white;
     font-size: large;
-    background-color:rgb(172, 36, 84) ;
+    background-color: rgb(172, 36, 84);
     border: none;
     height: 8%;
     border-radius: 5%;
@@ -26,49 +28,55 @@
     margin-right: 12%;
     /* border:rgb(102, 161, 142) 2px solid ; */
 }
-.login1{
+
+.login2 {
     margin-top: 5px;
-    color:white ;
+    /* color: white; */
     font-size: large;
-    background-color:rgb(172, 36, 84) ;
+    color: rgb(172, 36, 84);
     border: none;
     height: 8%;
     border-radius: 5%;
     /* border:rgb(102, 161, 142) 2px solid ; */
 }
-.login:hover{
-    background-color:rgba(172, 36, 84, 0.765) ;
+
+.login2:hover {
+    background-color: rgb(172, 36, 84);
 }
-.login:active{
+
+.login2:active {
     border-radius: 10%;
- 
+    background-color: rgba(172, 36, 84, 0.765);
 }
-.fieldset2{
+
+.fieldset2 {
     border-radius: 1%;
     font-size: large;
     /* background-color: rgba(0, 0, 0, 0.156); */
     width: 100%;
 
 }
-.imgLogin{
+
+.imgLogin {
     background-color: black;
     height: 100%;
-/* width: 72%;     */
+    /* width: 72%;     */
 }
 
-.outlined-basic{
-   margin-top: 4px;
+.outlined-basic {
+    margin-top: 4px;
 
 }
-.butx{
+
+.butx {
     font-size: large;
-    color:rgb(172, 36, 84) ;
+    color: rgb(172, 36, 84);
     width: 10%;
     margin-right: 50%;
 
 }
-.butx:hover{
+
+.butx:hover {
     font-size: large;
     color: black;
 }
-

@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchTreatmentThunk } from "./getTreatmentFetch";
 import { addTreatmentFetch } from "./addTreatmentFetch";
+import { updateTreatmentThunk } from "./updateTreatmentFetch";
+import { getOneTreatmentThunk } from "./getOneTreatmentFetch";
 
 const INITIAL_STATE = {
     treatmentList: [],
@@ -20,7 +22,6 @@ const INITIAL_STATE = {
     }
 
 }
-
 export const treatmentSlice = createSlice({
     name: 'treatment',
     initialState: INITIAL_STATE,
@@ -52,10 +53,34 @@ export const treatmentSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(addTreatmentFetch.fulfilled, (state, action) => {
-            debugger
             state.treatmentList.push(action.payload);
+            state.loading = false;
         });
         builder.addCase(addTreatmentFetch.rejected, (state, action) => {
+            console.log("action: ", action);
+            state.route = "Failed to get data";
+            state.loading = false;
+        });
+        builder.addCase(updateTreatmentThunk.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(updateTreatmentThunk.fulfilled, (state, action) => {
+            state.treatmentList.push(action.payload);
+            state.loading = false;
+        });
+        builder.addCase(updateTreatmentThunk.rejected, (state, action) => {
+            console.log("action: ", action);
+            state.route = "Failed to get data";
+            state.loading = false;
+        });
+        builder.addCase(getOneTreatmentThunk.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getOneTreatmentThunk.fulfilled, (state, action) => {
+            state.curretntTreatment = action.payload;
+            state.loading = false;
+        });
+        builder.addCase(getOneTreatmentThunk.rejected, (state, action) => {
             console.log("action: ", action);
             state.route = "Failed to get data";
             state.loading = false;

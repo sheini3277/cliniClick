@@ -120,6 +120,7 @@ button:hover {
   color: rgb(172, 36, 84);
   margin-top: 0px;
   padding-top: 0%;
+  cursor: pointer;
 }
 
 .butx:hover {
