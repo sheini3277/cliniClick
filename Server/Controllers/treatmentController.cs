@@ -27,7 +27,7 @@ namespace Server.Controllers
         {
             treatments.Create(treatment);
         }
-        [HttpPut("UpdateTreatment")]
+        [HttpPut("UpdateTreatment/{TreatmentId}")]
         public void Update(BlTreatment treatment)
         {
             treatments.Update(treatment);
@@ -42,7 +42,11 @@ namespace Server.Controllers
         {
             return treatments.GetByUserId(userId);
         }
-
+        [HttpGet("getByTreatmentId/{treatmentId}")]
+        public BlTreatment Get(int treatmentId)
+        {
+            return treatments.GetByTreatmentId(treatmentId);
+        }
 
     }
 }

@@ -15,6 +15,7 @@ namespace Bl.Api
         List<BlPationt> GetByUserId(string userId);
         void Update(BlPationt pationt);
         void Delete(string pationtId);
+        BlPationt GetByPatientId(string patientId);
 
 
 

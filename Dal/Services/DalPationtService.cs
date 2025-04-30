@@ -60,6 +60,7 @@ namespace Dal.Services
                 p.Diagnosis = pationt.Diagnosis;
                 p.CirculationMedium = pationt.CirculationMedium;
                 p.StartTreatmentDate = pationt.StartTreatmentDate;
+                p.TherapistId = pationt.TherapistId;
             }
             dbcontext.SaveChanges();
         }

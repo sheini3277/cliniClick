@@ -14,6 +14,7 @@ namespace Bl.Api
         void Update(BlTreatment treatment);
         void Delete(int id);
         List<BlTreatment> GetByUserId(string userId);
+        BlTreatment GetByTreatmentId(int id);
 
     }
 }

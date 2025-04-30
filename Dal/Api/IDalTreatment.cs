@@ -14,6 +14,7 @@ namespace Bl.Api
         void Create(Treatment treatment);
         void Update(Treatment treatment);
         void Delete(int treatmentId);
+
     }
 
 }

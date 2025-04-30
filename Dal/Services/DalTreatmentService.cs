@@ -35,6 +35,7 @@ namespace Dal.Services
 
             if (t != null)
             {
+                t.TreatmentId= treatment.TreatmentId;
                 t.TreatmentDate = treatment.TreatmentDate;
                 t.PationtId = treatment.PationtId;
                 t.IsComing = treatment.IsComing;

@@ -13,5 +13,6 @@ namespace Bl.Api
         void Create(BlAim aim);
         void Update(BlAim aim);
         void Delete(string aimId);
+        List<BlAim> GetByPatientId(string patientId);
     }
 }

@@ -50,6 +50,13 @@ namespace Bl.Services
         {
             dal.Pationt.Delete(pationtId);
         }
+
+        public BlPationt GetByPatientId(string patientId)
+        {
+            var pList = dal.Pationt.Get();
+            BlPationt patient = toBl(pList.Find(p => p.PationtId == patientId));
+            return patient;
+        }
         public BlPationt toBl(Pationt pationt)
         {
             if (pationt != null)

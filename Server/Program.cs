@@ -20,7 +20,7 @@ namespace Server
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddCors(c => c.AddPolicy("AllowAll",
-                        option => option.AllowAnyOrigin().AllowAnyHeader().AllowAnyHeader()));
+                        option => option.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
             var app = builder.Build();
 
 

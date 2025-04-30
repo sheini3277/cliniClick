@@ -55,6 +55,7 @@ namespace Dal.Services
         {
             return dbcontext.Users.ToList().Find(x => x.UserId == userId);
         }
-      
+    
+
     }
 }

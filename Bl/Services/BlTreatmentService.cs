@@ -44,17 +44,26 @@ namespace Bl.Services
             list.Add(t.UserId == userId ? toBl(t) : null));
             return list;
         }
+        public BlTreatment GetByTreatmentId(int treatmentId)
+        {
+            var tList = dal.Treatment.Get();
+            BlTreatment treatment = toBl(tList.Find(t => t.TreatmentId == treatmentId)); 
+            return treatment;
+        }
 
         public void Update(BlTreatment treatment)
         {
+            
             dal.Treatment.Update(toDal(treatment));
         }
         public Treatment toDal(BlTreatment blt)
+
         {
             if (blt != null)
             {
                 Treatment treatment = new Treatment()
                 {
+                    TreatmentId = blt.TreatmentId!=null? blt.TreatmentId:0,
                     TreatmentDate = new DateTime( blt.TreatmentDate.Year, blt.TreatmentDate.Month, blt.TreatmentDate.Day, blt.TreatmentTime.Hour, blt.TreatmentTime.Minute, DateTime.Now.Second),
                     PationtId = blt.PationtId,
                     IsComing = blt.IsComing,

@@ -31,5 +31,7 @@ namespace Bl.Models
         public string Diagnosis { get; set; }
 
         public string CirculationMedium { get; set; }
+
+        //public virtual ICollection<Aim> Aims { get; set; }
     }
 }

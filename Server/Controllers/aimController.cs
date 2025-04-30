@@ -1,5 +1,6 @@
 ﻿using Bl.Api;
 using Bl.Models;
+using Dal.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers
@@ -35,6 +36,11 @@ namespace Server.Controllers
         public void Delete(string aimId)
         {
             aims.Delete(aimId);
+        }
+        [HttpGet("getByPatientId/{patientId}")]
+        public List<BlAim> GetByPatientId(string patientId)
+        {
+            return aims.GetByPatientId(patientId);
         }
 
 
