@@ -5,6 +5,7 @@ import { getPatientByUserIdThunk } from "../../redux/slices/getPatientByUserId";
 import { newCurrentpatient } from "../../redux/slices/patientSlice";
 import { useNavigate } from "react-router-dom";
 import "./pationtList.css"
+import { Typography } from "@mui/material";
 
 export const PatientsList = () => {
     const patients = useSelector(state => state.patient.patientList);
@@ -30,16 +31,22 @@ export const PatientsList = () => {
     }, [currentPatient])
 
     return <div>
-        <div className="butaddPationt" onClick={() => navigate("/addPatient")}>הוספת מטופל</div>
+        {current?.userId != "" && <div className="butaddPationt" onClick={() => navigate("/addPatient")}>הוספת מטופל</div>}
+        {current?.userId === "" && navigate('../')}
         <div className="patient" >
-        {patients.map(p => p != null ?
-            <div className="inPationt"  onClick={() => setCurrentPatient(p)}>
-                <fieldset className="fieldsetP">
-                    <legend onClick={() => { showDetailsForPatient(p) }}>{p.firstName} {p.lastName} {p.age}</legend>
-                    <div onClick={()=> navigate(`/calender/${p.pationtId}`)}>מעבר לתור הקרוב</div>
-                    <div onClick={ ()=> navigate(`/calender/addNewTreatment/${p.pationtId}`)}>יצירת תור חדש</div>
-                    <div>דוח סיום טיפול</div>
-                    <div>דוח חודשי</div>
+            {patients.map(p => p != null ?
+                <div className="inPationt" onClick={() => setCurrentPatient(p)}>
+                    <fieldset className="fieldsetP">
+                        <legend onClick={() => { showDetailsForPatient(p) }}>
+                            <Typography component="legend">
+                                {p.firstName} {p.lastName} {p.age}</Typography></legend>
+                    {/* <div onClick={()=> navigate(`/calender/${p.pationtId}`)}>מעבר לתור הקרוב</div>
+                    <div onClick={ ()=> navigate(`/calender/addNewTreatment/${p.pationtId}`)}>יצירת תור חדש</div> */}
+                    <Typography component="legend" className="colorDesign" onClick={() => navigate(`/calender/${p.pationtId}`)}>מעבר לתור הקרוב</Typography>
+                    <Typography component="legend" className="colorDesign" onClick={() => navigate(`/calender/addNewTreatment/${p.pationtId}`)}>יצירת תור חדש</Typography>
+                    <Typography component="legend" className="colorDesign" onClick={() => navigate(`/aimsForPatient/${p.pationtId}`)}>בניית / עדכון מטרות אישיות</Typography>
+                    <Typography component="legend" className="colorDesign" onClick={() => alert("pdf is not define")}>דוח סיום טיפול</Typography>
+                    <Typography component="legend" className="colorDesign" onClick={() => alert("pdf is not define")}>דוח חודשי</Typography>
                 </fieldset> </div> : null)}</div>
-    </div>
+    </div >
 }

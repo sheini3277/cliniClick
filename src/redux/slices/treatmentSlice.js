@@ -53,6 +53,7 @@ export const treatmentSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(addTreatmentFetch.fulfilled, (state, action) => {
+            debugger   
             state.treatmentList.push(action.payload);
             state.loading = false;
         });

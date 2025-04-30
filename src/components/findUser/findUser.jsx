@@ -32,20 +32,24 @@ const param = useParams()
 
     }
     useEffect(() => {
-        if (cuser?.userId != "" && !param.new) {
+        if (cuser?.userId != "") {
             if (currentUser.password == cuser.password) {
                 navigate(`../`)
             }
-            else
+            else if(!param.new)
                 setNot(true)
         }
     }, [cuser])
+    setInterval(() => {
+        setBig(!big)
+    }, 1000);
 
     return <dialog className="inDiv2" ref={refDialog}>
         {!big &&
-            <img src="go2.JPG" alt="imglogo2" className="imgLogin2" onMouseOver={() => setBig(true)} />}
+            <img src="/go2.JPG" alt="imglogo2" className="imgLogin2"   />}
+            
         {big &&
-            <img src="goBigger.JPG" className="imgLogin2" onMouseLeave={() => setBig(false)} />}
+            <img src="/goBigger.JPG" className="imgLogin2" />}
         <div className="formLogin">                
         <p onClick={()=>navigate(`../`)}>×</p>
 

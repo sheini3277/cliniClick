@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const updateTreatmentThunk = createAsyncThunk(
     'updateTreatmentThunk',
-    async ({ treatment, treatmentId}) => {
+    async ({ treatmentId, treatment }) => {
 
         const res = await fetch(`https://localhost:1990/api/treatment/UpdateTreatment/${treatmentId}`, {
             method: 'PUT',
@@ -13,7 +13,7 @@ export const updateTreatmentThunk = createAsyncThunk(
         })
         if (res.ok) {
             const data = await res.json();
-            return data.treatmentList;
+            return data;
         } else {
             throw new Error('failed to fetch');
         }

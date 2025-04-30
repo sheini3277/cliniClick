@@ -1,6 +1,7 @@
 import './App.css';
 import { Home } from './components/home/home';
 import { PatientsList } from './components/patientsList/patientsList';
+import { Routing } from './components/routing/routing';
 import { ShowUsers } from './components/showUsers';
 
 
@@ -9,8 +10,10 @@ function App() {
   return (
     <div >
 
-      {/* <Routing/> */}
+     
       <Home />
+   {/* <Routing/> */}
+
       {/* <PatientsList />
       <ShowUsers /> */}
     </div>

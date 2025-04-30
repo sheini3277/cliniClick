@@ -16,20 +16,19 @@ export const AddNewTreatment = () => {
         treatmentDate: dateOfTreatment,
         treatmentTime: null,
         pationtId: param.pationtId,
-        isComing: null,
+        isComing: false,
         escort: null,
         cooperation: null,
         nextMeetingPlanning: null,
         bePaid: null,
         userId: theCurrentUser.userId,
-        TreatmentDate: new Date().toDateString()
     });
     const refDialog = useRef()
     const navigate = useNavigate();
 
     const confirm = () => {
         dispatch(addTreatmentFetch(treatment));
-        navigate(`/patientList`)
+        navigate(`/calender`)
     }
 
     useEffect(() => {
@@ -39,7 +38,7 @@ export const AddNewTreatment = () => {
 
     return <dialog className="inDivv" ref={refDialog}>
         <div className="formLogin">
-            <p className="butx" onClick={() => navigate(`/patientList`)}>x</p>
+            <p className="butx" onClick={() => navigate(`/calender`)}>x</p>
             <fieldset className="fieldset2">
                 <legend>פרטי התור</legend>
                 <span>למי התור? (ת''ז)</span><br />
@@ -49,7 +48,7 @@ export const AddNewTreatment = () => {
                 <br /> <span> מתי? (שעה)</span><br />
                 <input className="logBut" type="text" value={treatment?.treatmentTime} placeholder="שעה" onChange={(e) => setTreatment({ ...treatment, treatmentTime: e.target.value })} />
                 <br />
-                {countOfAims.map((c) => {
+                {/* {countOfAims.map((c) => {
                     return <><input type="text" className="logBut1" placeholder="מטרות הטיפול" list="dlm" />
 
                         <datalist id="dlm">
@@ -58,12 +57,12 @@ export const AddNewTreatment = () => {
                             })}
                         </datalist><br /></>
                 })}
-                <Button onClick={() => setCountOfAims([...countOfAims, 1])}>הוספת מטרה</Button>
+                <Button onClick={() => setCountOfAims([...countOfAims, 1])}>הוספת מטרה</Button> */}
             </fieldset>
             <br />
 
             <button className="login" onClick={() => { confirm() }} >הוספה</button>
-            <button className="login2" onClick={() => { navigate('/patientList') }} >ביטול</button>
+            <button className="login2" onClick={() => { navigate('/calender') }} >ביטול</button>
         </div>
     </dialog>
 }

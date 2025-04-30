@@ -4,7 +4,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 export const addTreatmentFetch = createAsyncThunk(
     'addTreatmentFetch',
     async (treatment) => {
-        debugger   
         const response = await fetch("https://localhost:1990/api/treatment/AddTreatment",
             {
                 method: 'POST',
