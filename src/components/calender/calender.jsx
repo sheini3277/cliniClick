@@ -276,7 +276,7 @@ export const Calender = () => {
 
     //#region  functions
     // ביטול דיפולט לחיצה ימנית
-    const rightClick = (event) => {
+    const rightClick = (event) => { 
         event.preventDefault();
         setLogOut(false);
     };

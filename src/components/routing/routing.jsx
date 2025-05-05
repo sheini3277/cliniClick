@@ -1,6 +1,6 @@
 import { AddNewUser } from "../addNewUserFolder/addNewUser"
 import { Navigate, Route, Routes } from "react-router-dom"
-import { FindUser } from "../findUser/findUser"
+import {  FindUser, Login, LoginModal, LoginPopup } from "../login/login"
 import { Home } from "../home/home"
 import { PatientsList } from "../patientsList/patientsList"
 import { PatientDetails } from "../patientDetails/patientDetails"
@@ -21,8 +21,8 @@ export const Routing = () => {
             <Route path={'/logon'} element={<AddNewUser />} />
             <Route path={'/aimsForPatient/:patientId'} element={<AddAims />} />
             <Route path={'/home'} element={<Home/>} />
-            <Route path={'/login'} element={<FindUser />} />
-            <Route path={`/login/:new`} element={<FindUser />} />
+            <Route path={'/login'} element={<Login />} />
+            <Route path={`/login/:new`} element={<Login />} />
             <Route path={'/patientList'} element={<PatientsList />} />
             <Route path={'/patientDetails'} element={<PatientDetails />} />
             <Route path={'/addPatient'} element={<AddNewPatient />} />

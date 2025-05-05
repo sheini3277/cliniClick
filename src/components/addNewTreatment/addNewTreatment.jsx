@@ -41,7 +41,7 @@ export const AddNewTreatment = () => {
             <p className="butx" onClick={() => navigate(`/calender`)}>x</p>
             <fieldset className="fieldset2">
                 <legend>פרטי התור</legend>
-                <span>למי התור? (ת''ז)</span><br />
+                <span>למי התור? (ת''ז)</span><br /> 
                 <input className="logBut" type="text" value={param.pationtId} placeholder="תעודת זהות מטופל" onChange={(e) => setTreatment({ ...treatment, pationtId: e.target.value })} />
                 <br /><span>מתי? (תאריך)</span><br />
                 <input className="logBut" type="date" value={treatment?.treatmentDate} placeholder="תאריך" onChange={(e) => setTreatment({ ...treatment, treatmentDate: e.target.value })} />

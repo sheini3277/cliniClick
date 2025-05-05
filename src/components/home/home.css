@@ -33,7 +33,17 @@ body {
 
 /* Header Styles */
 .main-header {
-    background-color: var(--white);
+    background-color: var(--white);/* 
+     * CSS file for the Home component's styling
+     * Defines global styles, color variables, and layout for the home page
+     * 
+     * Key features:
+     * - RTL (right-to-left) layout
+     * - Responsive header design
+     * - Custom color palette using CSS variables
+     * - Consistent typography and spacing
+     */
+    
     box-shadow: var(--shadow);
     position: sticky;
     top: 0;

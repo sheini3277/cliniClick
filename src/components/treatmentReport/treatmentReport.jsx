@@ -15,6 +15,7 @@ import { Directions, Star, TextFormatSharp } from "@mui/icons-material";
 import { getPatientByIdThunk } from "../../redux/slices/getPatientById";
 import { updateTreatmentThunk } from "../../redux/slices/updateTreatmentFetch";
 import { getAimsOfPatientsThunk } from "../../redux/slices/getAimsForPatients";
+import { addActivityFetch } from "../../redux/slices/addActivityFetch";
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -40,6 +41,13 @@ export const TreatmentReport = () => {
         bePaid: false,
         userId: theTreatment.userId,
     });
+    const [activity, setActivity] = useState({
+        activityId: null,
+        activityName: null,
+        activityDescription: null,
+        activityAim: null
+    })
+    const [activityList, setActivityList] = useState([]);
     const confirm = () => {
         dispatch(updateTreatmentThunk({ treatmentId: theTreatment.treatmentId, treatment: treatment }))
         navigate('../')
@@ -60,6 +68,16 @@ export const TreatmentReport = () => {
     useEffect(() => {
         dispatch(getPatientByIdThunk(theTreatment.pationtId))
     }, [theTreatment.pationtId])
+    const addActivity = () => {
+        dispatch(addActivityFetch(activity))
+        setActivityList([...activityList, activity])
+        setActivity({
+            activityId: null,
+            activityName: null,
+            activityDescription: null,
+            activityAim: null
+        })
+    }
     return <div>
         <fieldset className="fieldset3">
             <legend ><b>סיכום הטיפול</b></legend>
@@ -80,11 +98,12 @@ export const TreatmentReport = () => {
                 onChange={() => setTreatment({ ...treatment, bePaid: !treatment.bePaid })} />
             {treatment.cooperation}
             <br />
-            <Typography component="legend" className="colorDesign"><b> </b></Typography>
+            <Typography component="legend" className="colorDesign"><b>פעילות לקידום מטרות</b></Typography>
             {aimsForExam.map((a) => {
-                return a != null && <input type="text" placeholder={a.aimName}></input>
-            })}
+                return a != null && <input type="text" placeholder={a.aimName} onChange={null}></input>})}
             <br />
+
+
             {aimForActivity}
             {treatment.bePaid && <>!!!</>}
             <Button className="colorDesign" onClick={() => { confirm() }} variant="text">אישור</Button>

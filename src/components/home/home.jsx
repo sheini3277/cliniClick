@@ -418,10 +418,10 @@ export const Home = () => {
                             <h2 className="section-title">הכלים שלנו לניהול הקליניקה</h2>
                             <div className="features-grid">
                                 {[
-                                    { title: "ניהול יומן פגישות", icon: "calendar-icon.svg", description: "תזמון וניהול קל של כל הפגישות שלך" },
-                                    { title: "מעקב אחר מטופלים", icon: "patients-icon.svg", description: "שמירה על כל המידע הרפואי במקום אחד" },
-                                    { title: "תזכורות אוטומטיות", icon: "reminder-icon.svg", description: "שליחת תזכורות למטופלים לפני הפגישות" },
-                                    { title: "דוחות וסטטיסטיקות", icon: "reports-icon.svg", description: "קבלת תובנות על הפעילות בקליניקה" }
+                                    { title: "ניהול יומן פגישות", avatar: "yoman.png", description: "תזמון וניהול קל של כל הפגישות שלך" },
+                                    { title: "מעקב אחר מטופלים", icon: "maakav.jpg", description: "שמירה על כל המידע הרפואי במקום אחד" },
+                                    { title: "תזכורות אוטומטיות", icon: "tizcoret.jpg", description: "שליחת תזכורות למטופלים לפני הפגישות" },
+                                    { title: "דוחות וסטטיסטיקות", icon: "doch.jpg", description: "קבלת תובנות על הפעילות בקליניקה" }
                                 ].map((feature, index) => (
                                     <motion.div 
                                         key={index}
@@ -432,7 +432,7 @@ export const Home = () => {
                                         whileHover={{ y: -5, boxShadow: "0 10px 20px rgba(0,0,0,0.1)" }}
                                     >
                                         <div className="feature-icon">
-                                            <img src={`/images/${feature.icon}`} alt={feature.title} />
+                                            <img src={`/${feature.avatar}`} alt={feature.title} />
                                         </div>
                                         <h3 className="feature-title">{feature.title}</h3>
                                         <p className="feature-description">{feature.description}</p>
@@ -445,9 +445,9 @@ export const Home = () => {
                             <h2 className="section-title">מה אומרים עלינו</h2>
                             <div className="testimonials-slider">
                                 {[
-                                    { name: "ד״ר רונית כהן", role: "פיזיותרפיסטית", text: "המערכת שינתה לחלוטין את אופן ניהול הקליניקה שלי. אני חוסכת זמן רב וההתנהלות היומיומית הפכה לפשוטה הרבה יותר.", avatar: "userIcon.jpg" },
-                                    { name: "יוסי לוי", role: "קלינאי תקשורת", text: "הממשק ידידותי למשתמש והתמיכה הטכנית מעולה. ממליץ בחום לכל מטפל שרוצה לייעל את העבודה שלו.", avatar: "avatar2.jpg" },
-                                    { name: "מיכל אברהם", role: "מרפאה בעיסוק", text: "המעקב אחר המטופלים הפך לפשוט יותר, והיכולת לראות את ההיסטוריה הטיפולית בקלות עוזרת לי לתת טיפול טוב יותר.", avatar: "avatar3.jpg" }
+                                    { name: "ד״ר יוני כהן", role: "פיזיותרפיסט", text: "המערכת שינתה לחלוטין את אופן ניהול הקליניקה שלי. אני חוסך זמן רב וההתנהלות היומיומית הפכה לפשוטה הרבה יותר.", avatar: "men1.jpg" ,},
+                                    { name: "יוסי לוי", role: "קלינאי תקשורת", text: "הממשק ידידותי למשתמש והתמיכה הטכנית מעולה. ממליץ בחום לכל מטפל שרוצה לייעל את העבודה שלו.", avatar: "men2.jpg" },
+                                    { name: "מיכל אברהם", role: "מרפאה בעיסוק", text: "המעקב אחר המטופלים הפך לפשוט יותר, והיכולת לראות את ההיסטוריה הטיפולית בקלות עוזרת לי לתת טיפול טוב יותר.", avatar: "maakav.jpg" }
                                 ].map((testimonial, index) => (
                                     <motion.div 
                                         key={index}
@@ -460,7 +460,7 @@ export const Home = () => {
                                             <p className="testimonial-text">"{testimonial.text}"</p>
                                             <div className="testimonial-author">
                                                 <div className="testimonial-avatar">
-                                                    <img src={`/images/${testimonial.avatar}`} alt={testimonial.name} />
+                                                    <img src={`/${testimonial.avatar}`} alt={testimonial.name} />
                                                 </div>
                                                 <div className="testimonial-info">
                                                     <h4>{testimonial.name}</h4>
