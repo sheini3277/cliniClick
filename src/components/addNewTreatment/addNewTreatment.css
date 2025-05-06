@@ -1,4 +1,4 @@
-.logBut {
+/* .logBut {
     width: 58%;
     border: rgb(172, 36, 84) 2px solid;
     height: 4vh;
@@ -11,7 +11,6 @@
     display: flex;
     border: none;
     border: black 2px solid;
-    /* box-sizing: border-box; */
     padding-right: 10%;
     padding-top: 13px;
 }
@@ -26,18 +25,15 @@
     border-radius: 5%;
     margin-left: 20%;
     margin-right: 12%;
-    /* border:rgb(102, 161, 142) 2px solid ; */
 }
 
 .login2 {
     margin-top: 5px;
-    /* color: white; */
     font-size: large;
     color: rgb(172, 36, 84);
     border: none;
     height: 8%;
     border-radius: 5%;
-    /* border:rgb(102, 161, 142) 2px solid ; */
 }
 
 .login2:hover {
@@ -52,7 +48,6 @@
 .fieldset2 {
     border-radius: 1%;
     font-size: large;
-    /* background-color: rgba(0, 0, 0, 0.156); */
     width: 100%;
 
 }
@@ -60,7 +55,6 @@
 .imgLogin {
     background-color: black;
     height: 100%;
-    /* width: 72%;     */
 }
 
 .outlined-basic {
@@ -79,4 +73,291 @@
 .butx:hover {
     font-size: large;
     color: black;
+} */
+
+/* עיצוב כללי */
+/* עיצוב כללי */
+/* עיצוב כללי */
+/* עיצוב כללי */
+/* עיצוב כללי */
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-color: rgb(172, 36, 84); /* הצבע המקורי של האתר - ורוד-אדום */
+  --primary-light: rgba(172, 36, 84, 0.1);
+  --secondary-color: #e83e8c;
+  --text-color: #212529;
+  --light-gray: #f8f9fa;
+  --border-color: #dee2e6;
+  --success-color: #28a745;
+  --error-color: #dc3545;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Rubik', Arial, sans-serif;
+}
+
+/* עיצוב הדיאלוג */
+.appointment-dialog {
+  width: 90%;
+  max-width: 500px;
+  padding: 0;
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  background-color: white;
+  position: fixed;
+  top: 20%;
+  right: 38%;
+}
+
+.appointment-dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+}
+
+/* מיכל הטופס */
+.appointment-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  direction: rtl;
+}
+
+/* כותרת הטופס */
+.appointment-header {
+  background: var(--primary-color); /* הצבע המקורי של האתר */
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.appointment-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: var(--transition);
+}
+
+.close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* גוף הטופס */
+.appointment-body {
+  padding: 24px;
+  flex-grow: 1;
+  background-color: white;
+}
+
+/* קבוצות שדות */
+.form-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+}
+
+.icon-react {
+  margin-left: 8px;
+  font-size: 1.2rem;
+  color: var(--primary-color); /* הצבע המקורי של האתר */
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: var(--light-gray);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary-color); /* הצבע המקורי של האתר */
+  box-shadow: 0 0 0 3px rgba(172, 36, 84, 0.2); /* צל בצבע המקורי של האתר */
+  background-color: white;
+}
+
+/* סגנון שדה עם שגיאה */
+.input-error {
+  border-color: var(--error-color) !important;
+}
+
+.input-error:focus {
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2) !important;
+}
+
+/* הודעת שגיאה */
+.error-message {
+  color: var(--error-color);
+  font-size: 0.85rem;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* כפתורי פעולה */
+.appointment-footer {
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--light-gray);
+  border-top: 1px solid var(--border-color);
+}
+
+.cancel-btn, .save-btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-icon {
+  font-size: 1.1rem;
+}
+
+.cancel-btn {
+  background-color: white;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+.save-btn {
+  background-color: var(--primary-color); /* הצבע המקורי של האתר */
+  color: white;
+  border: none;
+  box-shadow: 0 4px 6px rgba(172, 36, 84, 0.2); /* צל בצבע המקורי של האתר */
+}
+
+.cancel-btn:hover {
+  background-color: #f1f1f1;
+}
+
+.save-btn:hover {
+  background-color: rgb(142, 30, 70); /* גוון כהה יותר של הצבע המקורי */
+}
+
+/* עיצוב רספונסיבי */
+@media (max-width: 576px) {
+  .appointment-dialog {
+    width: 95%;
+    max-width: none;
+    margin: 10px;
+  }
+  
+  .appointment-header {
+    padding: 16px;
+  }
+  
+  .appointment-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .appointment-body {
+    padding: 16px;
+  }
+  
+  .form-group input {
+    padding: 10px 14px;
+  }
+  
+  .appointment-footer {
+    padding: 12px 16px;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .cancel-btn, .save-btn {
+    width: 100%;
+    padding: 10px;
+  }
+  
+  .save-btn {
+    order: -1;
+  }
+}
+
+/* עיצוב מיוחד לשדות תאריך ושעה */
+input[type="date"], input[type="time"] {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  background-color: transparent;
+  cursor: pointer;
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+}
+
+/* אפקט מעבר עכבר על כפתורים - מינימלי */
+.cancel-btn:hover, .save-btn:hover {
+  transform: translateY(-2px);
+  transition: transform 0.3s ease;
+}
+
+.cancel-btn:active, .save-btn:active {
+  transform: translateY(0);
+}
+
+/* אפקט מעבר לדיאלוג - מינימלי */
+.appointment-dialog[open] {
+  animation: scale-up 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes scale-up {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

@@ -219,14 +219,14 @@ import { Routing } from "../routing/routing";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { changeDateForTreatment } from "../../redux/slices/treatmentSlice";
-import { 
-    FaCalendarAlt, 
-    FaChevronLeft, 
-    FaChevronRight, 
-    FaPlus, 
-    FaSearch, 
-    FaCalendarDay, 
-    FaCalendarWeek, 
+import {
+    FaCalendarAlt,
+    FaChevronLeft,
+    FaChevronRight,
+    FaPlus,
+    FaSearch,
+    FaCalendarDay,
+    FaCalendarWeek,
     FaCalendarCheck,
     FaTimes,
     FaUserClock,
@@ -251,7 +251,7 @@ export const Calender = () => {
     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
     const [monthDays, setMonthDays] = useState([]);
-    
+
     const logedUser = useSelector(state => state.user.currentUser);
     const date = new Date();
     const today = new Date().toLocaleDateString();
@@ -268,7 +268,7 @@ export const Calender = () => {
     const [y, setY] = useState();
     const [logedJustNow, setLogedJustNow] = useState(false);
     const [logOut, setLogOut] = useState(false);
-    const treatments = useSelector(state => state.treatment.treatmentList);
+    const treatments = useSelector(state => state.treatment.treatmentList) || [];
     const current = useSelector(state => state.user.currentUser);
     const navigate = useNavigate();
     const param = useParams();
@@ -276,7 +276,7 @@ export const Calender = () => {
 
     //#region  functions
     // ביטול דיפולט לחיצה ימנית
-    const rightClick = (event) => { 
+    const rightClick = (event) => {
         event.preventDefault();
         setLogOut(false);
     };
@@ -305,7 +305,7 @@ export const Calender = () => {
 
     // בכניסת משתמש רשום
     useEffect(() => {
-        if (current?.userId !== "")
+        if (current.userId !== "")
             dispatch((fetchTreatmentThunk(current.userId)));
         if (logedUser.firstName !== "") {
             setLogedJustNow(true);
@@ -327,20 +327,20 @@ export const Calender = () => {
     const generateMonthDays = (month, year) => {
         const firstDay = new Date(year, month, 1).getDay();
         const daysInMonth = new Date(year, month + 1, 0).getDate();
-        
+
         let days = [];
-        
+
         // הוספת ימים ריקים בתחילת החודש
         for (let i = 0; i < firstDay; i++) {
             days.push(null);
         }
-        
+
         // הוספת ימי החודש
         for (let i = 1; i <= daysInMonth; i++) {
             const dayDate = new Date(year, month, i);
             days.push(dayDate.toLocaleDateString());
         }
-        
+
         setMonthDays(days);
     };
 
@@ -364,7 +364,7 @@ export const Calender = () => {
     const goToAnotherMonth = (change) => {
         let newMonth = currentMonth + change;
         let newYear = currentYear;
-        
+
         if (newMonth > 11) {
             newMonth = 0;
             newYear++;
@@ -372,7 +372,7 @@ export const Calender = () => {
             newMonth = 11;
             newYear--;
         }
-        
+
         setCurrentMonth(newMonth);
         setCurrentYear(newYear);
     };
@@ -463,29 +463,33 @@ export const Calender = () => {
             return;
         }
 
+        // אם treatments הוא undefined, נשתמש במערך ריק
+        const treatmentsArray = treatments || [];
+
         let results = [];
-        
+
         switch (searchType) {
             case "name":
-                results = treatments.filter(treatment => 
-                    treatment.escort.toLowerCase().includes(searchQuery.toLowerCase())
+                results = treatmentsArray.filter(treatment =>
+                    treatment && treatment.escort && treatment.escort.toLowerCase().includes(searchQuery.toLowerCase())
                 );
                 break;
             case "date":
-                results = treatments.filter(treatment => {
+                results = treatmentsArray.filter(treatment => {
+                    if (!treatment || !treatment.treatmentDate) return false;
                     const treatmentDate = new Date(treatment.treatmentDate).toLocaleDateString();
                     return treatmentDate.includes(searchQuery);
                 });
                 break;
             case "id":
-                results = treatments.filter(treatment => 
-                    treatment.pationtId.includes(searchQuery)
+                results = treatmentsArray.filter(treatment =>
+                    treatment && treatment.pationtId && treatment.pationtId.includes(searchQuery)
                 );
                 break;
             default:
                 break;
         }
-        
+
         setSearchResults(results);
     };
     const handleViewModeChange = (mode) => {
@@ -503,15 +507,36 @@ export const Calender = () => {
         console.log("מחיקת טיפול:", treatmentId);
         setOptionMenu(false);
     };
+    useEffect(() => {
+        if (current?.userId === "") {
+            navigate('../');
+        }
+    }, [current, navigate]);
+
+    useEffect(() => {
+        console.log("Treatments:", treatments);
+        console.log("Dates in calendar:", dates);
+    }, [treatments, dates]);
+
+    useEffect(() => {
+        if (current?.userId) {
+          console.log("מביא טיפולים למשתמש:", current.userId);
+          dispatch(fetchTreatmentThunk(current.userId));
+        }
+      }, [current, dispatch]);
+
+      useEffect(() => {
+        console.log("טיפולים שהתקבלו:", treatments);
+        console.log("תאריכים בלוח:", dates);
+      }, [treatments, dates]);
+      
     //#endregion
 
     return (
         <div className="calendar-container" onClick={() => { setShowMenu([false, false, false, false, false, false, false]) }}>
             <Outlet></Outlet>
-            {current?.userId === "" && navigate('../')}
-            
             {logedJustNow && (
-                <motion.div 
+                <motion.div
                     className="welcome-notification"
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -528,8 +553,8 @@ export const Calender = () => {
                 <div className="calendar-title">
                     <FaCalendarAlt className="calendar-icon" />
                     <h2>
-                        {viewMode === "week" 
-                            ? `שבוע ${Math.floor(week/7) + 1}, ${new Date(dates[0]).toLocaleDateString('he-IL', { month: 'long', year: 'numeric' })}`
+                        {viewMode === "week"
+                            ? `שבוע ${Math.floor(week / 7) + 1}, ${new Date(dates[0]).toLocaleDateString('he-IL', { month: 'long', year: 'numeric' })}`
                             : `${new Date(currentYear, currentMonth).toLocaleDateString('he-IL', { month: 'long', year: 'numeric' })}`
                         }
                     </h2>
@@ -537,15 +562,15 @@ export const Calender = () => {
 
                 <div className="calendar-controls">
                     <div className="view-mode-controls">
-                        <button 
-                            className={`view-mode-btn ${viewMode === "week" ? "active" : ""}`} 
+                        <button
+                            className={`view-mode-btn ${viewMode === "week" ? "active" : ""}`}
                             onClick={() => handleViewModeChange("week")}
                         >
                             <FaCalendarWeek />
                             <span>שבועי</span>
                         </button>
-                        <button 
-                            className={`view-mode-btn ${viewMode === "month" ? "active" : ""}`} 
+                        <button
+                            className={`view-mode-btn ${viewMode === "month" ? "active" : ""}`}
                             onClick={() => handleViewModeChange("month")}
                         >
                             <FaCalendarAlt />
@@ -605,16 +630,17 @@ export const Calender = () => {
                 <div className="weekly-view">
                     {dates?.map((dateStr, ind) => {
                         const isToday = dateStr === today;
-                        const dateTreatments = treatments.filter(
-                            tt => new Date(tt?.treatmentDate).toLocaleDateString() === dateStr
+                        // פתרון פשוט יותר - אם treatments הוא undefined, נשתמש במערך ריק
+                        const dateTreatments = (treatments || []).filter(
+                            tt => tt && tt.treatmentDate && new Date(tt.treatmentDate).toLocaleDateString() === dateStr
                         );
 
                         return (
-                            <div 
+                            <div
                                 key={`day-${ind}`}
-                                className={`day-column ${isToday ? "today-column" : ""}`} 
-                                onClick={e => { 
-                                    e.preventDefault(rightClick); 
+                                className={`day-column ${isToday ? "today-column" : ""}`}
+                                onClick={e => {
+                                    e.preventDefault(rightClick);
                                     dispatch(changeDateForTreatment(dateStr));
                                 }}
                                 onContextMenu={(e) => { openDailyMenu(ind, e); }}
@@ -623,11 +649,11 @@ export const Calender = () => {
                                     <span className="day-name">{showDateName[ind]}</span>
                                     <span className="day-date">{new Date(dateStr).getDate()}</span>
                                 </div>
-                                
+
                                 <div className="day-events">
                                     <AnimatePresence>
                                         {dateTreatments.map((treatment) => (
-                                            <motion.div 
+                                            <motion.div
                                                 key={treatment.treatmentId}
                                                 className="event-card"
                                                 initial={{ opacity: 0, y: 20 }}
@@ -637,16 +663,16 @@ export const Calender = () => {
                                                 onClick={() => optionEvent(treatment)}
                                             >
                                                 <div className="event-time">
-                                                    {new Date(treatment.treatmentDate).toLocaleTimeString('he-IL', { 
-                                                        hour: '2-digit', 
-                                                        minute: '2-digit' 
+                                                    {new Date(treatment.treatmentDate).toLocaleTimeString('he-IL', {
+                                                        hour: '2-digit',
+                                                        minute: '2-digit'
                                                     })}
                                                 </div>
                                                 <div className="event-title">{treatment.escort}</div>
                                                 <div className="event-patient">מטופל: {treatment.pationtId}</div>
-                                                
+
                                                 {dateStr <= today && (
-                                                    <button 
+                                                    <button
                                                         className="event-report-btn"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
@@ -661,22 +687,22 @@ export const Calender = () => {
                                         ))}
                                     </AnimatePresence>
                                 </div>
-                                
+
                                 {showMenu[ind] && (
-                                    <motion.div 
+                                    <motion.div
                                         className="context-menu"
                                         initial={{ opacity: 0, scale: 0.9 }}
                                         animate={{ opacity: 1, scale: 1 }}
                                         style={{ top: y, left: x }}
                                     >
-                                        <button 
+                                        <button
                                             className="context-menu-item"
                                             onClick={() => { navigate(`/calender/addNewTreatment`); }}
                                         >
                                             <FaPlus />
                                             <span>הוספת טיפול</span>
                                         </button>
-                                        <button 
+                                        <button
                                             className="context-menu-item"
                                             onClick={restart}
                                         >
@@ -706,12 +732,13 @@ export const Calender = () => {
                             }
 
                             const isToday = dateStr === today;
-                            const dateTreatments = treatments.filter(
-                                tt => new Date(tt?.treatmentDate).toLocaleDateString() === dateStr
+                            // פתרון פשוט יותר
+                            const dateTreatments = (treatments || []).filter(
+                                tt => tt && tt.treatmentDate && new Date(tt.treatmentDate).toLocaleDateString() === dateStr
                             );
 
                             return (
-                                <div 
+                                <div
                                     key={`month-day-${index}`}
                                     className={`month-day ${isToday ? "today" : ""}`}
                                     onClick={() => dispatch(changeDateForTreatment(dateStr))}
@@ -723,7 +750,7 @@ export const Calender = () => {
                                     <div className="month-day-number">{new Date(dateStr).getDate()}</div>
                                     <div className="month-day-events">
                                         {dateTreatments.slice(0, 3).map((treatment) => (
-                                            <div 
+                                            <div
                                                 key={treatment.treatmentId}
                                                 className="month-event"
                                                 onClick={(e) => {
@@ -732,9 +759,9 @@ export const Calender = () => {
                                                 }}
                                             >
                                                 <span className="month-event-time">
-                                                    {new Date(treatment.treatmentDate).toLocaleTimeString('he-IL', { 
-                                                        hour: '2-digit', 
-                                                        minute: '2-digit' 
+                                                    {new Date(treatment.treatmentDate).toLocaleTimeString('he-IL', {
+                                                        hour: '2-digit',
+                                                        minute: '2-digit'
                                                     })}
                                                 </span>
                                                 <span className="month-event-title">{treatment.escort}</span>
@@ -756,14 +783,14 @@ export const Calender = () => {
             {/* חלון חיפוש תורים */}
             <AnimatePresence>
                 {search && (
-                    <motion.div 
+                    <motion.div
                         className="search-modal-overlay"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={closeSearch}
                     >
-                        <motion.div 
+                        <motion.div
                             className="search-modal"
                             initial={{ y: 50, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
@@ -776,29 +803,29 @@ export const Calender = () => {
                                     <FaTimes />
                                 </button>
                             </div>
-                            
+
                             <div className="search-controls">
                                 <div className="search-types">
-                                    <button 
+                                    <button
                                         className={`search-type-btn ${searchType === "name" ? "active" : ""}`}
                                         onClick={() => handleSearchTypeChange("name")}
                                     >
                                         לפי שם
                                     </button>
-                                    <button 
+                                    <button
                                         className={`search-type-btn ${searchType === "date" ? "active" : ""}`}
                                         onClick={() => handleSearchTypeChange("date")}
                                     >
                                         לפי תאריך
                                     </button>
-                                    <button 
+                                    <button
                                         className={`search-type-btn ${searchType === "id" ? "active" : ""}`}
                                         onClick={() => handleSearchTypeChange("id")}
                                     >
                                         לפי ת.ז.
                                     </button>
                                 </div>
-                                
+
                                 <div className="search-input-container">
                                     <input
                                         type="text"
@@ -806,8 +833,8 @@ export const Calender = () => {
                                         className="search-input"
                                         placeholder={
                                             searchType === "name" ? "הזן שם מטופל..." :
-                                            searchType === "date" ? "הזן תאריך (DD/MM/YYYY)..." :
-                                            "הזן מספר ת.ז...."
+                                                searchType === "date" ? "הזן תאריך (DD/MM/YYYY)..." :
+                                                    "הזן מספר ת.ז...."
                                         }
                                         value={searchQuery}
                                         onChange={handleSearchChange}
@@ -819,14 +846,14 @@ export const Calender = () => {
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <div className="search-results">
                                 {searchResults.length === 0 && searchQuery && (
                                     <div className="no-results">לא נמצאו תוצאות</div>
                                 )}
-                                
+
                                 {searchResults.map((treatment) => (
-                                    <motion.div 
+                                    <motion.div
                                         key={treatment.treatmentId}
                                         className="search-result-item"
                                         initial={{ opacity: 0, y: 20 }}
@@ -838,9 +865,9 @@ export const Calender = () => {
                                                 <FaCalendarCheck className="result-icon" />
                                                 {new Date(treatment.treatmentDate).toLocaleDateString('he-IL')}
                                                 <span className="result-time">
-                                                    {new Date(treatment.treatmentDate).toLocaleTimeString('he-IL', { 
-                                                        hour: '2-digit', 
-                                                        minute: '2-digit' 
+                                                    {new Date(treatment.treatmentDate).toLocaleTimeString('he-IL', {
+                                                        hour: '2-digit',
+                                                        minute: '2-digit'
                                                     })}
                                                 </span>
                                             </div>
@@ -851,7 +878,7 @@ export const Calender = () => {
                                             </div>
                                         </div>
                                         <div className="result-actions">
-                                            <button 
+                                            <button
                                                 className="result-action-btn view-btn"
                                                 onClick={() => navigateToTreatment(treatment.treatmentId)}
                                             >
@@ -870,14 +897,14 @@ export const Calender = () => {
             {/* חלון אפשרויות לטיפול */}
             <AnimatePresence>
                 {optionMenu && (
-                    <motion.div 
+                    <motion.div
                         className="event-options-overlay"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setOptionMenu(false)}
                     >
-                        <motion.div 
+                        <motion.div
                             className="event-options-modal"
                             initial={{ y: 50, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
@@ -890,7 +917,7 @@ export const Calender = () => {
                                     <FaTimes />
                                 </button>
                             </div>
-                            
+
                             <div className="event-info">
                                 <div className="event-info-item">
                                     <span className="event-info-label">מטופל:</span>
@@ -909,9 +936,9 @@ export const Calender = () => {
                                 <div className="event-info-item">
                                     <span className="event-info-label">שעה:</span>
                                     <span className="event-info-value">
-                                        {new Date(eventNow.treatmentDate).toLocaleTimeString('he-IL', { 
-                                            hour: '2-digit', 
-                                            minute: '2-digit' 
+                                        {new Date(eventNow.treatmentDate).toLocaleTimeString('he-IL', {
+                                            hour: '2-digit',
+                                            minute: '2-digit'
                                         })}
                                     </span>
                                 </div>
@@ -922,30 +949,30 @@ export const Calender = () => {
                                     </div>
                                 )}
                             </div>
-                            
+
                             <div className="event-options-actions">
-                                <button 
+                                <button
                                     className="event-option-btn view-btn"
                                     onClick={openDetailes}
                                 >
                                     <FaInfoCircle />
                                     <span>פרטים מלאים</span>
                                 </button>
-                                <button 
+                                <button
                                     className="event-option-btn edit-btn"
                                     onClick={editEvent}
                                 >
                                     <FaEdit />
                                     <span>ערוך טיפול</span>
                                 </button>
-                                <button 
+                                <button
                                     className="event-option-btn report-btn"
                                     onClick={() => navigate(`/treatmentReport/${eventNow.treatmentId}`)}
                                 >
                                     <FaCalendarCheck />
                                     <span>סיכום טיפול</span>
                                 </button>
-                                <button 
+                                <button
                                     className="event-option-btn delete-btn"
                                     onClick={() => deleteTreatment(eventNow.treatmentId)}
                                 >
@@ -961,14 +988,14 @@ export const Calender = () => {
             {/* חלון פרטים מלאים */}
             <AnimatePresence>
                 {details && (
-                    <motion.div 
+                    <motion.div
                         className="event-details-overlay"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setDetails(false)}
                     >
-                        <motion.div 
+                        <motion.div
                             className="event-details-modal"
                             initial={{ y: 50, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
@@ -981,7 +1008,7 @@ export const Calender = () => {
                                     <FaTimes />
                                 </button>
                             </div>
-                            
+
                             <div className="event-details-content">
                                 {/* כאן יש להציג את כל פרטי הטיפול */}
                                 <div className="details-section">
@@ -998,7 +1025,7 @@ export const Calender = () => {
                                         {/* הוסף כאן פרטים נוספים על המטופל */}
                                     </div>
                                 </div>
-                                
+
                                 <div className="details-section">
                                     <h4 className="details-section-title">פרטי טיפול</h4>
                                     <div className="details-grid">
@@ -1011,9 +1038,9 @@ export const Calender = () => {
                                         <div className="details-item">
                                             <span className="details-label">שעה:</span>
                                             <span className="details-value">
-                                                {new Date(eventNow.treatmentDate).toLocaleTimeString('he-IL', { 
-                                                    hour: '2-digit', 
-                                                    minute: '2-digit' 
+                                                {new Date(eventNow.treatmentDate).toLocaleTimeString('he-IL', {
+                                                    hour: '2-digit',
+                                                    minute: '2-digit'
                                                 })}
                                             </span>
                                         </div>
@@ -1024,7 +1051,7 @@ export const Calender = () => {
                                         {/* הוסף כאן פרטים נוספים על הטיפול */}
                                     </div>
                                 </div>
-                                
+
                                 <div className="details-section">
                                     <h4 className="details-section-title">הערות</h4>
                                     <div className="details-notes">
@@ -1032,16 +1059,16 @@ export const Calender = () => {
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div className="event-details-actions">
-                                <button 
+                                <button
                                     className="event-option-btn edit-btn"
                                     onClick={editEvent}
                                 >
                                     <FaEdit />
                                     <span>ערוך טיפול</span>
                                 </button>
-                                <button 
+                                <button
                                     className="event-option-btn report-btn"
                                     onClick={() => navigate(`/treatmentReport/${eventNow.treatmentId}`)}
                                 >

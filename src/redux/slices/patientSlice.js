@@ -22,6 +22,15 @@ const INITIAL_STATE = {
     }
 
 }
+const serializeDate = (state) => {
+    if (state.currentPatient && state.currentPatient.birthDate instanceof Date) {
+      state.currentPatient = {
+        ...state.currentPatient,
+        birthDate: state.currentPatient.birthDate.toISOString()
+      };
+    }
+    return state;
+  };
 
 export const patientSlice = createSlice({
     name: 'patient',
@@ -39,7 +48,7 @@ export const patientSlice = createSlice({
         builder.addCase(getPatientByUserIdThunk.fulfilled, (state, action) => {
             state.patientList = action.payload;
             state.loading = false;
-
+            return serializeDate(state);
         });
         builder.addCase(getPatientByUserIdThunk.rejected, (state, action) => {
             console.log("action: ", action);
@@ -62,6 +71,7 @@ export const patientSlice = createSlice({
         });
         builder.addCase(getPatientByIdThunk.fulfilled, (state, action) => {
             state.currentPatient = action.payload;
+            return serializeDate(state);
         });
         builder.addCase(getPatientByIdThunk.rejected, (state, action) => {
             console.log("action: ", action);

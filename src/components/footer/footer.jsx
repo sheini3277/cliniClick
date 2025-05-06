@@ -70,7 +70,7 @@ export const Footer = () => {
                                 </li>
                                 <li>
                                     <FaEnvelope className="footer-icon" />
-                                    <span>info@clinic.co.il</span>
+                                    <span>info@cliniclick.co.il</span>
                                 </li>
                                 <li>
                                     <FaMapMarkerAlt className="footer-icon" />

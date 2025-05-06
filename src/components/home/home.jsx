@@ -245,7 +245,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { fetchUserThunk } from "../../redux/slices/userFetch";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaUserCircle, FaCalendarAlt, FaUsers, FaEnvelope, FaHome, FaBars, FaTimes } from "react-icons/fa";
+import { FaUserCircle, FaCalendarAlt, FaUsers, FaEnvelope, FaHome, FaBars, FaTimes, FaAccessibleIcon, FaAdversal, FaAmazon, FaInfo } from "react-icons/fa";
 import { Footer } from "../footer/footer";
 import "./home.css";
 
@@ -294,7 +294,9 @@ export const Home = () => {
         { title: "דף הבית", icon: <FaHome />, action: () => navigate('/') },
         { title: `הלוח של ${current.firstName || 'המטפל'}`, icon: <FaCalendarAlt />, action: () => navigate('/calender') },
         { title: "רשימת מטופלים", icon: <FaUsers />, action: () => navigate('/patientList') },
-        { title: "צור קשר", icon: <FaEnvelope />, action: () => navigate('/contact') }
+        { title: "צור קשר", icon: <FaEnvelope />, action: () => navigate('/contact') },
+        { title: "אודות", icon: <FaInfo />, action: () => navigate('/about') }
+
     ];
 
     const handleMenuItemClick = (action) => {
@@ -418,7 +420,7 @@ export const Home = () => {
                             <h2 className="section-title">הכלים שלנו לניהול הקליניקה</h2>
                             <div className="features-grid">
                                 {[
-                                    { title: "ניהול יומן פגישות", avatar: "yoman.png", description: "תזמון וניהול קל של כל הפגישות שלך" },
+                                    { title: "ניהול יומן פגישות", icon: "yoman.png", description: "תזמון וניהול קל של כל הפגישות שלך" },
                                     { title: "מעקב אחר מטופלים", icon: "maakav.jpg", description: "שמירה על כל המידע הרפואי במקום אחד" },
                                     { title: "תזכורות אוטומטיות", icon: "tizcoret.jpg", description: "שליחת תזכורות למטופלים לפני הפגישות" },
                                     { title: "דוחות וסטטיסטיקות", icon: "doch.jpg", description: "קבלת תובנות על הפעילות בקליניקה" }
@@ -432,7 +434,7 @@ export const Home = () => {
                                         whileHover={{ y: -5, boxShadow: "0 10px 20px rgba(0,0,0,0.1)" }}
                                     >
                                         <div className="feature-icon">
-                                            <img src={`/${feature.avatar}`} alt={feature.title} />
+                                            <img src={`/${feature.icon}`} alt={feature.title} />
                                         </div>
                                         <h3 className="feature-title">{feature.title}</h3>
                                         <p className="feature-description">{feature.description}</p>
