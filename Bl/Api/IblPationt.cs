@@ -11,10 +11,10 @@ namespace Bl.Api
     public interface IblPationt : Icrud<BlPationt>
     {
         List<BlPationt> Get();
-        void Create(BlPationt pationt);
+        List<BlPationt> Create(BlPationt pationt);
         List<BlPationt> GetByUserId(string userId);
-        void Update(BlPationt pationt);
-        void Delete(string pationtId);
+        List<BlPationt> Update(BlPationt pationt);
+        List<BlPationt> Delete(string pationtId);
         BlPationt GetByPatientId(string patientId);
 
 

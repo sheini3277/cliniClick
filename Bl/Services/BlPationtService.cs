@@ -27,9 +27,10 @@ namespace Bl.Services
             return list;
         }
 
-        public void Create(BlPationt pationt)
+        public List<BlPationt> Create(BlPationt pationt)
         {
             dal.Pationt.Create(toDal(pationt));
+            return Get();
         }
 
         public List<BlPationt> GetByUserId(string userId)
@@ -41,14 +42,16 @@ namespace Bl.Services
             return list;
         }
 
-        public void Update(BlPationt pationt)
+        public List<BlPationt> Update(BlPationt pationt)
         {
             dal.Pationt.Update(toDal(pationt));
+            return Get();
         }
 
-        public void Delete(string pationtId)
+        public List<BlPationt> Delete(string pationtId)
         {
             dal.Pationt.Delete(pationtId);
+            return Get();
         }
 
         public BlPationt GetByPatientId(string patientId)

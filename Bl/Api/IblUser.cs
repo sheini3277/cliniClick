@@ -11,9 +11,9 @@ namespace Bl.Api
     public interface IblUser : Icrud<BlUser>
     {
         List<BlUser> Get();
-        void Create(BlUser user);
-        void Update(BlUser user);
-        void Delete(string userId);
+        List<BlUser> Create(BlUser user);
+        List<BlUser> Update(BlUser user);
+        List<BlUser> Delete(string userId);
         BlUser Get(string userId);
 
 

@@ -23,19 +23,26 @@ namespace Server.Controllers
         }
 
         [HttpPost("AddTreatment")]
-        public void Create(BlTreatment treatment)
+        public List<BlTreatment> Create(BlTreatment treatment)
         {
-            treatments.Create(treatment);
+            try
+            {
+                return treatments.Create(treatment);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
         [HttpPut("UpdateTreatment/{TreatmentId}")]
-        public void Update(BlTreatment treatment)
+        public List<BlTreatment> Update(BlTreatment treatment)
         {
-            treatments.Update(treatment);
+            return treatments.Update(treatment);
         }
         [HttpDelete("DeleteTreatment")]
-        public void Delete(int treatmentId)
+        public List<BlTreatment> Delete(int treatmentId)
         {
-            treatments.Delete(treatmentId);
+            return treatments.Delete(treatmentId);
         }
         [HttpGet("getByUserId/{userId}")]
         public List<BlTreatment> Get(string userId)

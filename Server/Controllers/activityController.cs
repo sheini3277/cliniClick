@@ -22,19 +22,24 @@ namespace Server.Controllers
         }
 
         [HttpPost("AddActivity")]
-        public void Create(BlActivity activity)
+        public List<BlActivity> Create(BlActivity activity)
         {
-            activities.Create(activity);
+            return activities.Create(activity);
+        }
+        [HttpPost("AddActivities")]
+        public List<BlActivity> CreateList(List<BlActivity> activitiesList)
+        {
+            return activities.creatListActivities(activitiesList);
         }
         [HttpPut("UpdateActivity")]
-        public void Update(BlActivity activity)
+        public List<BlActivity> Update(BlActivity activity)
         {
-            activities.Update(activity);
+            return activities.Update(activity);
         }
         [HttpDelete("DeleteActivity")]
-        public void Delete(string activityId)
+        public List<BlActivity> Delete(string activityId)
         {
-            activities.Delete(activityId);
+            return activities.Delete(activityId);
         }
 
 

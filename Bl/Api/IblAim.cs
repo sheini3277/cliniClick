@@ -10,9 +10,9 @@ namespace Bl.Api
     public interface IblAim : Icrud<BlAim>
     {
         List<BlAim> Get();
-        void Create(BlAim aim);
-        void Update(BlAim aim);
-        void Delete(string aimId);
+        List<BlAim> Create(BlAim aim);
+        List<BlAim> Update(BlAim aim);
+        List<BlAim> Delete(string aimId);
         List<BlAim> GetByPatientId(string patientId);
     }
 }

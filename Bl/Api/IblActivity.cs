@@ -1,6 +1,7 @@
 ﻿using Bl.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,8 +12,9 @@ namespace Bl.Api
     {
         List<BlActivity> Get();
 
-        void Create(BlActivity activity);
-        void Update(BlActivity activity);
-        void Delete(string activityId);
+        List<BlActivity> Create(BlActivity activity);
+        List<BlActivity> Update(BlActivity activity);
+        List<BlActivity> Delete(string activityId);
+        List<BlActivity> creatListActivities(List<BlActivity> activities);
     }
 }

@@ -23,19 +23,19 @@ namespace Server.Controllers
         }
 
         [HttpPost("AddAim")]
-        public void Create(BlAim aim)
+        public List<BlAim> Create(BlAim aim)
         {
-            aims.Create(aim);
+            return aims.Create(aim);
         }
         [HttpPut("UpdateAim")]
-        public void Update(BlAim aim)
+        public List<BlAim> Update(BlAim aim)
         {
-            aims.Update(aim);
+            return aims.Update(aim);
         }
         [HttpDelete("Delete")]
-        public void Delete(string aimId)
+        public List<BlAim> Delete(string aimId)
         {
-            aims.Delete(aimId);
+           return aims.Delete(aimId);
         }
         [HttpGet("getByPatientId/{patientId}")]
         public List<BlAim> GetByPatientId(string patientId)

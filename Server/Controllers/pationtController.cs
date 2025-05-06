@@ -25,9 +25,9 @@ namespace Server.Controllers
         }
 
         [HttpPost("AddPationt")]
-        public void Create(BlPationt pationt)
+        public List<BlPationt> Create(BlPationt pationt)
         {
-            pationts.Create(pationt);
+            return pationts.Create(pationt);
 
         }
         [HttpGet("getByUserId/{userId}")]
@@ -36,14 +36,14 @@ namespace Server.Controllers
             return pationts.GetByUserId(userId);
         }
         [HttpPut("UpdatePation/{patientId}")]
-        public void Update(BlPationt pationt)
+        public List<BlPationt> Update(BlPationt pationt)
         {
-            pationts.Update(pationt);
+             return pationts.Update(pationt);
         }
         [HttpDelete("Delete")]
-        public void Delete(string pationtId)
+        public List<BlPationt> Delete(string pationtId)
         {
-            pationts.Delete(pationtId);
+            return pationts.Delete(pationtId);
         }
         [HttpGet("getByPatientId/{patientId}")]
         public BlPationt GetByPatientId(string patientId)

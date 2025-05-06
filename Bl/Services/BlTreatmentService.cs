@@ -18,14 +18,27 @@ namespace Bl.Services
             this.dal = dal;
         }
 
-        public void Create(BlTreatment treatment)
+        public List<BlTreatment> Create(BlTreatment treatment)
         {
-            dal.Treatment.Create(toDal(treatment));
+            var pats = dal.Pationt.Get();
+            BlPationt patBL = new BlPationt();
+            patBL = toBlPationt(pats.Find(t => t.PationtId == treatment.PationtId));
+            if (patBL != null && patBL.TherapistId == treatment.UserId)
+            {
+                dal.Treatment.Create(toDal(treatment));
+            }
+            else
+            {
+                throw new Exception("not valid");
+            }
+            return Get();
+
         }
 
-        public void Delete(int treatmentId)
+        public List<BlTreatment> Delete(int treatmentId)
         {
             dal.Treatment.Delete(treatmentId);
+            return Get();
         }
 
         public List<BlTreatment> Get()
@@ -51,10 +64,10 @@ namespace Bl.Services
             return treatment;
         }
 
-        public void Update(BlTreatment treatment)
+        public List<BlTreatment> Update(BlTreatment treatment)
         {
-            
             dal.Treatment.Update(toDal(treatment));
+            return Get();
         }
         public Treatment toDal(BlTreatment blt)
 
@@ -96,6 +109,29 @@ namespace Bl.Services
                     TreatmentId = t.TreatmentId
                 };
                 return treatment;
+            }
+            return null;
+        }
+        public BlPationt toBlPationt(Pationt pationt)
+        {
+            if (pationt != null)
+            {
+                BlPationt newPationt = new BlPationt()
+                {
+                    PationtId = pationt.PationtId,
+                    FirstName = pationt.FirstName,
+                    LastName = pationt.LastName,
+                    TherapistId = pationt.TherapistId,
+                    Phone = pationt.Phone,
+                    Age = pationt.Age,
+                    BirthDate = DateOnly.FromDateTime(pationt.BirthDate),
+                    Background = pationt.Background,
+                    EducationalFramework = pationt.EducationalFramework,
+                    Diagnosis = pationt.Diagnosis,
+                    CirculationMedium = pationt.CirculationMedium,
+                    StartTreatmentDate = DateOnly.FromDateTime(pationt.StartTreatmentDate)
+                };
+                return newPationt;
             }
             return null;
         }

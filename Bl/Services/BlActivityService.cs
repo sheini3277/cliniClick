@@ -4,6 +4,7 @@ using Dal.Api;
 using Dal.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,14 +19,23 @@ namespace Bl.Services
             this.dal = dal;
         }
 
-        public void Create(BlActivity activity)
+        public List<BlActivity> Create(BlActivity activity)
         {
             dal.Activity.Create(toDal(activity));
+            return Get();
+        }
+        public List<BlActivity> creatListActivities(List<BlActivity> activities) {
+            activities.ForEach(activity =>
+            {
+                dal.Activity.Create(toDal(activity));
+            });
+            return Get();
         }
 
-        public void Delete(string aimId)
+        public List<BlActivity> Delete(string aimId)
         {
             dal.Activity.Delete(aimId);
+            return Get();
         }
 
         public List<BlActivity> Get()
@@ -36,15 +46,16 @@ namespace Bl.Services
             return list;
         }
 
-        public void Update(BlActivity activity)
+        public List<BlActivity> Update(BlActivity activity)
         {
             dal.Activity.Update(toDal(activity));
+            return Get();
         }
-        public Activity toDal(BlActivity bla)
+        public Dal.Models.Activity toDal(BlActivity bla)
         {
             if (bla != null)
             {
-                Activity activity = new Activity()
+                Dal.Models.Activity activity = new Dal.Models.Activity()
                 {
                     Activity1 = bla.Activity1,
                     ActivityAim = bla.ActivityAim,
@@ -55,7 +66,7 @@ namespace Bl.Services
             }
             return null;
         }
-        public BlActivity toBl(Activity a)
+        public BlActivity toBl(Dal.Models.Activity a)
         {
             if (a != null)
             {

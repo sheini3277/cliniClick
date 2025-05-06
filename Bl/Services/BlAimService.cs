@@ -18,14 +18,16 @@ namespace Bl.Services
             this.dal = dal;
         }
 
-        public void Create(BlAim aim)
+        public List<BlAim> Create(BlAim aim)
         {
             dal.Aim.Create(toDal(aim));
+            return Get();
         }
 
-        public void Delete(string aimId)
+        public List<BlAim> Delete(string aimId)
         {
             dal.Aim.Delete(aimId);
+            return Get();
         }
 
         public List<BlAim> Get()
@@ -44,9 +46,10 @@ namespace Bl.Services
             return list;
         }
 
-        public void Update(BlAim aim)
+        public List<BlAim> Update(BlAim aim)
         {
             dal.Aim.Update(toDal(aim));
+            return Get();
         }
         public Aim toDal(BlAim bla)
         {

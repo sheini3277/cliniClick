@@ -27,19 +27,22 @@ namespace Bl.Services
             return list;
         }
 
-        public void Create(BlUser user)
+        public List<BlUser> Create(BlUser user)
         {
             dal.Users.Create(toDal(user));
+            return Get();
         }
 
-        public void Update(BlUser user)
+        public List<BlUser> Update(BlUser user)
         {
             dal.Users.Update(toDal(user));
+            return Get();
         }
 
-        public void Delete(string userId)
+        public List<BlUser> Delete(string userId)
         {
             dal.Users.Delete(userId);
+            return Get();
         }
 
         public BlUser Get(string userId)
@@ -85,5 +88,6 @@ namespace Bl.Services
             }
             return null;
         }
+
     }
 }

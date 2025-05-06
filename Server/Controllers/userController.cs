@@ -26,9 +26,9 @@ namespace Server.Controllers
         }
 
         [HttpPost("Add")]
-        public void Create(BlUser user)
+        public List<BlUser> Create(BlUser user)
         {
-            users.Create(user);
+            return users.Create(user);
         }
         [HttpPut("update/{userId}")]
         public IActionResult Update(BlUser user)
@@ -37,9 +37,9 @@ namespace Server.Controllers
             return Ok(true);
         }
         [HttpDelete("Delete/{userId}")]
-        public void Delete(string userId)
+        public List<BlUser> Delete(string userId)
         {
-            users.Delete(userId);
+            return users.Delete(userId);
         }
         [HttpGet("GetById/{userId}")]
         public IActionResult GetById(string userId) { 

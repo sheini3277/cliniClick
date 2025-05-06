@@ -10,9 +10,9 @@ namespace Bl.Api
     public interface IblTreatment
     {
         List<BlTreatment> Get();
-        void Create(BlTreatment treatment);
-        void Update(BlTreatment treatment);
-        void Delete(int id);
+        List<BlTreatment> Create(BlTreatment treatment);
+        List<BlTreatment> Update(BlTreatment treatment);
+        List<BlTreatment> Delete(int id);
         List<BlTreatment> GetByUserId(string userId);
         BlTreatment GetByTreatmentId(int id);
 

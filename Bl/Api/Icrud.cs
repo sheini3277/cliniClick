@@ -10,8 +10,8 @@ namespace Bl.Api
     public interface Icrud<T>
     {
         List<T> Get();
-        void Create(T item);
-        void Update(T item);
-        void Delete(string id);
+        List<T> Create(T item);
+        List<T> Update(T item);
+        List<T> Delete(string id);
     }
 }
