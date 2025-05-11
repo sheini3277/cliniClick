@@ -22,7 +22,7 @@ const INITIAL_STATE = {
     }
 
 }
-export const treatmentSlice = createSlice({
+export const treatmentSlice2 = createSlice({
     name: 'treatment',
     initialState: INITIAL_STATE,
     reducers: {
@@ -93,4 +93,4 @@ export const treatmentSlice = createSlice({
         });
     }
 })
-export const { newCurrentTreatment, changeDateForTreatment } = treatmentSlice.actions 
+export const { newCurrentTreatment, changeDateForTreatment } = treatmentSlice2.actions 

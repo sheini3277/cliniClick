@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import "./about.css";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export const About = () => {
   const [activeTab, setActiveTab] = useState("about");
   const [activeFaq, setActiveFaq] = useState(null);
+  const navigate = useNavigate();
 
   const toggleFaq = (index) => {
     setActiveFaq(activeFaq === index ? null : index);
@@ -85,7 +87,12 @@ export const About = () => {
       name: "עטרה נוסבוים",
       role: "ראש צוות פיתוח",
       image: "https://randomuser.me/api/portraits/men/75.jpg"
-    }
+    },
+    // {
+    //   name: "פנינה שוורץ",
+    //   role: "מפתחת אלגוריתמים",
+    //   image: "https://randomuser.me/api/portraits/men/78.jpg"
+    // }
   ];
 
   return (
@@ -289,7 +296,7 @@ export const About = () => {
         <h2>מוכנים להתחיל?</h2>
         <p>הצטרפו לאלפי קליניקות שכבר משתמשות ב-CliniClick</p>
         <div className="cta-buttons">
-          <button className="cta-btn primary">התחל ניסיון בחינם</button>
+          <button className="cta-btn primary" onClick={()=>navigate('/logon')}>התחל ניסיון בחינם</button>
           <button className="cta-btn secondary">תיאום הדגמה</button>
         </div>
       </div>

@@ -115,18 +115,18 @@ import { useNavigate, useParams } from "react-router-dom";
 import "./treatmentReport.css";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { 
-  Button, 
-  Checkbox, 
-  TextField, 
-  styled, 
-  Typography, 
-  Box, 
-  Rating, 
-  Autocomplete, 
-  Paper, 
-  Chip, 
-  Divider, 
+import {
+  Button,
+  Checkbox,
+  TextField,
+  styled,
+  Typography,
+  Box,
+  Rating,
+  Autocomplete,
+  Paper,
+  Chip,
+  Divider,
   Grid,
   Card,
   CardContent
@@ -151,33 +151,33 @@ export const TreatmentReport = () => {
   const theTreatment = useSelector(state => state.treatment.curretntTreatment);
   const thePatient = useSelector(state => state.patient.currentPatient);
   const allActivities = useSelector(state => state.activity?.activitiesList || []);
-  
+
   const [treatment, setTreatment] = useState({
-    treatmentId: theTreatment.treatmentId,
-    treatmentDate: theTreatment.treatmentDate,
-    treatmentTime: theTreatment.treatmentTime,
-    pationtId: theTreatment.pationtId,
+    treatmentId: theTreatment?.treatmentId,
+    treatmentDate: theTreatment?.treatmentDate,
+    treatmentTime: theTreatment?.treatmentTime,
+    pationtId: theTreatment?.pationtId,
     isComing: true,
     escort: null,
     cooperation: null,
     nextMeetingPlanning: null,
     bePaid: false,
-    userId: theTreatment.userId,
+    userId: theTreatment?.userId,
   });
-  
+
   const [aimActivities, setAimActivities] = useState({});
   const [activityList, setActivityList] = useState([]);
 
   // דוגמאות להצעות פעילויות (באפליקציה אמיתית, אלה יגיעו מהשרת)
   const activitySuggestions = [
-    "קריאת ספר", 
-    "תרגילי נשימה", 
-    "משחק חברתי", 
-    "פעילות מוטורית", 
+    "קריאת ספר",
+    "תרגילי נשימה",
+    "משחק חברתי",
+    "פעילות מוטורית",
     "תרגילי זיכרון",
-    "תרגול שפה", 
-    "פעילות יצירתית", 
-    "תרגילי ריכוז", 
+    "תרגול שפה",
+    "פעילות יצירתית",
+    "תרגילי ריכוז",
     "משחק תפקידים",
     ...allActivities.map(a => a.activityName)
   ].filter((value, index, self) => self.indexOf(value) === index); // הסרת כפילויות
@@ -194,8 +194,8 @@ export const TreatmentReport = () => {
         }));
       }
     });
-    
-    dispatch(updateTreatmentThunk({ treatmentId: theTreatment.treatmentId, treatment: treatment }));
+
+    dispatch(updateTreatmentThunk({ treatmentId: theTreatment?.treatmentId, treatment: treatment }));
     navigate('../');
   };
 
@@ -209,15 +209,20 @@ export const TreatmentReport = () => {
   });
 
   useEffect(() => {
-    dispatch(getAimsOfPatientsThunk(theTreatment.pationtId));
+    debugger
     dispatch(getOneTreatmentThunk(param.treatmentId));
   }, []);
 
   useEffect(() => {
-    if (theTreatment.pationtId) {
-      dispatch(getPatientByIdThunk(theTreatment.pationtId));
+    debugger
+    dispatch(getAimsOfPatientsThunk(theTreatment?.pationtId));
+  }, [theTreatment]);
+
+  useEffect(() => {
+    if (theTreatment?.pationtId) {
+      dispatch(getPatientByIdThunk(theTreatment?.pationtId));
     }
-  }, [theTreatment.pationtId]);
+  }, [theTreatment?.pationtId]);
 
   // אתחול aimActivities כאשר המטרות נטענות
   useEffect(() => {
@@ -246,33 +251,33 @@ export const TreatmentReport = () => {
   };
 
   return (
-    <Box sx={{ 
-      maxWidth: 900, 
-      margin: '0 auto', 
+    <Box sx={{
+      maxWidth: 900,
+      margin: '0 auto',
       padding: 3,
       direction: 'rtl'
     }}>
-      <Paper 
-        elevation={3} 
-        sx={{ 
-          padding: 3, 
+      <Paper
+        elevation={3}
+        sx={{
+          padding: 3,
           borderRadius: 2,
           border: '1px solid #ac2454',
           position: 'relative',
           overflow: 'hidden'
         }}
       >
-        <Box sx={{ 
-          position: 'absolute', 
-          top: 0, 
-          right: 0, 
-          width: '10px', 
-          height: '100%', 
-          backgroundColor: '#ac2454' 
+        <Box sx={{
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          width: '10px',
+          height: '100%',
+          backgroundColor: '#ac2454'
         }} />
-        
-        <Typography variant="h4" component="h1" sx={{ 
-          color: '#ac2454', 
+
+        <Typography variant="h4" component="h1" sx={{
+          color: '#ac2454',
           fontWeight: 'bold',
           marginBottom: 3,
           textAlign: 'center'
@@ -287,32 +292,32 @@ export const TreatmentReport = () => {
                 <Typography variant="h6" sx={{ color: '#ac2454', fontWeight: 'bold', marginBottom: 2 }}>
                   פרטי המטופל והטיפול
                 </Typography>
-                
+
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                   <Box>
                     <Typography component="span" sx={{ fontWeight: 'bold', color: '#ac2454' }}>
                       ת.ז מטופל:
                     </Typography>
                     <Typography component="span" sx={{ marginRight: 1 }}>
-                      {theTreatment.pationtId}
+                      {theTreatment?.pationtId}
                     </Typography>
                   </Box>
-                  
+
                   <Box>
                     <Typography component="span" sx={{ fontWeight: 'bold', color: '#ac2454' }}>
                       שם מלא:
                     </Typography>
                     <Typography component="span" sx={{ marginRight: 1 }}>
-                      {thePatient.firstName} {thePatient.lastName}
+                      {thePatient.firstName} {thePatient?.lastName}
                     </Typography>
                   </Box>
-                  
+
                   <Box>
                     <Typography component="span" sx={{ fontWeight: 'bold', color: '#ac2454' }}>
                       מועד הטיפול:
                     </Typography>
                     <Typography component="span" sx={{ marginRight: 1 }}>
-                      {theTreatment.treatmentDate}, {theTreatment.treatmentTime}
+                      {theTreatment?.treatmentDate}, {theTreatment?.treatmentTime}
                     </Typography>
                   </Box>
                 </Box>
@@ -326,7 +331,7 @@ export const TreatmentReport = () => {
                 <Typography variant="h6" sx={{ color: '#ac2454', fontWeight: 'bold', marginBottom: 2 }}>
                   פרטי מעקב
                 </Typography>
-                
+
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                   <TextField
                     label="מלווה"
@@ -336,7 +341,7 @@ export const TreatmentReport = () => {
                     onChange={e => setTreatment({ ...treatment, escort: e.target.value })}
                     size="small"
                   />
-                  
+
                   <Box>
                     <Typography component="legend" sx={{ color: '#ac2454', marginBottom: 0.5 }}>
                       שיתוף פעולה
@@ -350,7 +355,7 @@ export const TreatmentReport = () => {
                       onChange={(_, value) => setTreatment({ ...treatment, cooperation: value })}
                     />
                   </Box>
-                  
+
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography sx={{ color: '#ac2454', marginLeft: 1 }}>
                       האם שולם
@@ -383,16 +388,16 @@ export const TreatmentReport = () => {
           <Typography variant="h6" sx={{ color: '#ac2454', fontWeight: 'bold', marginBottom: 2 }}>
             פעילויות לקידום מטרות
           </Typography>
-          
+
           {aimsForExam.map((aim) => {
             if (!aim) return null;
-            
+
             return (
-              <Paper 
-                key={aim.aimId} 
-                variant="outlined" 
-                sx={{ 
-                  padding: 2, 
+              <Paper
+                key={aim.aimId}
+                variant="outlined"
+                sx={{
+                  padding: 2,
                   marginBottom: 2,
                   borderRadius: 2,
                   borderColor: '#ac2454',
@@ -402,7 +407,7 @@ export const TreatmentReport = () => {
                 <Typography variant="subtitle1" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
                   מטרה: {aim.aimName}
                 </Typography>
-                
+
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={6}>
                     <Autocomplete
@@ -450,7 +455,7 @@ export const TreatmentReport = () => {
           >
             אישור
           </Button>
-          
+
           <Button
             variant="outlined"
             onClick={() => navigate('../')}

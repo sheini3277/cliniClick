@@ -124,7 +124,6 @@ export const Login = () => {
         } catch (error) {
             console.error("שגיאה בהתחברות:", error);
             setAuthError(true);
-        } finally {
             setIsLoading(false);
         }
     };
@@ -151,9 +150,11 @@ export const Login = () => {
     };
 
     useEffect(() => {
-        if (cuser?.userId !== "") {
+        if (cuser?.userId && isLoading) {
+            setIsLoading(false);
+            
             if (currentUser.password === cuser.password) {
-                // אנימציה להצלחת התחברות
+                // התחברות הצליחה - סגירת החלון והניווט
                 const animation = dialogRef.current.animate(
                     [
                         { opacity: 1, transform: 'scale(1)' },
@@ -163,23 +164,31 @@ export const Login = () => {
                 );
                 
                 animation.onfinish = () => {
+                    dialogRef.current.close();
                     navigate(`../`);
                 };
-            } else if (!param.new) {
+            } else {
+                // סיסמה שגויה
                 setAuthError(true);
                 // אנימציה לשגיאת התחברות
                 const passwordInput = document.getElementById('password-input');
-                passwordInput.animate(
-                    [
-                        { transform: 'translateX(0)' },
-                        { transform: 'translateX(-5px)' },
-                        { transform: 'translateX(5px)' },
-                        { transform: 'translateX(-5px)' },
-                        { transform: 'translateX(0)' }
-                    ],
-                    { duration: 400, easing: 'ease-in-out' }
-                );
+                if (passwordInput) {
+                    passwordInput.animate(
+                        [
+                            { transform: 'translateX(0)' },
+                            { transform: 'translateX(-5px)' },
+                            { transform: 'translateX(5px)' },
+                            { transform: 'translateX(-5px)' },
+                            { transform: 'translateX(0)' }
+                        ],
+                        { duration: 400, easing: 'ease-in-out' }
+                    );
+                }
             }
+        } else if (cuser === null && isLoading) {
+            // משתמש לא נמצא
+            setIsLoading(false);
+            setAuthError(true);
         }
     }, [cuser]);
 

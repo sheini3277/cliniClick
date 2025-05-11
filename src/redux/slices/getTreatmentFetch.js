@@ -5,6 +5,7 @@ export const fetchTreatmentThunk = createAsyncThunk(
     async (userId) => {
         const response = await fetch(`https://localhost:1990/api/treatment/getByUserId/${userId}`);
         if (response.ok) {
+            debugger
             const data = await response.json();
             return data;
         }

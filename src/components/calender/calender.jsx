@@ -234,6 +234,7 @@ import {
     FaInfoCircle,
     FaTrashAlt
 } from "react-icons/fa";
+import { set } from "date-fns";
 
 export const Calender = () => {
     //#region variables
@@ -268,7 +269,8 @@ export const Calender = () => {
     const [y, setY] = useState();
     const [logedJustNow, setLogedJustNow] = useState(false);
     const [logOut, setLogOut] = useState(false);
-    const treatments = useSelector(state => state.treatment.treatmentList) || [];
+    const treatmentss = useSelector(state => state.treatment.treatmentList) //|| [];
+    const [treatments, setTreatments] = useState(treatmentss !== undefined ? treatmentss : []) //|| [];
     const current = useSelector(state => state.user.currentUser);
     const navigate = useNavigate();
     const param = useParams();
@@ -305,8 +307,24 @@ export const Calender = () => {
 
     // בכניסת משתמש רשום
     useEffect(() => {
-        if (current.userId !== "")
-            dispatch((fetchTreatmentThunk(current.userId)));
+
+        const getData = async () => {
+            const dd = await dispatch((fetchTreatmentThunk(current.userId)));
+            if (dd.payload != null) {
+
+                setTreatments(dd.payload);
+            }
+        }
+        if (current.userId !== "" && (treatments?.length === 0 || treatments == undefined))
+            // dispatch((fetchTreatmentThunk(current.userId)));
+            getData();
+        if (current?.userId === "") {
+
+            navigate('../');
+        }
+
+    }, [current]);
+    useEffect(() => {
         if (logedUser.firstName !== "") {
             setLogedJustNow(true);
             setTimeout(() => {
@@ -314,8 +332,7 @@ export const Calender = () => {
             }, 5000);
         }
         setLogOut(false);
-    }, [current, dispatch, logedUser.firstName]);
-
+    }, [logedUser.firstName])
     // אתחול תצוגת חודש
     useEffect(() => {
         if (viewMode === "month") {
@@ -507,29 +524,29 @@ export const Calender = () => {
         console.log("מחיקת טיפול:", treatmentId);
         setOptionMenu(false);
     };
-    useEffect(() => {
-        if (current?.userId === "") {
-            navigate('../');
-        }
-    }, [current, navigate]);
+    // useEffect(() => {
+    //     if (current?.userId === "") {
+    //         navigate('../');
+    //     }
+    // }, [current, navigate]);
 
     useEffect(() => {
         console.log("Treatments:", treatments);
         console.log("Dates in calendar:", dates);
     }, [treatments, dates]);
 
-    useEffect(() => {
-        if (current?.userId) {
-          console.log("מביא טיפולים למשתמש:", current.userId);
-          dispatch(fetchTreatmentThunk(current.userId));
-        }
-      }, [current, dispatch]);
+    // useEffect(() => {
+    //     if (current?.userId) {
+    //       console.log("מביא טיפולים למשתמש:", current.userId);
+    //       dispatch(fetchTreatmentThunk(current.userId));
+    //     }
+    //   }, [current, dispatch]);
 
-      useEffect(() => {
-        console.log("טיפולים שהתקבלו:", treatments);
-        console.log("תאריכים בלוח:", dates);
-      }, [treatments, dates]);
-      
+    //   useEffect(() => {
+    //     console.log("טיפולים שהתקבלו:", treatments);
+    //     console.log("תאריכים בלוח:", dates);
+    //   }, [treatments, dates]);
+
     //#endregion
 
     return (
@@ -631,10 +648,11 @@ export const Calender = () => {
                     {dates?.map((dateStr, ind) => {
                         const isToday = dateStr === today;
                         // פתרון פשוט יותר - אם treatments הוא undefined, נשתמש במערך ריק
-                        const dateTreatments = (treatments || []).filter(
+                        const dateTreatments = treatments?.filter(
                             tt => tt && tt.treatmentDate && new Date(tt.treatmentDate).toLocaleDateString() === dateStr
                         );
-
+                        console.log("dateTreatments:", dateTreatments);
+                        console.log("treatments:", treatments);
                         return (
                             <div
                                 key={`day-${ind}`}
@@ -651,8 +669,12 @@ export const Calender = () => {
                                 </div>
 
                                 <div className="day-events">
+
                                     <AnimatePresence>
-                                        {dateTreatments.map((treatment) => (
+                                        {dateTreatments?.map((treatment) => (
+
+
+
                                             <motion.div
                                                 key={treatment.treatmentId}
                                                 className="event-card"
@@ -663,10 +685,20 @@ export const Calender = () => {
                                                 onClick={() => optionEvent(treatment)}
                                             >
                                                 <div className="event-time">
-                                                    {new Date(treatment.treatmentDate).toLocaleTimeString('he-IL', {
-                                                        hour: '2-digit',
-                                                        minute: '2-digit'
-                                                    })}
+                                                    {/* איך מציגים שעה בפורמט של 14:00 */}
+                                                    {treatment.treatmentTime.toString().slice(0, treatment.treatmentTime.length - 3)}
+
+                                                    {/* {
+                                                    // new Date(treatment.treatmentDate).setTime(parseInt(treatment.treatmentTime)).toLocaleString('he-IL', {
+                                                    //         hour: '2-digit',
+                                                    //         minute: '2-digit'
+                                                    //     })
+                                                    
+                                                    // .toLocaleTimeString('he-IL', {
+                                                    //     hour: '2-digit',
+                                                    //     minute: '2-digit'
+                                                    // })
+                                                    } */}
                                                 </div>
                                                 <div className="event-title">{treatment.escort}</div>
                                                 <div className="event-patient">מטופל: {treatment.pationtId}</div>
@@ -733,7 +765,7 @@ export const Calender = () => {
 
                             const isToday = dateStr === today;
                             // פתרון פשוט יותר
-                            const dateTreatments = (treatments || []).filter(
+                            const dateTreatments = (treatments)?.filter(
                                 tt => tt && tt.treatmentDate && new Date(tt.treatmentDate).toLocaleDateString() === dateStr
                             );
 
@@ -749,7 +781,7 @@ export const Calender = () => {
                                 >
                                     <div className="month-day-number">{new Date(dateStr).getDate()}</div>
                                     <div className="month-day-events">
-                                        {dateTreatments.slice(0, 3).map((treatment) => (
+                                        {dateTreatments?.slice(0, 3).map((treatment) => (
                                             <div
                                                 key={treatment.treatmentId}
                                                 className="month-event"
@@ -759,17 +791,19 @@ export const Calender = () => {
                                                 }}
                                             >
                                                 <span className="month-event-time">
-                                                    {new Date(treatment.treatmentDate).toLocaleTimeString('he-IL', {
+                                                    {/* {new Date(treatment.treatmentDate).toLocaleTimeString('he-IL', {
                                                         hour: '2-digit',
                                                         minute: '2-digit'
-                                                    })}
+                                                    })} */}
+                                                    {treatment.treatmentTime.toString().slice(0, treatment.treatmentTime.length - 3)}
+
                                                 </span>
                                                 <span className="month-event-title">{treatment.escort}</span>
                                             </div>
                                         ))}
-                                        {dateTreatments.length > 3 && (
+                                        {dateTreatments?.length > 3 && (
                                             <div className="month-more-events">
-                                                +{dateTreatments.length - 3} נוספים
+                                                +{dateTreatments?.length - 3} נוספים
                                             </div>
                                         )}
                                     </div>
@@ -852,7 +886,7 @@ export const Calender = () => {
                                     <div className="no-results">לא נמצאו תוצאות</div>
                                 )}
 
-                                {searchResults.map((treatment) => (
+                                {searchResults?.map((treatment) => (
                                     <motion.div
                                         key={treatment.treatmentId}
                                         className="search-result-item"
@@ -936,10 +970,8 @@ export const Calender = () => {
                                 <div className="event-info-item">
                                     <span className="event-info-label">שעה:</span>
                                     <span className="event-info-value">
-                                        {new Date(eventNow.treatmentDate).toLocaleTimeString('he-IL', {
-                                            hour: '2-digit',
-                                            minute: '2-digit'
-                                        })}
+                                        {eventNow.treatmentTime.toString().slice(0, eventNow.treatmentTime.length - 3)}
+
                                     </span>
                                 </div>
                                 {eventNow.nextMeetingPlanning && (
@@ -1038,10 +1070,8 @@ export const Calender = () => {
                                         <div className="details-item">
                                             <span className="details-label">שעה:</span>
                                             <span className="details-value">
-                                                {new Date(eventNow.treatmentDate).toLocaleTimeString('he-IL', {
-                                                    hour: '2-digit',
-                                                    minute: '2-digit'
-                                                })}
+                                                {eventNow.treatmentTime.toString().slice(0, eventNow.treatmentTime.length - 3)}
+
                                             </span>
                                         </div>
                                         <div className="details-item">

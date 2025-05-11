@@ -67,18 +67,18 @@
 //     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 //     const menuRef = useRef(null);
 //     const dispatch = useDispatch();
-    
+
 //     useEffect(() => {
 //         dispatch(fetchUserThunk());
 //     }, [dispatch]);
-    
+
 //     useEffect(() => {
 //         const handleClickOutside = (event) => {
 //             if (menuRef.current && !menuRef.current.contains(event.target)) {
 //                 setOpenDetails(false);
 //             }
 //         };
-        
+
 //         document.addEventListener("mousedown", handleClickOutside);
 //         return () => {
 //             document.removeEventListener("mousedown", handleClickOutside);
@@ -111,11 +111,11 @@
 //                     <div className="logo-container">
 //                         <img className="logo" src="logo.JPG" alt="לוגו הקליניקה" />
 //                     </div>
-                    
+
 //                     <div className="mobile-menu-toggle" onClick={toggleMobileMenu}>
 //                         {mobileMenuOpen ? <FaTimes /> : <FaBars />}
 //                     </div>
-                    
+
 //                     <nav className={`main-menu ${mobileMenuOpen ? 'mobile-open' : ''}`}>
 //                         {menuItems.map((item, index) => (
 //                             <motion.div 
@@ -130,7 +130,7 @@
 //                             </motion.div>
 //                         ))}
 //                     </nav>
-                    
+
 //                     <div className="user-menu-container" ref={menuRef}>
 //                         <motion.div 
 //                             className="user-menu-button"
@@ -141,7 +141,7 @@
 //                             <FaUserCircle className="user-icon" />
 //                             {current.firstName && <span className="user-name">שלום, {current.firstName}</span>}
 //                         </motion.div>
-                        
+
 //                         <AnimatePresence>
 //                             {openDetails && (
 //                                 <motion.div 
@@ -170,7 +170,7 @@
 //                     </div>
 //                 </div>
 //             </header>
-            
+
 //             <main className="main-content">
 //                 <section className="hero-section">
 //                     <div className="hero-content">
@@ -190,7 +190,7 @@
 //                         >
 //                             המקום המושלם לניהול הטיפולים והמטופלים שלך
 //                         </motion.p>
-                        
+
 //                         <motion.div 
 //                             className="hero-buttons"
 //                             initial={{ opacity: 0, y: 20 }}
@@ -209,7 +209,7 @@
 //                         <img src="/images/therapy-illustration.svg" alt="איור טיפול" />
 //                     </div>
 //                 </section>
-                
+
 //                 <section className="features-section">
 //                     <h2 className="section-title">הכלים שלנו לניהול הקליניקה</h2>
 //                     <div className="features-grid">
@@ -234,7 +234,7 @@
 //                     </div>
 //                 </section>
 //             </main>
-            
+
 //             <Routing />
 //         </div>
 //     );
@@ -256,18 +256,18 @@ export const Home = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const menuRef = useRef(null);
     const dispatch = useDispatch();
-    
+
     useEffect(() => {
         dispatch(fetchUserThunk());
     }, [dispatch]);
-    
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (menuRef.current && !menuRef.current.contains(event.target)) {
                 setOpenDetails(false);
             }
         };
-        
+
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
@@ -314,16 +314,16 @@ export const Home = () => {
                     <div className="logo-container">
                         <img className="logo" src="logo2.JPG" alt="לוגו הקליניקה" />
                     </div>
-                    
+
                     <div className="mobile-menu-toggle" onClick={toggleMobileMenu}>
                         {mobileMenuOpen ? <FaTimes /> : <FaBars />}
                     </div>
-                    
+
                     <nav className={`main-menu ${mobileMenuOpen ? 'mobile-open' : ''}`}>
                         {menuItems.map((item, index) => (
-                            <motion.div 
+                            <motion.div
                                 key={index}
-                                className="menu-item" 
+                                className="menu-item"
                                 onClick={() => handleMenuItemClick(item.action)}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
@@ -333,9 +333,9 @@ export const Home = () => {
                             </motion.div>
                         ))}
                     </nav>
-                    
+
                     <div className="user-menu-container" ref={menuRef}>
-                        <motion.div 
+                        <motion.div
                             className="user-menu-button"
                             onClick={handlePersonal}
                             whileHover={{ scale: 1.1 }}
@@ -344,10 +344,10 @@ export const Home = () => {
                             <FaUserCircle className="user-icon" />
                             {current.firstName && <span className="user-name">שלום, {current.firstName}</span>}
                         </motion.div>
-                        
+
                         <AnimatePresence>
                             {openDetails && (
-                                <motion.div 
+                                <motion.div
                                     className="user-dropdown"
                                     initial={{ opacity: 0, y: -10 }}
                                     animate={{ opacity: 1, y: 0 }}
@@ -373,14 +373,14 @@ export const Home = () => {
                     </div>
                 </div>
             </header>
-            
+
             <main className="main-content">
                 {/* תוכן דינמי - יוצג רק בדף הבית */}
                 {window.location.pathname === '/' && (
                     <>
                         <section className="hero-section">
                             <div className="hero-content">
-                                <motion.h1 
+                                <motion.h1
                                     className="hero-title"
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
@@ -388,7 +388,7 @@ export const Home = () => {
                                 >
                                     ברוכים הבאים לקליניקה שלנו
                                 </motion.h1>
-                                <motion.p 
+                                <motion.p
                                     className="hero-subtitle"
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
@@ -396,8 +396,8 @@ export const Home = () => {
                                 >
                                     המקום המושלם לניהול הטיפולים והמטופלים שלך
                                 </motion.p>
-                                
-                                <motion.div 
+
+                                <motion.div
                                     className="hero-buttons"
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
@@ -415,7 +415,7 @@ export const Home = () => {
                                 <img src="logo2.jpg" alt="איור טיפול" />
                             </div>
                         </section>
-                        
+
                         <section className="features-section">
                             <h2 className="section-title">הכלים שלנו לניהול הקליניקה</h2>
                             <div className="features-grid">
@@ -425,7 +425,7 @@ export const Home = () => {
                                     { title: "תזכורות אוטומטיות", icon: "tizcoret.jpg", description: "שליחת תזכורות למטופלים לפני הפגישות" },
                                     { title: "דוחות וסטטיסטיקות", icon: "doch.jpg", description: "קבלת תובנות על הפעילות בקליניקה" }
                                 ].map((feature, index) => (
-                                    <motion.div 
+                                    <motion.div
                                         key={index}
                                         className="feature-card"
                                         initial={{ opacity: 0, y: 20 }}
@@ -442,16 +442,16 @@ export const Home = () => {
                                 ))}
                             </div>
                         </section>
-                        
+
                         <section className="testimonials-section">
                             <h2 className="section-title">מה אומרים עלינו</h2>
                             <div className="testimonials-slider">
                                 {[
-                                    { name: "ד״ר יוני כהן", role: "פיזיותרפיסט", text: "המערכת שינתה לחלוטין את אופן ניהול הקליניקה שלי. אני חוסך זמן רב וההתנהלות היומיומית הפכה לפשוטה הרבה יותר.", avatar: "men1.jpg" ,},
+                                    { name: "ד״ר יוני כהן", role: "פיזיותרפיסט", text: "המערכת שינתה לחלוטין את אופן ניהול הקליניקה שלי. אני חוסך זמן רב וההתנהלות היומיומית הפכה לפשוטה הרבה יותר.", avatar: "men1.jpg", },
                                     { name: "יוסי לוי", role: "קלינאי תקשורת", text: "הממשק ידידותי למשתמש והתמיכה הטכנית מעולה. ממליץ בחום לכל מטפל שרוצה לייעל את העבודה שלו.", avatar: "men2.jpg" },
                                     { name: "מיכל אברהם", role: "מרפאה בעיסוק", text: "המעקב אחר המטופלים הפך לפשוט יותר, והיכולת לראות את ההיסטוריה הטיפולית בקלות עוזרת לי לתת טיפול טוב יותר.", avatar: "maakav.jpg" }
                                 ].map((testimonial, index) => (
-                                    <motion.div 
+                                    <motion.div
                                         key={index}
                                         className="testimonial-card"
                                         initial={{ opacity: 0, x: 50 }}
@@ -470,27 +470,31 @@ export const Home = () => {
                                                 </div>
                                             </div>
                                         </div>
+
                                     </motion.div>
+
                                 ))}
                             </div>
                         </section>
-                        
+
+
+
                         <section className="cta-section">
-                            <div className="cta-content">
-                                <h2>מוכנים להתחיל?</h2>
+                            <div className="cta-content">                            
+                            <h2>מוכנים להתחיל?</h2>
                                 <p>הצטרפו אלינו עוד היום וגלו כיצד המערכת שלנו יכולה לשפר את ניהול הקליניקה שלכם</p>
-                                <button className="primary-button" onClick={() => navigate('/contact')}>
-                                    צור קשר עכשיו
-                                </button>
+                                <div className="cta-buttons">
+                                    <button className="primary-button" onClick={() => navigate('/logon')}>התחל ניסיון בחינם</button>
+                                </div>
                             </div>
                         </section>
                     </>
                 )}
-                
+
                 {/* כאן מוצג התוכן הדינמי מהניתוב */}
                 <Routing />
             </main>
-            
+
             <Footer />
         </div>
     );
