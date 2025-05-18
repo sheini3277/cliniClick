@@ -64,6 +64,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaEye, FaEyeSlash, FaLock, FaIdCard } from "react-icons/fa";
 import "./auth.css";
+import { resetUser } from "../../redux/slices/usersSlice";
 
 export const Login = () => {
     const dispatch = useDispatch();
@@ -143,7 +144,9 @@ export const Login = () => {
             ],
             { duration: 200, easing: 'ease-in' }
         );
-        
+        if(authError) {
+            dispatch(resetUser())
+        }
         animation.onfinish = () => {
             navigate(`../`);
         };
@@ -169,6 +172,8 @@ export const Login = () => {
                 };
             } else {
                 // סיסמה שגויה
+                debugger
+
                 setAuthError(true);
                 // אנימציה לשגיאת התחברות
                 const passwordInput = document.getElementById('password-input');

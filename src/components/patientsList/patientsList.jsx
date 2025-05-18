@@ -60,6 +60,7 @@ import { FaUserPlus, FaCalendarAlt, FaCalendarPlus, FaListAlt, FaFilePdf, FaChar
 
 export const PatientsList = () => {
     const patients = useSelector(state => state.patient.patientList);
+    const treatments = useSelector(state => state.treatment.treatmentList);
     const dispatch = useDispatch();
     const current = useSelector(state => state.user.currentUser);
     const [currentPatient, setCurrentPatient] = useState({});
@@ -74,6 +75,7 @@ export const PatientsList = () => {
     useEffect(() => {
         if (current?.userId) dispatch(getPatientByUserIdThunk(current.userId));
     }, [current, dispatch]);
+    
 
     const showDetailsForPatient = (p) => {
         setCurrentPatient(p);
@@ -146,7 +148,7 @@ export const PatientsList = () => {
                                     onClick={() => navigate(`/calender/${p.pationtId}`)}
                                 >
                                     <FaCalendarAlt className="action-icon" />
-                                    <span>תור קרוב</span>
+                                    <span>רשימת התורים</span>
                                 </button>
                                 <button 
                                     className="patient-action-button" 
@@ -164,7 +166,7 @@ export const PatientsList = () => {
                                 </button>
                                 <button 
                                     className="patient-action-button" 
-                                    onClick={() => alert("pdf is not define")}
+                                    onClick={() => navigate(`/showTreatmentReport/${p.pationtId}`)}
                                 >
                                     <FaFilePdf className="action-icon" />
                                     <span>דוח סיום</span>

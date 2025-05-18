@@ -136,9 +136,9 @@ export const AddNewTreatment = () => {
         }
         
         // בדיקה שהשעה בפורמט תקין
-        if (!/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(time)) {
-            return "פורמט שעה לא תקין";
-        }
+        // if (!/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(time)) {
+        //     return "פורמט שעה לא תקין";
+        // }
         
         return "";
     };
@@ -285,7 +285,7 @@ export const AddNewTreatment = () => {
                                 </label>
                                 <input 
                                     id="treatment-time"
-                                    type="time" 
+                                    type="text" 
                                     value={treatment.treatmentTime} 
                                     onChange={(e) => handleInputChange("treatmentTime", e.target.value)}
                                     className={errors.treatmentTime ? "input-error" : ""}

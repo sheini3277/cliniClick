@@ -176,7 +176,7 @@ export const About = () => {
               <h3>חדשנות טכנולוגית</h3>
               <div className="innovation-content">
                 <div className="innovation-image">
-                  <img src="/ai.jpeg" alt="AI Analysis" />
+                  <img src="/ai2.jpg" alt="AI Analysis" />
                 </div>
                 <div className="innovation-text">
                   <h4>בינה מלאכותית בשירות הקליניקה</h4>

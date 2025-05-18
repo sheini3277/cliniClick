@@ -1,30 +1,3 @@
-// import { useDispatch, useSelector } from "react-redux";
-// import { useEffect, useRef, useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { Typography } from "@mui/material";
-// export const MyAccount = () => {
-//     const refDialog = useRef()
-//     const navigate = useNavigate();
-//     const currentToShow = useSelector(state => state.user.currentUser)
-//     useEffect(() => {
-//         refDialog.current.showModal();
-//     }, []);
-//     const closeDialog = async () => {
-//         navigate(`../`)
-//     }
-//     return <dialog className="inDiv2" ref={refDialog}>
-//         <button className="login" onClick={() => { closeDialog() }} >x</button>
-//         <div className="formLogin">
-//             <fieldset className="fieldset1">
-//                 <legend>{currentToShow.firstName} {currentToShow.lastName}</legend>
-//                 {/* {currentToShow.diagnosis} {currentToShow.background} {currentToShow.pationtId} */}
-//                 {/* <Typography component="legend" className="colorDesign"></Typography> */}
-//                 <Typography component="legend" className="colorDesign" onClick={() => navigate(`/login/${true}`)}>רישום מחדש</Typography>
-//             </fieldset>
-//             <br />
-//         </div>
-//     </dialog>
-// }
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -39,191 +12,345 @@ import {
   ListItemText,
   IconButton,
   useMediaQuery,
-  useTheme
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Button,
+  Paper,
+  Stack
 } from "@mui/material";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { 
-  Person as PersonIcon, 
   Edit as EditIcon, 
   Logout as LogoutIcon, 
   Close as CloseIcon,
   MedicalServices as MedicalIcon,
-  History as HistoryIcon
+  History as HistoryIcon,
+  CalendarMonth as CalendarIcon,
+  Person as PersonIcon
 } from '@mui/icons-material';
 
 export const MyAccount = () => {
+    // הגדרת ערכי הצבעים של האתר
+    const customTheme = createTheme({
+        palette: {
+            primary: {
+                main: 'rgb(172, 36, 84)',
+                light: 'rgba(172, 36, 84, 0.1)',
+                dark: 'rgb(142, 30, 70)',
+            },
+            text: {
+                primary: '#333',
+                secondary: '#666',
+            },
+            background: {
+                default: '#ffffff',
+                paper: '#ffffff',
+            },
+        },
+        direction: 'rtl',
+    });
+
     const refDialog = useRef();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const currentToShow = useSelector(state => state.user.currentUser);
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const isMobile = useMediaQuery(customTheme.breakpoints.down('sm'));
+    const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
     useEffect(() => {
-        refDialog.current.showModal();
+        if (refDialog.current) {
+            refDialog.current.showModal();
+        }
     }, []);
 
     const closeDialog = async () => {
-        navigate(`../`);
+        if (refDialog.current) {
+            refDialog.current.close();
+        }
+        setTimeout(() => navigate(`../`), 100);
     };
 
     const handleEditProfile = () => {
-        navigate(`/login/${true}`);
+        closeDialog();
+        setTimeout(() => navigate(`/login/${true}`), 100);
+    };
+
+    const handleViewAppointments = () => {
+        closeDialog();
+        setTimeout(() => navigate('/appointments'), 100);
+    };
+
+    const handleViewMedicalRecord = () => {
+        closeDialog();
+        setTimeout(() => navigate('/medical-record'), 100);
+    };
+
+    const handleViewHistory = () => {
+        closeDialog();
+        setTimeout(() => navigate('/visit-history'), 100);
+    };
+
+    const handleLogout = () => {
+        setLogoutDialogOpen(true);
+    };
+
+    const confirmLogout = () => {
+        setLogoutDialogOpen(false);
+        // כאן יש להוסיף את הלוגיקה של התנתקות מהמערכת
+        dispatch({ type: 'LOGOUT_USER' });
+        closeDialog();
+        setTimeout(() => navigate('/'), 100);
+    };
+
+    const dialogStyles = {
+        maxWidth: isMobile ? '90vw' : '450px',
+        width: '100%',
+        borderRadius: '12px',
+        padding: 0,
+        overflow: 'hidden',
+        border: 'none',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        margin: 0,
+        backgroundColor: '#ffffff',
+        '&::backdrop': {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)'
+        }
     };
 
     return (
-        <dialog 
-            className="inDiv2" 
-            ref={refDialog}
-            style={{
-                maxWidth: isMobile ? '90vw' : '450px',
-                width: '100%',
-                borderRadius: '8px',
-                padding: 0,
-                overflow: 'hidden'
-            }}
-        >
-            <button 
-                className="login" 
-                onClick={closeDialog}
-                style={{
-                    position: 'absolute',
-                    top: '10px',
-                    right: '10px',
-                    zIndex: 10
-                }}
-            >
-                x
-            </button>
+        <ThemeProvider theme={customTheme}>
+            <dialog ref={refDialog} style={dialogStyles}>
+                <IconButton 
+                    onClick={closeDialog}
+                    sx={{
+                        position: 'absolute',
+                        top: '12px',
+                        right: '12px',
+                        zIndex: 10,
+                        color: '#ffffff',
+                        '&:hover': {
+                            backgroundColor: 'rgba(255, 255, 255, 0.2)'
+                        }
+                    }}
+                    size="small"
+                >
+                    <CloseIcon />
+                </IconButton>
 
-            <div className="formLogin" style={{ padding: '0' }}>
-                <fieldset className="fieldset1" style={{ margin: '0', padding: '20px', border: 'none' }}>
-                    <Box sx={{ 
-                        textAlign: 'center', 
-                        mb: 3,
-                        mt: 2
-                    }}>
-                        <Avatar 
-                            sx={{ 
-                                width: 80, 
-                                height: 80, 
-                                margin: '0 auto 16px',
-                                bgcolor: '#4682b4' // כחול בסיסי שמתאים לרוב האתרים
-                            }}
-                        >
-                            {currentToShow.firstName?.charAt(0) || 'U'}
-                        </Avatar>
-                        
-                        <legend style={{ 
-                            fontSize: '1.5rem', 
-                            fontWeight: 'bold',
-                            marginBottom: '8px',
-                            width: '100%',
-                            textAlign: 'center'
-                        }}>
-                            {currentToShow.firstName} {currentToShow.lastName}
-                        </legend>
-                        
-                        {currentToShow.pationtId && (
-                            <Typography variant="body2" sx={{ opacity: 0.7 }}>
-                                מספר מטופל: {currentToShow.pationtId}
-                            </Typography>
-                        )}
-                    </Box>
+                <Box sx={{ 
+                    bgcolor: 'primary.main', 
+                    color: '#ffffff',
+                    p: 3,
+                    pb: 8,
+                    position: 'relative',
+                    borderRadius: '0 0 50% 50% / 20%',
+                    textAlign: 'center'
+                }}>
+                    <Avatar 
+                        sx={{ 
+                            width: 90, 
+                            height: 90, 
+                            margin: '0 auto 16px',
+                            bgcolor: '#ffffff',
+                            color: 'primary.main',
+                            border: '4px solid rgba(255, 255, 255, 0.3)',
+                            fontSize: '2rem',
+                            fontWeight: 'bold'
+                        }}
+                    >
+                        {currentToShow.firstName?.charAt(0) || <PersonIcon fontSize="large" />}
+                    </Avatar>
+                    
+                    <Typography variant="h5" fontWeight="bold" sx={{ mb: 0.5 }}>
+                        {currentToShow.firstName} {currentToShow.lastName}
+                    </Typography>
+                    
+                    {currentToShow.pationtId && (
+                        <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                            מספר מטופל: {currentToShow.pationtId}
+                        </Typography>
+                    )}
+                </Box>
 
+                <Box sx={{ p: 3, pt: 2, direction: 'rtl' }}>
                     {/* מידע רפואי אם קיים */}
                     {(currentToShow.diagnosis || currentToShow.background) && (
-                        <Box sx={{ 
-                            mb: 3, 
-                            p: 2, 
-                            bgcolor: '#f5f5f5', 
-                            borderRadius: '8px',
-                            textAlign: 'right'
-                        }}>
+                        <Paper 
+                            elevation={0}
+                            sx={{ 
+                                mb: 3, 
+                                p: 2, 
+                                bgcolor: 'primary.light', 
+                                borderRadius: '8px',
+                                textAlign: 'right'
+                            }}
+                        >
                             {currentToShow.diagnosis && (
                                 <Box sx={{ mb: 1 }}>
-                                    <Typography variant="subtitle2" fontWeight="bold">אבחנה:</Typography>
-                                    <Typography variant="body2">{currentToShow.diagnosis}</Typography>
+                                    <Typography variant="subtitle2" fontWeight="bold" color="primary.dark">אבחנה:</Typography>
+                                    <Typography variant="body2" color="text.primary">{currentToShow.diagnosis}</Typography>
                                 </Box>
                             )}
                             
                             {currentToShow.background && (
                                 <Box>
-                                    <Typography variant="subtitle2" fontWeight="bold">רקע רפואי:</Typography>
-                                    <Typography variant="body2">{currentToShow.background}</Typography>
+                                    <Typography variant="subtitle2" fontWeight="bold" color="primary.dark">רקע רפואי:</Typography>
+                                    <Typography variant="body2" color="text.primary">{currentToShow.background}</Typography>
                                 </Box>
                             )}
-                        </Box>
+                        </Paper>
                     )}
 
-                    <List sx={{ width: '100%' }}>
+                    <List sx={{ width: '100%', p: 0 }}>
                         <ListItem 
                             button 
                             onClick={handleEditProfile}
                             sx={{ 
-                                borderRadius: '4px',
-                                '&:hover': { bgcolor: '#f0f0f0' }
+                                borderRadius: '8px',
+                                mb: 1,
+                                '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.04)' }
                             }}
                         >
-                            <ListItemIcon>
-                                <EditIcon />
+                            <ListItemIcon sx={{ minWidth: '40px' }}>
+                                <EditIcon sx={{ color: 'primary.main' }} />
                             </ListItemIcon>
                             <ListItemText 
-                                primary="רישום מחדש" 
-                                className="colorDesign"
+                                primary="עריכת פרופיל" 
+                                primaryTypographyProps={{ fontWeight: 'medium' }}
                             />
                         </ListItem>
                         
                         <ListItem 
                             button
+                            onClick={handleViewAppointments}
                             sx={{ 
-                                borderRadius: '4px',
-                                '&:hover': { bgcolor: '#f0f0f0' }
+                                borderRadius: '8px',
+                                mb: 1,
+                                '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.04)' }
                             }}
                         >
-                            <ListItemIcon>
-                                <HistoryIcon />
+                            <ListItemIcon sx={{ minWidth: '40px' }}>
+                                <CalendarIcon sx={{ color: 'primary.main' }} />
+                            </ListItemIcon>
+                            <ListItemText 
+                                primary="התורים שלי" 
+                                primaryTypographyProps={{ fontWeight: 'medium' }}
+                            />
+                        </ListItem>
+                        
+                        <ListItem 
+                            button
+                            onClick={handleViewHistory}
+                            sx={{ 
+                                borderRadius: '8px',
+                                mb: 1,
+                                '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.04)' }
+                            }}
+                        >
+                            <ListItemIcon sx={{ minWidth: '40px' }}>
+                                <HistoryIcon sx={{ color: 'primary.main' }} />
                             </ListItemIcon>
                             <ListItemText 
                                 primary="היסטוריית ביקורים" 
-                                className="colorDesign"
+                                primaryTypographyProps={{ fontWeight: 'medium' }}
                             />
                         </ListItem>
                         
                         <ListItem 
                             button
+                            onClick={handleViewMedicalRecord}
                             sx={{ 
-                                borderRadius: '4px',
-                                '&:hover': { bgcolor: '#f0f0f0' }
+                                borderRadius: '8px',
+                                mb: 1,
+                                '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.04)' }
                             }}
                         >
-                            <ListItemIcon>
-                                <MedicalIcon />
+                            <ListItemIcon sx={{ minWidth: '40px' }}>
+                                <MedicalIcon sx={{ color: 'primary.main' }} />
                             </ListItemIcon>
                             <ListItemText 
                                 primary="תיק רפואי" 
-                                className="colorDesign"
+                                primaryTypographyProps={{ fontWeight: 'medium' }}
                             />
                         </ListItem>
                         
-                        <Divider sx={{ my: 1 }} />
+                        <Divider sx={{ my: 2 }} />
                         
                         <ListItem 
                             button
+                            onClick={handleLogout}
                             sx={{ 
-                                borderRadius: '4px',
-                                '&:hover': { bgcolor: '#ffeeee' }
+                                borderRadius: '8px',
+                                '&:hover': { bgcolor: 'rgba(172, 36, 84, 0.08)' }
                             }}
                         >
-                            <ListItemIcon>
-                                <LogoutIcon sx={{ color: '#d32f2f' }} />
+                            <ListItemIcon sx={{ minWidth: '40px' }}>
+                                <LogoutIcon sx={{ color: 'primary.dark' }} />
                             </ListItemIcon>
                             <ListItemText 
                                 primary="התנתקות" 
-                                sx={{ color: '#d32f2f' }}
+                                primaryTypographyProps={{ 
+                                    fontWeight: 'medium',
+                                    color: 'primary.dark'
+                                }}
                             />
                         </ListItem>
                     </List>
-                </fieldset>
-            </div>
-        </dialog>
+                </Box>
+            </dialog>
+
+            {/* דיאלוג אישור התנתקות */}
+            <Dialog
+                open={logoutDialogOpen}
+                onClose={() => setLogoutDialogOpen(false)}
+                PaperProps={{
+                    sx: {
+                        borderRadius: '12px',
+                        overflow: 'hidden',
+                        direction: 'rtl',
+                        maxWidth: '400px',
+                        width: '100%'
+                    }
+                }}
+            >
+                <DialogTitle sx={{ 
+                    fontWeight: 'bold', 
+                    color: 'primary.main',
+                    pb: 1
+                }}>
+                    התנתקות מהמערכת
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        האם אתה בטוח שברצונך להתנתק מהמערכת?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions sx={{ p: 2, pt: 0 }}>
+                    <Button 
+                        onClick={() => setLogoutDialogOpen(false)} 
+                        sx={{ color: 'text.secondary' }}
+                    >
+                        ביטול
+                    </Button>
+                    <Button 
+                        onClick={confirmLogout} 
+                        variant="contained"
+                        sx={{ 
+                            bgcolor: 'primary.main',
+                            '&:hover': { bgcolor: 'primary.dark' }
+                        }}
+                    >
+                        התנתק
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </ThemeProvider>
     );
 };

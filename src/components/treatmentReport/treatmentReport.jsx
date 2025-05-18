@@ -1,116 +1,3 @@
-// import { Navigate, useNavigate, useParams } from "react-router-dom"
-// import "./treatmentReport.css"
-// import { useEffect, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { Button, Checkbox, TextField, styled } from "@mui/material";
-// import { newCurrentTreatment } from "../../redux/slices/treatmentSlice";
-// import { getOneTreatmentThunk } from "../../redux/slices/getOneTreatmentFetch";
-
-// import Box from '@mui/material/Box';
-// import Rating from '@mui/material/Rating';
-// import FavoriteIcon from '@mui/icons-material/Favorite';
-// import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-// import Typography from '@mui/material/Typography';
-// import { Directions, Star, TextFormatSharp } from "@mui/icons-material";
-// import { getPatientByIdThunk } from "../../redux/slices/getPatientById";
-// import { updateTreatmentThunk } from "../../redux/slices/updateTreatmentFetch";
-// import { getAimsOfPatientsThunk } from "../../redux/slices/getAimsForPatients";
-// import { addActivityFetch } from "../../redux/slices/addActivityFetch";
-
-// const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-
-
-// export const TreatmentReport = () => {
-
-//     const param = useParams();
-//     const navigate = useNavigate()
-//     const dispatch = useDispatch()
-//     const aimsForExam = useSelector(state => state.aim.aimsList)
-//     const theTreatment = useSelector(state => state.treatment.curretntTreatment);
-//     const thePatient = useSelector(state => state.patient.currentPatient);
-//     const [aimForActivity, setAimForActivity] = useState();
-//     const [treatment, setTreatment] = useState({
-//         treatmentId: theTreatment.treatmentId,
-//         treatmentDate: theTreatment.treatmentDate,
-//         treatmentTime: theTreatment.treatmentTime,
-//         pationtId: theTreatment.pationtId,
-//         isComing: true,
-//         escort: null,
-//         cooperation: null,
-//         nextMeetingPlanning: null,
-//         bePaid: false,
-//         userId: theTreatment.userId,
-//     });
-//     const [activity, setActivity] = useState({
-//         activityId: null,
-//         activityName: null,
-//         activityDescription: null,
-//         activityAim: null
-//     })
-//     const [activityList, setActivityList] = useState([]);
-//     const confirm = () => {
-//         dispatch(updateTreatmentThunk({ treatmentId: theTreatment.treatmentId, treatment: treatment }))
-//         navigate('../')
-//     }
-//     const StyledRating = styled(Rating)({
-//         '& .MuiRating-iconFilled': {
-//             color: '#ac2454',
-//         },
-//         '& .MuiRating-iconHover': {
-//             color: '#ac2454',
-//         },
-//     });
-//     useEffect(() => {
-//         dispatch(getAimsOfPatientsThunk(theTreatment.pationtId))
-//         dispatch(getOneTreatmentThunk(param.treatmentId))
-//         dispatch(getPatientByIdThunk())
-//     }, [])
-//     useEffect(() => {
-//         dispatch(getPatientByIdThunk(theTreatment.pationtId))
-//     }, [theTreatment.pationtId])
-//     const addActivity = () => {
-//         dispatch(addActivityFetch(activity))
-//         setActivityList([...activityList, activity])
-//         setActivity({
-//             activityId: null,
-//             activityName: null,
-//             activityDescription: null,
-//             activityAim: null
-//         })
-//     }
-//     return <div>
-//         <fieldset className="fieldset3">
-//             <legend ><b>סיכום הטיפול</b></legend>
-//             <Typography component="legend"> <b className="colorDesign">ת.ז מטופל  </b><br />{theTreatment.pationtId}</Typography>
-//             <Typography component="legend"> <b className="colorDesign">שם פרטי </b><br />{thePatient.firstName}</Typography>
-//             <Typography component="legend"> <b className="colorDesign">שם משפחה   </b><br />{thePatient.lastName}</Typography>
-//             <Typography component="legend"> <b className="colorDesign">שעת הטיפול </b><br />{theTreatment.treatmentTime}</Typography>
-//             <Typography component="legend"> <b className="colorDesign">תאריך הטיפול </b><br />{theTreatment.treatmentDate}</Typography>
-//             <Typography component="legend" className="colorDesign"><b>מלווה</b></Typography>
-//             <input value={theTreatment?.escort} onChange={e => setTreatment({ ...treatment, escort: e.target.value })} />
-//             <Typography component="legend" className="colorDesign"><b>תכנון הפגישה הבאה</b></Typography>
-//             <textarea value={theTreatment?.nextMeetingPlanning} onChange={e => setTreatment({ ...treatment, nextMeetingPlanning: e.target.value })} />
-//             <br />  <Typography component="legend" className="colorDesign">שיתוף פעולה</Typography>
-//             <StyledRating style={{ direction: 'ltr' }} name="customized-color" defaultValue={2} precision={1} icon={<Star fontSize="inherit" />} emptyIcon={<Star fontSize="inherit" />}
-//                 onChange={(e) => setTreatment({ ...treatment, cooperation: e.target.value })} />
-//             <Typography component="legend" className="colorDesign">האם שולם</Typography>
-//             <Checkbox {...label} sx={{ color: '#ac2454', '&.Mui-checked': { color: '#ac2454' } }}
-//                 onChange={() => setTreatment({ ...treatment, bePaid: !treatment.bePaid })} />
-//             {treatment.cooperation}
-//             <br />
-//             <Typography component="legend" className="colorDesign"><b>פעילות לקידום מטרות</b></Typography>
-//             {aimsForExam.map((a) => {
-//                 return a != null && <input type="text" placeholder={a.aimName} onChange={null}></input>})}
-//             <br />
-
-
-//             {aimForActivity}
-//             {treatment.bePaid && <>!!!</>}
-//             <Button className="colorDesign" onClick={() => { confirm() }} variant="text">אישור</Button>
-//             <Button className="colorDesign" onClick={() => { navigate(`./patientList`) }} variant="text">ביטול</Button>
-//         </fieldset>
-//     </div>
-// }
 import { useNavigate, useParams } from "react-router-dom";
 import "./treatmentReport.css";
 import { useEffect, useState } from "react";
@@ -129,19 +16,62 @@ import {
   Divider,
   Grid,
   Card,
-  CardContent
+  CardContent,
+  CircularProgress
 } from "@mui/material";
 import { newCurrentTreatment } from "../../redux/slices/treatmentSlice";
 import { getOneTreatmentThunk } from "../../redux/slices/getOneTreatmentFetch";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { Star, Add, CheckCircle } from "@mui/icons-material";
+import { CheckCircle, Cancel, Person, CalendarToday, AccessTime, Badge, Psychology, Assignment, Lightbulb, EmojiPeople, SportsKabaddi, MedicalServices, Healing, MedicalInformation } from "@mui/icons-material";
 import { getPatientByIdThunk } from "../../redux/slices/getPatientById";
 import { updateTreatmentThunk } from "../../redux/slices/updateTreatmentFetch";
 import { getAimsOfPatientsThunk } from "../../redux/slices/getAimsForPatients";
 import { addActivityFetch } from "../../redux/slices/addActivityFetch";
+import { getActivityThunk } from "../../redux/slices/getActivityThunk";
 
-const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+// סגנון מותאם לדירוג כוכבים
+const StyledRating = styled(Rating)({
+  '& .MuiRating-iconFilled': {
+    color: '#ac2454',
+  },
+  '& .MuiRating-iconHover': {
+    color: '#ac2454',
+  },
+  '& .MuiRating-iconEmpty': {
+    color: '#ac245433',
+  }
+});
+
+// סגנון מותאם לכפתורים
+const StyledButton = styled(Button)(({ theme }) => ({
+  borderRadius: '25px',
+  padding: '10px 20px',
+  fontWeight: 'bold',
+  transition: 'all 0.3s ease',
+  '&:hover': {
+    transform: 'translateY(-2px)',
+    boxShadow: '0 4px 10px rgba(172, 36, 84, 0.3)',
+  },
+  '&:active': {
+    transform: 'translateY(1px)',
+  }
+}));
+
+// סגנון מותאם לשדות טקסט
+const StyledTextField = styled(TextField)({
+  '& .MuiOutlinedInput-root': {
+    '&:hover fieldset': {
+      borderColor: '#ac2454',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#ac2454',
+    },
+  },
+  '& .MuiInputLabel-root.Mui-focused': {
+    color: '#ac2454',
+  },
+});
 
 export const TreatmentReport = () => {
   const param = useParams();
@@ -151,6 +81,8 @@ export const TreatmentReport = () => {
   const theTreatment = useSelector(state => state.treatment.curretntTreatment);
   const thePatient = useSelector(state => state.patient.currentPatient);
   const allActivities = useSelector(state => state.activity?.activitiesList || []);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   const [treatment, setTreatment] = useState({
     treatmentId: theTreatment?.treatmentId,
@@ -158,69 +90,77 @@ export const TreatmentReport = () => {
     treatmentTime: theTreatment?.treatmentTime,
     pationtId: theTreatment?.pationtId,
     isComing: true,
-    escort: null,
-    cooperation: null,
-    nextMeetingPlanning: null,
-    bePaid: false,
+    escort: theTreatment?.escort || "",
+    cooperation: theTreatment?.cooperation || 3,
+    nextMeetingPlanning: theTreatment?.nextMeetingPlanning || "",
+    bePaid: theTreatment?.bePaid || false,
     userId: theTreatment?.userId,
   });
 
   const [aimActivities, setAimActivities] = useState({});
-  const [activityList, setActivityList] = useState([]);
+  const [activeAim, setActiveAim] = useState(null);
 
-  // דוגמאות להצעות פעילויות (באפליקציה אמיתית, אלה יגיעו מהשרת)
-  const activitySuggestions = [
-    "קריאת ספר",
-    "תרגילי נשימה",
-    "משחק חברתי",
-    "פעילות מוטורית",
-    "תרגילי זיכרון",
-    "תרגול שפה",
-    "פעילות יצירתית",
-    "תרגילי ריכוז",
-    "משחק תפקידים",
-    ...allActivities.map(a => a.activityName)
-  ].filter((value, index, self) => self.indexOf(value) === index); // הסרת כפילויות
+  // דוגמאות להצעות פעילויות
+  const activitySuggestions = useSelector(state => state.activity.activitiesList);
+  const confirm = async () => {
+    setSaving(true);
 
-  const confirm = () => {
-    // שמירת כל הפעילויות עבור כל מטרה
-    Object.entries(aimActivities).forEach(([aimId, activity]) => {
-      if (activity.activityName) {
-        dispatch(addActivityFetch({
-          activityId: null,
-          activityName: activity.activityName,
-          activityDescription: activity.activityDescription,
-          activityAim: aimId
-        }));
-      }
-    });
+    try {
+      // שמירת כל הפעילויות עבור כל מטרה
+      const activityPromises = Object.entries(aimActivities).map(([aimId, activity]) => {
+        if (activity.activityName) {
+          return dispatch(addActivityFetch({
+            activityId: null,
+            activityName: activity.activityName,
+            activityDescription: activity.activityDescription,
+            activityAim: aimId
+          }));
+        }
+        return Promise.resolve();
+      });
 
-    dispatch(updateTreatmentThunk({ treatmentId: theTreatment?.treatmentId, treatment: treatment }));
-    navigate('../');
+      await Promise.all(activityPromises);
+      await dispatch(updateTreatmentThunk({ treatmentId: theTreatment?.treatmentId, treatment: treatment }));
+
+      setSaving(false);
+      navigate('../');
+    } catch (error) {
+      console.error("שגיאה בשמירת הנתונים:", error);
+      setSaving(false);
+    }
   };
 
-  const StyledRating = styled(Rating)({
-    '& .MuiRating-iconFilled': {
-      color: '#ac2454',
-    },
-    '& .MuiRating-iconHover': {
-      color: '#ac2454',
-    },
-  });
-
   useEffect(() => {
-    debugger
-    dispatch(getOneTreatmentThunk(param.treatmentId));
+    const loadData = async () => {
+      setLoading(true);
+      await dispatch(getOneTreatmentThunk(param.treatmentId));
+      setLoading(false);
+    };
+    loadData();
   }, []);
 
   useEffect(() => {
-    debugger
-    dispatch(getAimsOfPatientsThunk(theTreatment?.pationtId));
+    dispatch(getActivityThunk());
   }, [theTreatment]);
 
   useEffect(() => {
     if (theTreatment?.pationtId) {
-      dispatch(getPatientByIdThunk(theTreatment?.pationtId));
+      dispatch(getAimsOfPatientsThunk(theTreatment.pationtId));
+      dispatch(getPatientByIdThunk(theTreatment.pationtId));
+
+      // עדכון ה-state המקומי עם ערכים מהטיפול הנוכחי
+      setTreatment(prev => ({
+        ...prev,
+        treatmentId: theTreatment.treatmentId,
+        treatmentDate: theTreatment.treatmentDate,
+        treatmentTime: theTreatment.treatmentTime,
+        pationtId: theTreatment.pationtId,
+        escort: theTreatment.escort || "",
+        cooperation: theTreatment.cooperation || 3,
+        nextMeetingPlanning: theTreatment.nextMeetingPlanning || "",
+        bePaid: theTreatment.bePaid || false,
+        userId: theTreatment.userId,
+      }));
     }
   }, [theTreatment?.pationtId]);
 
@@ -237,6 +177,11 @@ export const TreatmentReport = () => {
         }
       });
       setAimActivities(initialAimActivities);
+
+      // הגדרת המטרה הראשונה כפעילה
+      if (aimsForExam[0]) {
+        setActiveAim(aimsForExam[0].aimId);
+      }
     }
   }, [aimsForExam]);
 
@@ -249,121 +194,269 @@ export const TreatmentReport = () => {
       }
     }));
   };
+  if (loading) {
+    return (
+      <Box sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        flexDirection: 'column',
+        gap: 2
+      }}>
+        <CircularProgress sx={{ color: '#ac2454' }} />
+        <Typography sx={{ color: '#ac2454', fontWeight: 'bold' }}>
+          טוען נתוני טיפול...
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
-    <Box sx={{
-      maxWidth: 900,
-      margin: '0 auto',
-      padding: 3,
-      direction: 'rtl'
-    }}>
+    <Box
+      className="treatment-report-container"
+      sx={{
+        maxWidth: 1000,
+        margin: '0 auto',
+        padding: { xs: 2, md: 4 },
+        direction: 'rtl'
+      }}
+    >
       <Paper
-        elevation={3}
+        elevation={5}
+        className="treatment-report-paper"
         sx={{
-          padding: 3,
-          borderRadius: 2,
+          padding: { xs: 2, md: 4 },
+          borderRadius: 4,
           border: '1px solid #ac2454',
           position: 'relative',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          background: 'linear-gradient(to bottom, #fff, #fdf5f8)'
         }}
       >
         <Box sx={{
           position: 'absolute',
           top: 0,
           right: 0,
-          width: '10px',
+          width: '12px',
           height: '100%',
-          backgroundColor: '#ac2454'
+          background: 'linear-gradient(to bottom, #ac2454, #d4447c)'
         }} />
 
-        <Typography variant="h4" component="h1" sx={{
-          color: '#ac2454',
-          fontWeight: 'bold',
-          marginBottom: 3,
-          textAlign: 'center'
-        }}>
-          סיכום הטיפול
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 4 }} className="title-container">
+          <MedicalServices sx={{ color: '#ac2454', fontSize: 32, mr: 1 }} className="title-icon" />
+          <Typography variant="h4" component="h1" sx={{
+            color: '#ac2454',
+            fontWeight: 'bold',
+            textAlign: 'center',
+            fontFamily: 'Rubik, Arial, sans-serif'
+          }} className="title-text">
+            סיכום הטיפול
+          </Typography>
+        </Box>
 
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
-            <Card variant="outlined" sx={{ height: '100%' }}>
+            <Card
+              className="patient-card card-hover"
+              elevation={3}
+              sx={{
+                height: '100%',
+                borderRadius: 3,
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                '&:hover': {
+                  transform: 'translateY(-5px)',
+                  boxShadow: '0 8px 20px rgba(172, 36, 84, 0.2)'
+                }
+              }}
+            >
               <CardContent>
-                <Typography variant="h6" sx={{ color: '#ac2454', fontWeight: 'bold', marginBottom: 2 }}>
-                  פרטי המטופל והטיפול
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <Person sx={{ color: '#ac2454', mr: 1 }} />
+                  <Typography variant="h6" sx={{ color: '#ac2454', fontWeight: 'bold' }}>
+                    פרטי המטופל והטיפול
+                  </Typography>
+                </Box>
 
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                  <Box>
-                    <Typography component="span" sx={{ fontWeight: 'bold', color: '#ac2454' }}>
+                <Divider sx={{ mb: 2, backgroundColor: '#ac245433' }} />
+
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Badge sx={{ color: '#ac2454', mr: 1 }} />
+                    <Typography component="span" sx={{ fontWeight: 'bold', color: '#ac2454', ml: 1 }}>
                       ת.ז מטופל:
                     </Typography>
-                    <Typography component="span" sx={{ marginRight: 1 }}>
+                    <Typography component="span">
                       {theTreatment?.pationtId}
                     </Typography>
                   </Box>
 
-                  <Box>
-                    <Typography component="span" sx={{ fontWeight: 'bold', color: '#ac2454' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Person sx={{ color: '#ac2454', mr: 1 }} />
+                    <Typography component="span" sx={{ fontWeight: 'bold', color: '#ac2454', ml: 1 }}>
                       שם מלא:
                     </Typography>
-                    <Typography component="span" sx={{ marginRight: 1 }}>
-                      {thePatient.firstName} {thePatient?.lastName}
+                    <Typography component="span">
+                      {thePatient?.firstName} {thePatient?.lastName}
                     </Typography>
                   </Box>
 
-                  <Box>
-                    <Typography component="span" sx={{ fontWeight: 'bold', color: '#ac2454' }}>
-                      מועד הטיפול:
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <CalendarToday sx={{ color: '#ac2454', mr: 1 }} />
+                    <Typography component="span" sx={{ fontWeight: 'bold', color: '#ac2454', ml: 1 }}>
+                      תאריך:
                     </Typography>
-                    <Typography component="span" sx={{ marginRight: 1 }}>
-                      {theTreatment?.treatmentDate}, {theTreatment?.treatmentTime}
+                    <Typography component="span">
+                      {theTreatment?.treatmentDate}
+                    </Typography>
+                  </Box>
+
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <AccessTime sx={{ color: '#ac2454', mr: 1 }} />
+                    <Typography component="span" sx={{ fontWeight: 'bold', color: '#ac2454', ml: 1 }}>
+                      שעה:
+                    </Typography>
+                    <Typography component="span">
+                      {theTreatment?.treatmentTime}
                     </Typography>
                   </Box>
                 </Box>
               </CardContent>
             </Card>
           </Grid>
-
           <Grid item xs={12} md={6}>
-            <Card variant="outlined" sx={{ height: '100%' }}>
+            <Card
+              className="patient-card card-hover"
+              elevation={3}
+              sx={{
+                height: '100%',
+                borderRadius: 3,
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                '&:hover': {
+                  transform: 'translateY(-5px)',
+                  boxShadow: '0 8px 20px rgba(172, 36, 84, 0.2)'
+                }
+              }}
+            >
               <CardContent>
-                <Typography variant="h6" sx={{ color: '#ac2454', fontWeight: 'bold', marginBottom: 2 }}>
-                  פרטי מעקב
-                </Typography>
-
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <MedicalInformation sx={{ color: '#ac2454', mr: 1 }} />
+                  <Typography variant="h6" sx={{ color: '#ac2454', fontWeight: 'bold' }}>
+                    רקע
+                  </Typography>
+                </Box>
+                <Divider sx={{ mb: 2, backgroundColor: '#ac245433' }} />
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                  <TextField
-                    label="מלווה"
-                    variant="outlined"
-                    fullWidth
-                    value={treatment.escort || ''}
-                    onChange={e => setTreatment({ ...treatment, escort: e.target.value })}
-                    size="small"
-                  />
-
-                  <Box>
-                    <Typography component="legend" sx={{ color: '#ac2454', marginBottom: 0.5 }}>
-                      שיתוף פעולה
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Typography component="span">
+                      {thePatient?.background}
                     </Typography>
-                    <StyledRating
-                      name="cooperation"
-                      defaultValue={treatment.cooperation || 3}
-                      precision={1}
-                      icon={<Star fontSize="inherit" />}
-                      emptyIcon={<Star fontSize="inherit" />}
-                      onChange={(_, value) => setTreatment({ ...treatment, cooperation: value })}
+                  </Box>
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Card
+              className="treatment-details-card card-hover"
+              elevation={3}
+              sx={{
+                height: '100%',
+                borderRadius: 3,
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                '&:hover': {
+                  transform: 'translateY(-5px)',
+                  boxShadow: '0 8px 20px rgba(172, 36, 84, 0.2)'
+                }
+              }}
+            >
+              <CardContent>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <Assignment sx={{ color: '#ac2454', mr: 1 }} />
+                  <Typography variant="h6" sx={{ color: '#ac2454', fontWeight: 'bold' }}>
+                    פרטי מעקב
+                  </Typography>
+                </Box>
+
+                <Divider sx={{ mb: 2, backgroundColor: '#ac245433' }} />
+
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <EmojiPeople sx={{ color: '#ac2454', mr: 1 }} />
+                    <StyledTextField
+                      label="מלווה"
+                      variant="outlined"
+                      fullWidth
+                      value={treatment.escort || ''}
+                      onChange={e => setTreatment({ ...treatment, escort: e.target.value })}
+                      size="small"
+                      InputProps={{
+                        sx: { borderRadius: 2 }
+                      }}
+                      className="escort-input input-focus"
                     />
                   </Box>
 
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography sx={{ color: '#ac2454', marginLeft: 1 }}>
+                  <Box>
+                    <Typography
+                      component="legend"
+                      sx={{
+                        color: '#ac2454',
+                        mb: 0.5,
+                        display: 'flex',
+                        alignItems: 'center'
+                      }}
+                    >
+                      <Psychology sx={{ mr: 1 }} /> שיתוף פעולה
+                    </Typography>
+                    <Box
+                      className="rating-container"
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        backgroundColor: 'rgba(172, 36, 84, 0.05)',
+                        borderRadius: 2,
+                        padding: 1
+                      }}
+                    >
+                      <StyledRating
+                        name="cooperation"
+                        value={Number(treatment.cooperation) || 3}
+                        precision={1}
+                        icon={<FavoriteIcon fontSize="inherit" />}
+                        emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+                        onChange={(_, value) => setTreatment({ ...treatment, cooperation: value })}
+                        sx={{ direction: 'ltr' }}
+                      />
+                      <Typography sx={{ mr: 1, color: '#ac2454', fontWeight: 'bold' }}>
+                        {treatment.cooperation ? `${treatment.cooperation}/5` : '3/5'}
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Box
+                    className={`payment-status ${treatment.bePaid ? 'paid' : 'unpaid'}`}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      backgroundColor: treatment.bePaid ? 'rgba(76, 175, 80, 0.1)' : 'rgba(255, 152, 0, 0.1)',
+                      borderRadius: 2,
+                      padding: 1,
+                      transition: 'background-color 0.3s ease'
+                    }}
+                  >
+                    <CheckCircle sx={{ color: treatment.bePaid ? '#4caf50' : '#ff9800', mr: 1 }} />
+                    <Typography sx={{ color: treatment.bePaid ? '#4caf50' : '#ff9800', mr: 1, fontWeight: 'bold' }}>
                       האם שולם
                     </Typography>
                     <Checkbox
                       checked={treatment.bePaid || false}
                       onChange={() => setTreatment({ ...treatment, bePaid: !treatment.bePaid })}
-                      sx={{ color: '#ac2454', '&.Mui-checked': { color: '#ac2454' } }}
+                      sx={{
+                        color: '#ac2454',
+                        '&.Mui-checked': { color: '#4caf50' },
+                        '& .MuiSvgIcon-root': { fontSize: 28 }
+                      }}
                     />
                   </Box>
                 </Box>
@@ -372,40 +465,124 @@ export const TreatmentReport = () => {
           </Grid>
         </Grid>
 
-        <Box sx={{ marginTop: 3 }}>
-          <TextField
-            label="תכנון הפגישה הבאה"
+        <Box sx={{ mt: 3 }} className="next-meeting-container">
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+            <CalendarToday sx={{ color: '#ac2454', mr: 1 }} />
+            <Typography sx={{ color: '#ac2454', fontWeight: 'bold' }}>
+              תכנון הפגישה הבאה
+            </Typography>
+          </Box>
+          <StyledTextField
             variant="outlined"
             fullWidth
             multiline
             rows={2}
             value={treatment.nextMeetingPlanning || ''}
             onChange={e => setTreatment({ ...treatment, nextMeetingPlanning: e.target.value })}
+            placeholder="תאר את התכנון לפגישה הבאה..."
+            InputProps={{
+              sx: {
+                borderRadius: 2,
+                backgroundColor: 'rgba(255, 255, 255, 0.7)'
+              }
+            }}
+            className="next-meeting-input input-focus"
           />
         </Box>
 
-        <Box sx={{ marginTop: 4 }}>
-          <Typography variant="h6" sx={{ color: '#ac2454', fontWeight: 'bold', marginBottom: 2 }}>
-            פעילויות לקידום מטרות
-          </Typography>
+        <Box sx={{ mt: 4 }} className="aims-activities-container">
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <Lightbulb sx={{ color: '#ac2454', mr: 1 }} />
+            <Typography variant="h6" sx={{ color: '#ac2454', fontWeight: 'bold' }}>
+              פעילויות לקידום מטרות
+            </Typography>
+          </Box>
 
+          {/* תצוגת מטרות כלחצנים */}
+          <Box
+            className="aim-chips-container"
+            sx={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 1,
+              mb: 3,
+              overflowX: 'auto',
+              pb: 1
+            }}
+          >
+            {aimsForExam.map((aim) => {
+              if (!aim) return null;
+
+              const isActive = activeAim === aim.aimId;
+              const hasActivity = aimActivities[aim.aimId]?.activityName;
+
+              return (
+                <Chip
+                  key={aim.aimId}
+                  label={aim.aimName}
+                  onClick={() => setActiveAim(aim.aimId)}
+                  color={isActive ? "primary" : "default"}
+                  variant={isActive ? "filled" : "outlined"}
+                  icon={hasActivity ? <CheckCircle /> : <Lightbulb />}
+                  sx={{
+                    borderRadius: '20px',
+                    fontWeight: 'bold',
+                    backgroundColor: isActive ? '#ac2454' : hasActivity ? 'rgba(76, 175, 80, 0.1)' : 'transparent',
+                    color: isActive ? 'white' : hasActivity ? '#4caf50' : '#666',
+                    borderColor: isActive ? '#ac2454' : hasActivity ? '#4caf50' : '#ddd',
+                    '&:hover': {
+                      backgroundColor: isActive ? '#8e1c44' : 'rgba(172, 36, 84, 0.1)',
+                    },
+                    transition: 'all 0.3s ease',
+                    px: 1.5,
+                    py: 2.5
+                  }}
+                  className={`aim-chip ${isActive ? 'active' : ''} ${hasActivity ? 'completed' : ''}`}
+                />
+              );
+            })}
+          </Box>
+
+          {/* תצוגת המטרה הפעילה */}
           {aimsForExam.map((aim) => {
-            if (!aim) return null;
+            if (!aim || activeAim !== aim.aimId) return null;
 
             return (
               <Paper
                 key={aim.aimId}
-                variant="outlined"
+                elevation={3}
+                className="aim-card"
                 sx={{
-                  padding: 2,
+                  padding: 3,
                   marginBottom: 2,
-                  borderRadius: 2,
-                  borderColor: '#ac2454',
-                  borderWidth: '1px'
+                  borderRadius: 3,
+                  background: 'linear-gradient(to bottom right, #fff, #fdf5f8)',
+                  border: '1px solid rgba(172, 36, 84, 0.2)',
+                  position: 'relative',
+                  overflow: 'hidden'
                 }}
               >
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
-                  מטרה: {aim.aimName}
+                <Box sx={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  width: '8px',
+                  height: '100%',
+                  backgroundColor: '#ac2454'
+                }} />
+
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: 'bold',
+                    mb: 2,
+                    color: '#ac2454',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                  className="aim-title"
+                >
+                  <Lightbulb sx={{ mr: 1 }} /> מטרה: {aim.aimName}
                 </Typography>
 
                 <Grid container spacing={2}>
@@ -415,60 +592,148 @@ export const TreatmentReport = () => {
                       options={activitySuggestions}
                       value={aimActivities[aim.aimId]?.activityName || ''}
                       onChange={(_, newValue) => handleActivityChange(aim.aimId, 'activityName', newValue)}
+                      renderOption={(props, option) => (
+                        <Box component="li" {...props} sx={{ display: 'flex', alignItems: 'center' }}>
+                          <Typography sx={{ ml: 1 }}>{option}</Typography>
+                        </Box>
+                      )}
                       renderInput={(params) => (
-                        <TextField
+                        <StyledTextField
                           {...params}
                           label="פעילות"
                           variant="outlined"
                           fullWidth
-                          size="small"
+                          size="medium"
+                          placeholder="בחר או הזן פעילות חדשה..."
+                          // InputProps={{
+                          //   ...params.InputProps,
+                          //   startAdornment: (
+                          //     <>
+                          //       {params.InputProps.startAdornment}
+                          //     </>
+                          //   ),
+                          //   sx: { borderRadius: 2 }
+                          // }}
+                          className="activity-input input-focus"
                         />
                       )}
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    <TextField
+                    <StyledTextField
                       label="תיאור הפעילות"
                       variant="outlined"
                       fullWidth
-                      size="small"
+                      size="medium"
+                      multiline
+                      rows={1}
                       value={aimActivities[aim.aimId]?.activityDescription || ''}
                       onChange={(e) => handleActivityChange(aim.aimId, 'activityDescription', e.target.value)}
+                      placeholder="תאר את הפעילות בקצרה..."
+                      InputProps={{
+                        sx: { borderRadius: 2 }
+                      }}
+                      className="activity-description-input input-focus"
                     />
                   </Grid>
                 </Grid>
+
+                {/* תצוגת הצעות פעילויות */}
+                <Box sx={{ mt: 3 }} className="activity-suggestions">
+                  <Typography variant="body2" sx={{ color: '#666', mb: 1 }}>
+                    הצעות פעילויות נפוצות:
+                  </Typography>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      gap: 1
+                    }}
+                    className="suggestions-chips"
+                  >
+                    {/* {activitySuggestions.slice(0, 5).map((activity, index) => (
+                      <Chip
+                        key={index}
+                        label={activity}
+                        onClick={() => handleActivityChange(aim.aimId, 'activityName', activity)}
+                        sx={{
+                          borderRadius: '20px',
+                          transition: 'all 0.2s ease',
+                          '&:hover': {
+                            backgroundColor: 'rgba(172, 36, 84, 0.1)',
+                            transform: 'translateY(-2px)'
+                          }
+                        }}
+                        className="suggestion-chip"
+                      />
+                    ))} */}
+                  </Box>
+                </Box>
               </Paper>
             );
           })}
         </Box>
 
-        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, marginTop: 4 }}>
-          <Button
+        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mt: 4 }} className="actions-container">
+          <StyledButton
             variant="contained"
             onClick={confirm}
+            disabled={saving}
             sx={{
               backgroundColor: '#ac2454',
+              color: 'white',
               '&:hover': { backgroundColor: '#8e1c44' },
-              minWidth: 120
+              minWidth: 150,
+              fontSize: '1rem'
             }}
-            startIcon={<CheckCircle />}
+            startIcon={saving ? <CircularProgress size={20} color="inherit" /> : <CheckCircle />}
+            className="confirm-button button-hover"
           >
-            אישור
-          </Button>
+            {saving ? 'שומר...' : 'אישור'}
+          </StyledButton>
 
-          <Button
+          <StyledButton
             variant="outlined"
-            onClick={() => navigate('../')}
+            onClick={() => navigate('/calender')}
+            disabled={saving}
             sx={{
               color: '#ac2454',
               borderColor: '#ac2454',
               '&:hover': { borderColor: '#8e1c44', color: '#8e1c44' },
-              minWidth: 120
+              minWidth: 150,
+              fontSize: '1rem'
             }}
+            startIcon={<Cancel />}
+            className="cancel-button button-hover"
           >
             ביטול
-          </Button>
+          </StyledButton>
         </Box>
+
+        {/* אנימציית טעינה */}
+        {saving && (
+          <Box
+            className="saving-overlay"
+            sx={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: 'rgba(255, 255, 255, 0.8)',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              zIndex: 9999,
+              flexDirection: 'column'
+            }}
+          >
+            <CircularProgress size={60} sx={{ color: '#ac2454' }} />
+            <Typography variant="h6" sx={{ mt: 2, color: '#ac2454', fontWeight: 'bold' }}>
+              שומר את סיכום הטיפול...
+            </Typography>
+          </Box>
+        )}
       </Paper>
     </Box>
   );

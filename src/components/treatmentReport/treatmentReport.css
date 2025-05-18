@@ -1,3 +1,171 @@
-.colorDesign{
-    color: #ac2454;
+/* עיצוב כללי לדף סיכום הטיפול */
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap');
+
+/* צבעים מרכזיים */
+:root {
+  --primary-color: #ac2454;
+  --primary-light: #d4447c;
+  --primary-dark: #8e1c44;
+  --primary-bg: #fdf5f8;
+  --success-color: #4caf50;
+  --warning-color: #ff9800;
+  --text-color: #333;
+  --light-text: #666;
+  --border-radius: 8px;
+}
+
+/* עיצוב כללי */
+.colorDesign {
+  color: var(--primary-color);
+}
+
+/* אנימציות */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* עיצוב לכרטיסיות */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(172, 36, 84, 0.2);
+}
+
+/* עיצוב לכפתורים */
+.button-hover {
+  transition: all 0.3s ease;
+}
+
+.button-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(172, 36, 84, 0.3);
+}
+
+.button-hover:active {
+  transform: translateY(1px);
+}
+
+/* עיצוב לשדות קלט */
+.input-focus {
+  transition: border-color 0.3s ease;
+}
+
+.input-focus:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(172, 36, 84, 0.2);
+}
+
+/* אפקט גלישה לכותרות */
+.title-gradient {
+    background: linear-gradient(45deg, #ac2454, #d4447c);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+
+/* אפקט הבהוב לאייקונים */
+.icon-pulse {
+    animation: pulse 2s infinite ease-in-out;
+}
+
+/* עיצוב לתגיות */
+.chip-active {
+    background-color: #ac2454 !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+.chip-completed {
+    background-color: rgba(76, 175, 80, 0.1) !important;
+    color: #4caf50 !important;
+    border-color: #4caf50 !important;
+}
+
+/* אפקט טעינה */
+.loading-shimmer {
+    background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.5), rgba(255,255,255,0));
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+}
+
+/* עיצוב לדירוג כוכבים */
+.rating-container {
+    direction: ltr;
+    display: flex;
+    align-items: center;
+    background-color: rgba(172, 36, 84, 0.05);
+    border-radius: 8px;
+    padding: 8px;
+    transition: all 0.3s ease;
+}
+
+.rating-container:hover {
+    background-color: rgba(172, 36, 84, 0.1);
+}
+
+/* עיצוב למטרות */
+.aim-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.aim-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8px;
+    height: 100%;
+    background-color: var(--primary-color);
+}
+
+.aim-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(172, 36, 84, 0.2);
+}
+
+/* עיצוב לאנימציית הצלחה */
+.success-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    flex-direction: column;
+}
+
+/* התאמה למסכים קטנים */
+@media (max-width: 600px) {
+    .title-gradient {
+      font-size: 1.5rem;
+    }
+  
+    .aim-chips-container {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+  
+    .aim-chip {
+      flex-shrink: 0;
+    }
 }

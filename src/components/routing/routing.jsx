@@ -51,6 +51,8 @@ import { MyAccount } from "../myAccount/myAccount"
 import { AddAims } from "../addAims/addAims"
 import { About } from "../about/about"
 import { Footer } from "../footer/footer"
+import AimsForPatient from "../aimsForPatient/aimsForPatient"
+import ShowTreatmentReport from "../showTreatmentReport/showTreatmentReport"
 
 export const Routing = () => {
 
@@ -60,8 +62,10 @@ export const Routing = () => {
     {/* <button onClick={() => setLogin(!login)}>{login ? 'Logout': 'Login'}</button> */}
         <Routes>
             <Route path={'/logon'} element={<AddNewUser />} />
-            <Route path={'/aimsForPatient/:patientId'} element={<AddAims />} />
+            <Route path={'/aimsForPatient/:patientId'} element={<AimsForPatient/>} />
             <Route path={'/home'} element={<Home/>} />
+            <Route path={'/showTreatmentReport'} element={<ShowTreatmentReport />} />
+            <Route path={'/showTreatmentReport/:patiotId'} element={<ShowTreatmentReport />} />
             <Route path={'/login'} element={<Login />} />
             <Route path={`/login/:new`} element={<Login />} />
             <Route path={'/patientList'} element={<PatientsList />} />

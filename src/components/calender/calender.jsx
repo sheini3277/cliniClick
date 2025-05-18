@@ -300,10 +300,24 @@ export const Calender = () => {
     // בכניסה ראשונה למערכת - אתחול
     useEffect(() => {
         window.addEventListener('contextmenu', rightClick);
+        // בדיקה אם יש פרמטר patientId בניתוב
+        if (param.patientId) {
+            // פתיחת חלון החיפוש
+            setSearch(true);
+            // הגדרת סוג החיפוש ל-"id" (לפי ת.ז.)
+            setSearchType("id");
+            // הגדרת ערך החיפוש למספר הזהות שהתקבל
+            setSearchQuery(param.patientId);
+
+            // ביצוע החיפוש אוטומטית אחרי שהדיאלוג נפתח
+            setTimeout(() => {
+                performSearch();
+            }, 300);
+        }
         return () => {
             window.removeEventListener('contextmenu', rightClick);
         };
-    }, []);
+    }, [param.patientId]);
 
     // בכניסת משתמש רשום
     useEffect(() => {
@@ -479,15 +493,15 @@ export const Calender = () => {
             setSearchResults([]);
             return;
         }
-
+        
         // אם treatments הוא undefined, נשתמש במערך ריק
         const treatmentsArray = treatments || [];
-
+        
         let results = [];
-
+        
         switch (searchType) {
             case "name":
-                results = treatmentsArray.filter(treatment =>
+                results = treatmentsArray.filter(treatment => 
                     treatment && treatment.escort && treatment.escort.toLowerCase().includes(searchQuery.toLowerCase())
                 );
                 break;
@@ -499,14 +513,14 @@ export const Calender = () => {
                 });
                 break;
             case "id":
-                results = treatmentsArray.filter(treatment =>
+                results = treatmentsArray.filter(treatment => 
                     treatment && treatment.pationtId && treatment.pationtId.includes(searchQuery)
                 );
                 break;
             default:
                 break;
         }
-
+        
         setSearchResults(results);
     };
     const handleViewModeChange = (mode) => {
@@ -1048,7 +1062,7 @@ export const Calender = () => {
                                     <div className="details-grid">
                                         <div className="details-item">
                                             <span className="details-label">שם:</span>
-                                            <span className="details-value">{eventNow.escort}</span>
+                                            <span className="details-value">{eventNow.firstName} {eventNow.lastName}</span>
                                         </div>
                                         <div className="details-item">
                                             <span className="details-label">ת.ז:</span>

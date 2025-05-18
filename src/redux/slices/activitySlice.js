@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addActivityFetch } from "./addActivityFetch";
+import { getActivityThunk } from "./getActivityThunk";
 
 const INITIAL_STATE = {
     activitiesList: [],
@@ -14,7 +15,7 @@ const INITIAL_STATE = {
 
 }
 export const activitySlice = createSlice({
-    name: 'treatment',
+    name: 'activity',
     initialState: INITIAL_STATE,
     reducers: {
         newCurrentActivty: (state, action) => {
@@ -31,6 +32,18 @@ export const activitySlice = createSlice({
             state.loading = false;
         });
         builder.addCase(addActivityFetch.rejected, (state, action) => {
+            console.log("action: ", action);
+            state.route = "Failed to get data";
+            state.loading = false;
+        });
+        builder.addCase(getActivityThunk.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getActivityThunk.fulfilled, (state, action) => {   
+            state.activitiesList = (action.payload);
+            state.loading = false;
+        });
+        builder.addCase(getActivityThunk.rejected, (state, action) => {
             console.log("action: ", action);
             state.route = "Failed to get data";
             state.loading = false;
