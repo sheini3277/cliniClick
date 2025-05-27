@@ -341,7 +341,7 @@ export const TreatmentReport = () => {
         <div style="height: 80px; display: flex; justify-content: center; align-items: center;">
           <img src="${signature}" style="max-height: 70px; max-width: 100%;" />
         </div>
-        <p style="font-size: 12px; margin-top: 5px;">שם המטפל/ת: ${localStorage.getItem('userName') || 'המטפל/ת'}</p>
+        <p style="font-size: 12px; margin-top: 5px;">שם המטפל/ת: ${thePatient?.therapistId || 'המטפל/ת'}</p>
       </div>
       
       <div style="width: 45%;">
