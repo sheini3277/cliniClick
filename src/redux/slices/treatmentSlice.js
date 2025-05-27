@@ -31,6 +31,24 @@ export const treatmentSlice = createSlice({
         },
         changeDateForTreatment: (state, action) => {
             state.thisDay = action.payload
+        },
+        // פונקציית איפוס חדשה
+        resetTreatments: (state) => {
+            state.treatmentList = [];
+            state.loading = false;
+            state.thisDay = Date.now();
+            state.curretntTreatment = {
+                treatmentId: null,
+                treatmentDate: "2025-03-26",
+                treatmentTime: null,
+                pationtId: "",
+                isComing: true,
+                escort: "",
+                cooperation: null,
+                nextMeetingPlanning: "",
+                bePaid: true,
+                userId: ""
+            };
         }
     },
     extraReducers: (builder) => {
@@ -93,4 +111,4 @@ export const treatmentSlice = createSlice({
         });
     }
 })
-export const { newCurrentTreatment, changeDateForTreatment } = treatmentSlice.actions 
+export const { newCurrentTreatment, changeDateForTreatment, resetTreatments } = treatmentSlice.actions

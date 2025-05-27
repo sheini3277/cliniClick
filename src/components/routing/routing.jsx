@@ -64,7 +64,6 @@ export const Routing = () => {
             <Route path={'/logon'} element={<AddNewUser />} />
             <Route path={'/aimsForPatient/:patientId'} element={<AimsForPatient/>} />
             <Route path={'/home'} element={<Home/>} />
-            <Route path={'/showTreatmentReport'} element={<ShowTreatmentReport />} />
             <Route path={'/showTreatmentReport/:patiotId'} element={<ShowTreatmentReport />} />
             <Route path={'/login'} element={<Login />} />
             <Route path={`/login/:new`} element={<Login />} />

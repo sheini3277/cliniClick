@@ -13,6 +13,7 @@ export const addPatientThunk = createAsyncThunk(
                 }
             }
         )
+        debugger
         const data = await response.json();
         return data;
     }

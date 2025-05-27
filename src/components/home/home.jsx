@@ -1,56 +1,3 @@
-// import { useDispatch, useSelector } from "react-redux"
-// import { AddNewUser } from "../addNewUserFolder/addNewUser"
-// import { Login } from "../oldComponents/login/login"
-// import { Routing } from "../routing/routing"
-// import { ShowUsers } from "../showUsers"
-// import "./home.css"
-// import { PatientsList } from "../patientsList/patientsList"
-// import { useNavigate } from "react-router-dom"
-// import { useEffect, useState } from "react"
-// import { fetchUserThunk } from "../../redux/slices/userFetch"
-// import { resetUser } from "../../redux/slices/usersSlice"
-// export const Home = () => {
-//     const current = useSelector(state => state.user.currentUser)
-//     const navigate = useNavigate();
-//     const [openDetails, setOpenDetails] = useState(false)
-//     const users = useSelector(state => state.user.usersList);
-//     const dispatch = useDispatch();
-
-//     useEffect(() => {
-//         // dispatch(resetUser())
-//         dispatch(fetchUserThunk())
-//     }, [])
-//     const perssonal = () => {
-//         if (current.firstName == "") {
-//             navigate(`/login`)
-//         }
-//         else {
-//             setOpenDetails(!openDetails)
-//         }
-//     }
-//     return <div>
-//         {/* <Login></Login> */}
-//         <div className="header">
-//             <img className="logo" src="logo.JPG" alt="logo" />
-//             <div className="menu">
-//                 <div className="butMenu">דף הבית</div>
-//                 <div className="butMenu" onClick={() => navigate(`/calender`)}>הלוח של {current.firstName}</div>
-//                 <div className="butMenu" onClick={() => navigate(`/patientList`)}>רשימת מטופלים</div>
-//                 <div className="butMenu">צור קשר</div>
-
-//             </div>
-//             <div className="userMenu" onClick={() => perssonal()}><img src="userIcon.JPG" alt="userIcon" className="userIcon" /></div>
-//         </div>
-//         {/* <img src="child.gif" alt=""  className="backgraundHome"/> */}
-
-//         {openDetails && <div className="accaunt" onClick={() => {navigate('/myAccount'); setOpenDetails(false)}}>לחשבון שלי</div>}
-//         <Routing />
-//         {/* <ShowUsers></ShowUsers> */}
-
-//     </div>
-
-
-// }
 import { useDispatch, useSelector } from "react-redux";
 import { Routing } from "../routing/routing";
 import { useNavigate } from "react-router-dom";
@@ -60,6 +7,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaUserCircle, FaCalendarAlt, FaUsers, FaEnvelope, FaHome, FaBars, FaTimes, FaAccessibleIcon, FaAdversal, FaAmazon, FaInfo } from "react-icons/fa";
 import { Footer } from "../footer/footer";
 import "./home.css";
+import { resetUser, resetAllUserData } from "../../redux/slices/usersSlice";
+import { resetPatients } from "../../redux/slices/patientSlice";
+import { resetTreatments } from "../../redux/slices/treatmentSlice";
+import { resetTreatments2 } from "../../redux/slices/treatmentSlice2";
 
 export const Home = () => {
     const current = useSelector(state => state.user.currentUser);
@@ -102,13 +53,27 @@ export const Home = () => {
         }
     };
 
+    // פונקציית איפוס/התנתקות מעודכנת
+    const handleLogout = () => {
+        // איפוס כל הנתונים במערכת
+        dispatch(resetAllUserData());
+        dispatch(resetPatients());
+        dispatch(resetTreatments());
+        dispatch(resetTreatments2());
+        
+        // סגירת התפריט
+        setOpenDetails(false);
+        
+        // ניתוב לדף ההתחברות
+        navigate('/login');
+    };
+
     const menuItems = [
         { title: "דף הבית", icon: <FaHome />, action: () => navigate('/') },
         { title: `הלוח של ${current.firstName || 'המטפל'}`, icon: <FaCalendarAlt />, action: () => navigate('/calender') },
         { title: "רשימת מטופלים", icon: <FaUsers />, action: () => navigate('/patientList') },
         { title: "צור קשר", icon: <FaEnvelope />, action: () => navigate('/contact') },
         { title: "אודות", icon: <FaInfo />, action: () => navigate('/about') }
-
     ];
 
     const handleMenuItemClick = (action) => {
@@ -172,11 +137,7 @@ export const Home = () => {
                                     }}>
                                         החשבון שלי
                                     </div>
-                                    <div className="dropdown-item" onClick={() => {
-                                        // הוסף פונקציונליות להתנתקות
-                                        navigate('/login');
-                                        setOpenDetails(false);
-                                    }}>
+                                    <div className="dropdown-item" onClick={handleLogout}>
                                         התנתק
                                     </div>
                                 </motion.div>
@@ -216,7 +177,7 @@ export const Home = () => {
                                     transition={{ duration: 0.6, delay: 0.4 }}
                                 >
                                     <button className="primary-button" onClick={() => navigate('/calender')}>
-                                        <FaCalendarAlt /> צפה בלוח הזמנים
+                                        <FaCalendarAlt /> צפה בלוח הזמינו
                                     </button>
                                     <button className="secondary-button" onClick={() => navigate('/patientList')}>
                                         <FaUsers /> רשימת המטופלים
@@ -235,7 +196,7 @@ export const Home = () => {
                                     { title: "ניהול יומן פגישות", icon: "yoman.png", description: "תזמון וניהול קל של כל הפגישות שלך" },
                                     { title: "מעקב אחר מטופלים", icon: "maakav.jpg", description: "שמירה על כל המידע הרפואי במקום אחד" },
                                     { title: "תזכורות אוטומטיות", icon: "shaon.png", description: "שליחת תזכורות למטופלים לפני הפגישות" },
-                                    { title: "דוחות וסטטיסטיקות", icon: "doch.jpg", description: "קבלת תובנות על הפעילות בקליניקה" }
+                                    { title: "דוחות וסטטיסטיקות", icon: "doch2.png", description: "קבלת תובנות על הפעילות בקליניקה" }
                                 ].map((feature, index) => (
                                     <motion.div
                                         key={index}

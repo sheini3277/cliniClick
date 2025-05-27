@@ -20,8 +20,8 @@ const INITIAL_STATE = {
         bePaid: true,
         userId: ""
     }
-
 }
+
 export const treatmentSlice2 = createSlice({
     name: 'treatment',
     initialState: INITIAL_STATE,
@@ -31,10 +31,27 @@ export const treatmentSlice2 = createSlice({
         },
         changeDateForTreatment: (state, action) => {
             state.thisDay = action.payload
+        },
+        // פונקציית איפוס חדשה
+        resetTreatments2: (state) => {
+            state.treatmentList = [];
+            state.loading = false;
+            state.thisDay = Date.now();
+            state.curretntTreatment = {
+                treatmentId: null,
+                treatmentDate: "2025-03-26",
+                treatmentTime: null,
+                pationtId: "",
+                isComing: true,
+                escort: "",
+                cooperation: null,
+                nextMeetingPlanning: "",
+                bePaid: true,
+                userId: ""
+            };
         }
     },
     extraReducers: (builder) => {
-
         builder.addCase(fetchTreatmentThunk.pending, (state) => {
             debugger
             state.loading = true;
@@ -93,4 +110,4 @@ export const treatmentSlice2 = createSlice({
         });
     }
 })
-export const { newCurrentTreatment, changeDateForTreatment } = treatmentSlice2.actions 
+export const { newCurrentTreatment, changeDateForTreatment, resetTreatments2 } = treatmentSlice2.actions

@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addActivityFetch } from "./addActivityFetch";
 import { getActivityThunk } from "./getActivityThunk";
+import { addActivitiesFetch } from "./addActivitiesFetch";
 
 const INITIAL_STATE = {
     activitiesList: [],
@@ -8,7 +9,7 @@ const INITIAL_STATE = {
     thisDay: Date.now(),
     curretntActivity: {
         activityId: null,
-        activityName: null,
+        activityName: "",
         activityDescription: null,
         activityAim: null
     }
@@ -32,6 +33,18 @@ export const activitySlice = createSlice({
             state.loading = false;
         });
         builder.addCase(addActivityFetch.rejected, (state, action) => {
+            console.log("action: ", action);
+            state.route = "Failed to get data";
+            state.loading = false;
+        });
+        builder.addCase(addActivitiesFetch.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(addActivitiesFetch.fulfilled, (state, action) => {   
+            state.activitiesList.push(action.payload);
+            state.loading = false;
+        });
+        builder.addCase(addActivitiesFetch.rejected, (state, action) => {
             console.log("action: ", action);
             state.route = "Failed to get data";
             state.loading = false;

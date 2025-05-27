@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import "./treatmentReport.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
@@ -17,18 +17,47 @@ import {
   Grid,
   Card,
   CardContent,
-  CircularProgress
+  CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton
 } from "@mui/material";
 import { newCurrentTreatment } from "../../redux/slices/treatmentSlice";
 import { getOneTreatmentThunk } from "../../redux/slices/getOneTreatmentFetch";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { CheckCircle, Cancel, Person, CalendarToday, AccessTime, Badge, Psychology, Assignment, Lightbulb, EmojiPeople, SportsKabaddi, MedicalServices, Healing, MedicalInformation } from "@mui/icons-material";
+import {
+  CheckCircle,
+  Cancel,
+  Person,
+  CalendarToday,
+  AccessTime,
+  Badge,
+  Psychology,
+  Assignment,
+  Lightbulb,
+  EmojiPeople,
+  SportsKabaddi,
+  MedicalServices,
+  Healing,
+  MedicalInformation,
+  PictureAsPdf,
+  Edit,
+  Save,
+  Close
+} from "@mui/icons-material";
 import { getPatientByIdThunk } from "../../redux/slices/getPatientById";
 import { updateTreatmentThunk } from "../../redux/slices/updateTreatmentFetch";
 import { getAimsOfPatientsThunk } from "../../redux/slices/getAimsForPatients";
 import { addActivityFetch } from "../../redux/slices/addActivityFetch";
 import { getActivityThunk } from "../../redux/slices/getActivityThunk";
+import SignaturePad from 'signature_pad';
+import { jsPDF } from "jspdf";
+import 'jspdf-autotable';
+import html2canvas from 'html2canvas';
+
 
 // סגנון מותאם לדירוג כוכבים
 const StyledRating = styled(Rating)({
@@ -83,7 +112,13 @@ export const TreatmentReport = () => {
   const allActivities = useSelector(state => state.activity?.activitiesList || []);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [exportingPdf, setExportingPdf] = useState(false);
 
+  // State לחתימה הדיגיטלית
+  const [signature, setSignature] = useState(null);
+  const [signatureDialogOpen, setSignatureDialogOpen] = useState(false);
+  const canvasRef = useRef(null);
+  const signaturePadRef = useRef(null);
   const [treatment, setTreatment] = useState({
     treatmentId: theTreatment?.treatmentId,
     treatmentDate: theTreatment?.treatmentDate,
@@ -99,20 +134,288 @@ export const TreatmentReport = () => {
 
   const [aimActivities, setAimActivities] = useState({});
   const [activeAim, setActiveAim] = useState(null);
+  const reportRef = useRef(null);
 
   // דוגמאות להצעות פעילויות
   const activitySuggestions = useSelector(state => state.activity.activitiesList);
+
+  // פתיחת דיאלוג החתימה
+  const openSignatureDialog = () => {
+    setSignatureDialogOpen(true);
+    
+    // אתחול ה-SignaturePad אחרי שהדיאלוג נפתח ומוצג
+    setTimeout(() => {
+      initSignaturePad();
+    }, 300);
+  };
+  const initSignaturePad = () => {
+    if (!canvasRef.current) return;
+    
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    
+    // התאמת גודל הקנבס לגודל האמיתי שלו בדף
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    
+    // ניקוי הקנבס
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // יצירת אובייקט SignaturePad חדש
+    signaturePadRef.current = new SignaturePad(canvas, {
+      minWidth: 1,
+      maxWidth: 3,
+      penColor: 'black',
+      backgroundColor: 'rgba(255, 255, 255, 0)'
+    });
+    
+    // אם יש חתימה קיימת, טען אותה לקנבס
+    if (signature && signaturePadRef.current) {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        // ניקוי הקנבס
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // חישוב גודל התמונה בקנבס תוך שמירה על יחס הגובה-רוחב
+        const imgAspect = img.height / img.width;
+        let drawWidth = canvas.width * 0.8;
+        let drawHeight = drawWidth * imgAspect;
+        
+        // אם הגובה גדול מדי, התאם את הרוחב
+        if (drawHeight > canvas.height * 0.8) {
+          drawHeight = canvas.height * 0.8;
+          drawWidth = drawHeight / imgAspect;
+        }
+        
+        // חישוב מיקום מרכזי
+        const x = (canvas.width - drawWidth) / 2;
+        const y = (canvas.height - drawHeight) / 2;
+        
+        // ציור התמונה במרכז הקנבס
+        ctx.drawImage(img, x, y, drawWidth, drawHeight);
+        
+        // עדכון ה-SignaturePad
+        signaturePadRef.current.fromDataURL(canvas.toDataURL());
+      };
+      img.src = signature;
+    }
+  };
+  
+  // ניקוי החתימה
+  const clearSignature = () => {
+    if (!signaturePadRef.current) return;
+    signaturePadRef.current.clear();
+  };
+
+  // שמירת החתימה
+  const saveSignature = () => {
+    if (!signaturePadRef.current) return;
+    
+    if (signaturePadRef.current.isEmpty()) {
+      alert("אנא חתום לפני השמירה");
+      return;
+    }
+    
+    // שמירת החתימה כתמונת PNG עם רקע שקוף
+    setSignature(signaturePadRef.current.toDataURL('image/png'));
+    closeSignatureDialog();
+  };
+
+  // סגירת דיאלוג החתימה
+  const closeSignatureDialog = () => {
+    setSignatureDialogOpen(false);
+  };
+
+  // פונקציה מעודכנת לייצוא PDF - מבוססת על הקוד שעבד ב-showTreatmentReport.jsx
+  const generateProfessionalPDF = () => {
+    // אם אין חתימה, פתח את דיאלוג החתימה תחילה
+    if (!signature) {
+      alert("נא להוסיף חתימה לפני ייצוא ה-PDF");
+      openSignatureDialog();
+      return;
+    }
+
+    setExportingPdf(true);
+
+    // יצירת אלמנט HTML נפרד לייצוא ה-PDF
+    const pdfContainer = document.createElement('div');
+    pdfContainer.className = 'pdf-export-container';
+    pdfContainer.style.width = '210mm';
+    pdfContainer.style.padding = '20mm';
+    pdfContainer.style.backgroundColor = 'white';
+    pdfContainer.style.fontFamily = 'Arial, sans-serif';
+    pdfContainer.style.direction = 'rtl';
+    pdfContainer.style.position = 'absolute';
+    pdfContainer.style.left = '-9999px';
+
+    // הוספת תוכן המסמך הרשמי
+    pdfContainer.innerHTML = `
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <div style="text-align: right;">
+        <h1 style="color: #ac2454; margin: 0; font-size: 24px;">דוח טיפול רפואי</h1>
+        <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">מספר: ${theTreatment.treatmentId}</p>
+      </div>
+      <div>
+        <img src="https://raw.githubusercontent.com/sheini3277/cliniClick/main/src/assets/logo.png" alt="Logo" style="height: 60px;" />
+      </div>
+    </div>
+    
+    <div style="border-bottom: 2px solid #ac2454; margin-bottom: 20px;"></div>
+    
+    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+      <div style="text-align: left; font-size: 12px; color: #666;">
+        <p>תאריך הפקה: ${new Date().toLocaleDateString('he-IL')}</p>
+      </div>
+      <div style="text-align: right; font-size: 12px; color: #666;">
+        <p>מסמך רשמי - CliniClick</p>
+      </div>
+    </div>
+    
+    <div style="margin-bottom: 20px;">
+      <h2 style="color: #333; border-bottom: 1px solid #ddd; padding-bottom: 5px; font-size: 18px;">פרטי המטופל</h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+        <div style="font-size: 14px;"><strong>שם מלא:</strong> ${thePatient?.firstName || ''} ${thePatient?.lastName || ''}</div>
+        <div style="font-size: 14px;"><strong>מספר זיהוי:</strong> ${thePatient?.pationtId || ''}</div>
+        <div style="font-size: 14px;"><strong>טלפון:</strong> ${thePatient?.phone || ''}</div>
+        <div style="font-size: 14px;"><strong>תאריך לידה:</strong> ${thePatient?.birthDate || ''}</div>
+      </div>
+    </div>
+    
+    <div style="margin-bottom: 20px;">
+      <h2 style="color: #333; border-bottom: 1px solid #ddd; padding-bottom: 5px; font-size: 18px;">פרטי הטיפול</h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+        <div style="font-size: 14px;"><strong>תאריך הטיפול:</strong> ${theTreatment.treatmentDate}</div>
+        <div style="font-size: 14px;"><strong>שעת הטיפול:</strong> ${theTreatment.treatmentTime || 'לא צוין'}</div>
+        <div style="font-size: 14px;"><strong>הגיע לטיפול:</strong> ${theTreatment.isComing ? 'כן' : 'לא'}</div>
+        <div style="font-size: 14px;"><strong>מלווה:</strong> ${treatment.escort || 'ללא מלווה'}</div>
+        <div style="font-size: 14px;"><strong>שיתוף פעולה:</strong> ${treatment.cooperation ? `${treatment.cooperation}/5` : 'לא צוין'}</div>
+        <div style="font-size: 14px;"><strong>תכנון פגישה הבאה:</strong> ${treatment.nextMeetingPlanning || 'לא נקבע'}</div>
+        <div style="font-size: 14px;"><strong>סטטוס תשלום:</strong> ${treatment.bePaid ? 'שולם' : 'לא שולם'}</div>
+      </div>
+    </div>
+    
+    <div style="margin-bottom: 20px;">
+      <h2 style="color: #333; border-bottom: 1px solid #ddd; padding-bottom: 5px; font-size: 18px;">רקע</h2>
+      <div style="background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 5px; padding: 15px; margin-top: 10px;">
+        <p style="font-size: 14px; margin: 0;">${thePatient?.background || 'אין מידע רקע.'}</p>
+      </div>
+    </div>
+    
+    <div style="margin-bottom: 30px;">
+      <h2 style="color: #333; border-bottom: 1px solid #ddd; padding-bottom: 5px; font-size: 18px;">פעילויות לקידום מטרות</h2>
+      <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+        <thead>
+          <tr style="background-color: #f2f2f2;">
+            <th style="padding: 8px; text-align: right; border: 1px solid #ddd;">מטרה</th>
+            <th style="padding: 8px; text-align: right; border: 1px solid #ddd;">פעילות</th>
+            <th style="padding: 8px; text-align: right; border: 1px solid #ddd;">תיאור</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${aimsForExam.map(aim => {
+      if (!aim || !aimActivities[aim.aimId] || !aimActivities[aim.aimId].activityName) return '';
+      return `
+              <tr>
+                <td style="padding: 8px; text-align: right; border: 1px solid #ddd;">${aim.aimName || ''}</td>
+                <td style="padding: 8px; text-align: right; border: 1px solid #ddd;">${aimActivities[aim.aimId].activityName || ''}</td>
+                <td style="padding: 8px; text-align: right; border: 1px solid #ddd;">${aimActivities[aim.aimId].activityDescription || ''}</td>
+              </tr>
+            `;
+    }).join('')}
+          ${!aimsForExam.some(aim => aim && aimActivities[aim.aimId] && aimActivities[aim.aimId].activityName) ?
+        `<tr><td colspan="3" style="padding: 8px; text-align: center; border: 1px solid #ddd;">לא הוגדרו פעילויות</td></tr>` : ''}
+        </tbody>
+      </table>
+    </div>
+    
+    <div style="display: flex; justify-content: space-between; margin-top: 40px;">
+      <div style="width: 45%;">
+        <p style="font-size: 14px; margin-bottom: 5px;"><strong>חתימת המטפל/ת:</strong></p>
+        <div style="height: 80px; display: flex; justify-content: center; align-items: center;">
+          <img src="${signature}" style="max-height: 70px; max-width: 100%;" />
+        </div>
+        <p style="font-size: 12px; margin-top: 5px;">שם המטפל/ת: ${localStorage.getItem('userName') || 'המטפל/ת'}</p>
+      </div>
+      
+      <div style="width: 45%;">
+        <p style="font-size: 14px; margin-bottom: 5px;"><strong>חתימת המטופל/ת:</strong></p>
+        <div style="border-bottom: 1px solid #000; height: 40px;"></div>
+        <p style="font-size: 12px; margin-top: 5px;">שם המטופל/ת: ${thePatient?.firstName || ''} ${thePatient?.lastName || ''}</p>
+      </div>
+    </div>
+    
+    <div style="margin-top: 40px; text-align: center; font-size: 10px; color: #999;">
+      <p>מסמך זה הופק באמצעות מערכת CliniClick. כל הזכויות שמורות © ${new Date().getFullYear()}</p>
+      <p>המסמך נחתם דיגיטלית ומאושר לשימוש רשמי</p>
+    </div>
+  `;
+
+    // הוספת האלמנט לדף
+    document.body.appendChild(pdfContainer);
+
+    // יצירת ה-PDF
+    html2canvas(pdfContainer, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      logging: false,
+      windowWidth: pdfContainer.scrollWidth,
+      windowHeight: pdfContainer.scrollHeight
+    }).then(canvas => {
+      // הסרת האלמנט מהדף
+      document.body.removeChild(pdfContainer);
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+      const imgX = (pdfWidth - imgWidth * ratio) / 2;
+      const imgY = 0;
+
+      pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+
+      // הוספת מספור עמודים
+      pdf.setFontSize(8);
+      pdf.setTextColor(150, 150, 150);
+      pdf.text(`עמוד 1 מתוך 1`, pdfWidth / 2, pdfHeight - 5, { align: 'center' });
+
+      // שמירת הקובץ
+      const patientName = `${thePatient?.firstName || ''}_${thePatient?.lastName || ''}`;
+      const fileName = `דוח_טיפול_${patientName}_${theTreatment.treatmentDate || ''}.pdf`;
+      pdf.save(fileName);
+
+      setExportingPdf(false);
+      // alert("ה-PDF נוצר בהצלחה!");
+    }).catch(error => {
+      console.error('שגיאה ביצירת ה-PDF:', error);
+      alert('אירעה שגיאה ביצירת קובץ ה-PDF. אנא נסה שוב מאוחר יותר.');
+      setExportingPdf(false);
+    });
+  };
+
+
   const confirm = async () => {
     setSaving(true);
 
     try {
       // שמירת כל הפעילויות עבור כל מטרה
+
       const activityPromises = Object.entries(aimActivities).map(([aimId, activity]) => {
         if (activity.activityName) {
           return dispatch(addActivityFetch({
             activityId: null,
             activityName: activity.activityName,
-            activityDescription: activity.activityDescription,
+            activityDiscription: activity.activityDescription,
             activityAim: aimId
           }));
         }
@@ -144,8 +447,10 @@ export const TreatmentReport = () => {
   }, [theTreatment]);
 
   useEffect(() => {
+    dispatch(getAimsOfPatientsThunk(theTreatment.pationtId));
+  }, [thePatient]);
+  useEffect(() => {
     if (theTreatment?.pationtId) {
-      dispatch(getAimsOfPatientsThunk(theTreatment.pationtId));
       dispatch(getPatientByIdThunk(theTreatment.pationtId));
 
       // עדכון ה-state המקומי עם ערכים מהטיפול הנוכחי
@@ -223,6 +528,7 @@ export const TreatmentReport = () => {
       }}
     >
       <Paper
+        ref={reportRef}  // הוספת ה-ref כאן
         elevation={5}
         className="treatment-report-paper"
         sx={{
@@ -234,6 +540,8 @@ export const TreatmentReport = () => {
           background: 'linear-gradient(to bottom, #fff, #fdf5f8)'
         }}
       >
+        {/* המשך הקוד הקיים */}
+
         <Box sx={{
           position: 'absolute',
           top: 0,
@@ -463,6 +771,104 @@ export const TreatmentReport = () => {
               </CardContent>
             </Card>
           </Grid>
+
+          {/* חלק החתימה הדיגיטלית */}
+          <Grid item xs={12} md={6}>
+            <Card
+              className="signature-card card-hover"
+              elevation={3}
+              sx={{
+                height: '100%',
+                borderRadius: 3,
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                '&:hover': {
+                  transform: 'translateY(-5px)',
+                  boxShadow: '0 8px 20px rgba(172, 36, 84, 0.2)'
+                }
+              }}
+            >
+              <CardContent>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <Edit sx={{ color: '#ac2454', mr: 1 }} />
+                  <Typography variant="h6" sx={{ color: '#ac2454', fontWeight: 'bold' }}>
+                    חתימה דיגיטלית
+                  </Typography>
+                </Box>
+
+                <Divider sx={{ mb: 2, backgroundColor: '#ac245433' }} />
+
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                  {signature ? (
+                    <Box sx={{
+                      width: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      border: '1px dashed #ac2454',
+                      borderRadius: 2,
+                      padding: 2,
+                      backgroundColor: 'rgba(255, 255, 255, 0.7)'
+                    }}>
+                      <img
+                        src={signature}
+                        alt="חתימה דיגיטלית"
+                        style={{
+                          maxWidth: '100%',
+                          maxHeight: '100px',
+                          marginBottom: '10px'
+                        }}
+                      />
+                      <Typography variant="caption" sx={{ color: '#666', mb: 1 }}>
+                        החתימה נשמרה בהצלחה
+                      </Typography>
+                      <StyledButton
+                        variant="outlined"
+                        size="small"
+                        onClick={openSignatureDialog}
+                        startIcon={<Edit />}
+                        sx={{
+                          color: '#ac2454',
+                          borderColor: '#ac2454',
+                          '&:hover': { borderColor: '#8e1c44', color: '#8e1c44' },
+                          fontSize: '0.8rem'
+                        }}
+                      >
+                        שינוי חתימה
+                      </StyledButton>
+                    </Box>
+                  ) : (
+                    <Box sx={{
+                      width: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      border: '1px dashed #ac2454',
+                      borderRadius: 2,
+                      padding: 3,
+                      backgroundColor: 'rgba(255, 255, 255, 0.7)'
+                    }}>
+                      <Typography sx={{ color: '#666', mb: 2, textAlign: 'center' }}>
+                        לא נמצאה חתימה. אנא הוסף חתימה דיגיטלית לפני ייצוא ה-PDF.
+                      </Typography>
+                      <StyledButton
+                        variant="contained"
+                        onClick={openSignatureDialog}
+                        startIcon={<Edit />}
+                        sx={{
+                          backgroundColor: '#ac2454',
+                          color: 'white',
+                          '&:hover': { backgroundColor: '#8e1c44' },
+                          fontSize: '0.9rem'
+                        }}
+                      >
+                        הוספת חתימה
+                      </StyledButton>
+                    </Box>
+                  )}
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
 
         <Box sx={{ mt: 3 }} className="next-meeting-container">
@@ -589,7 +995,8 @@ export const TreatmentReport = () => {
                   <Grid item xs={12} md={6}>
                     <Autocomplete
                       freeSolo
-                      options={activitySuggestions}
+                      options={Array.isArray(activitySuggestions) ? activitySuggestions.map(activity => 
+                        activity && activity.activityName ? activity.activityName : '') : []}
                       value={aimActivities[aim.aimId]?.activityName || ''}
                       onChange={(_, newValue) => handleActivityChange(aim.aimId, 'activityName', newValue)}
                       renderOption={(props, option) => (
@@ -605,16 +1012,6 @@ export const TreatmentReport = () => {
                           fullWidth
                           size="medium"
                           placeholder="בחר או הזן פעילות חדשה..."
-                          // InputProps={{
-                          //   ...params.InputProps,
-                          //   startAdornment: (
-                          //     <>
-                          //       {params.InputProps.startAdornment}
-                          //     </>
-                          //   ),
-                          //   sx: { borderRadius: 2 }
-                          // }}
-                          className="activity-input input-focus"
                         />
                       )}
                     />
@@ -651,11 +1048,11 @@ export const TreatmentReport = () => {
                     }}
                     className="suggestions-chips"
                   >
-                    {/* {activitySuggestions.slice(0, 5).map((activity, index) => (
+                    {activitySuggestions.slice(0, 5).map((activity, index) => (
                       <Chip
                         key={index}
-                        label={activity}
-                        onClick={() => handleActivityChange(aim.aimId, 'activityName', activity)}
+                        label={activity.activityName}
+                        onClick={() => handleActivityChange(aim.aimId, 'activityName', activity.activityName)}
                         sx={{
                           borderRadius: '20px',
                           transition: 'all 0.2s ease',
@@ -666,7 +1063,7 @@ export const TreatmentReport = () => {
                         }}
                         className="suggestion-chip"
                       />
-                    ))} */}
+                    ))}
                   </Box>
                 </Box>
               </Paper>
@@ -675,66 +1072,261 @@ export const TreatmentReport = () => {
         </Box>
 
         <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mt: 4 }} className="actions-container">
-          <StyledButton
-            variant="contained"
-            onClick={confirm}
-            disabled={saving}
-            sx={{
-              backgroundColor: '#ac2454',
-              color: 'white',
-              '&:hover': { backgroundColor: '#8e1c44' },
-              minWidth: 150,
-              fontSize: '1rem'
-            }}
-            startIcon={saving ? <CircularProgress size={20} color="inherit" /> : <CheckCircle />}
-            className="confirm-button button-hover"
-          >
-            {saving ? 'שומר...' : 'אישור'}
-          </StyledButton>
+  <StyledButton
+    variant="contained"
+    onClick={generateProfessionalPDF}
+    disabled={saving || exportingPdf}
+    sx={{
+      backgroundColor: '#ac2454',
+      color: 'white',
+      '&:hover': { backgroundColor: '#8e1c44' },
+      minWidth: 150,
+      fontSize: '1rem'
+    }}
+    startIcon={exportingPdf ? <CircularProgress size={20} color="inherit" /> : <PictureAsPdf />}
+    className="pdf-button button-hover"
+  >
+    {exportingPdf ? 'מייצא...' : 'ייצוא דוח מקצועי'}
+  </StyledButton>
 
-          <StyledButton
-            variant="outlined"
-            onClick={() => navigate('/calender')}
-            disabled={saving}
-            sx={{
-              color: '#ac2454',
-              borderColor: '#ac2454',
-              '&:hover': { borderColor: '#8e1c44', color: '#8e1c44' },
-              minWidth: 150,
-              fontSize: '1rem'
-            }}
-            startIcon={<Cancel />}
-            className="cancel-button button-hover"
-          >
-            ביטול
-          </StyledButton>
-        </Box>
+  <StyledButton
+    variant="contained"
+    onClick={confirm}
+    disabled={saving || exportingPdf}
+    sx={{
+      backgroundColor: '#ac2454',
+      color: 'white',
+      '&:hover': { backgroundColor: '#8e1c44' },
+      minWidth: 150,
+      fontSize: '1rem'
+    }}
+    startIcon={saving ? <CircularProgress size={20} color="inherit" /> : <CheckCircle />}
+    className="confirm-button button-hover"
+  >
+    {saving ? 'שומר...' : 'אישור'}
+  </StyledButton>
 
-        {/* אנימציית טעינה */}
-        {saving && (
-          <Box
-            className="saving-overlay"
-            sx={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundColor: 'rgba(255, 255, 255, 0.8)',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              zIndex: 9999,
-              flexDirection: 'column'
-            }}
-          >
-            <CircularProgress size={60} sx={{ color: '#ac2454' }} />
-            <Typography variant="h6" sx={{ mt: 2, color: '#ac2454', fontWeight: 'bold' }}>
-              שומר את סיכום הטיפול...
-            </Typography>
-          </Box>
-        )}
+  <StyledButton
+    variant="outlined"
+    onClick={() => navigate('/calender')}
+    disabled={saving || exportingPdf}
+    sx={{
+      color: '#ac2454',
+      borderColor: '#ac2454',
+      '&:hover': { borderColor: '#8e1c44', color: '#8e1c44' },
+      minWidth: 150,
+      fontSize: '1rem'
+    }}
+    startIcon={<Cancel />}
+    className="cancel-button button-hover"
+  >
+    ביטול
+  </StyledButton>
+</Box>
+
+{/* דיאלוג החתימה */}
+<Dialog 
+  open={signatureDialogOpen} 
+  onClose={closeSignatureDialog}
+  maxWidth="sm"
+  fullWidth
+>
+  <DialogTitle sx={{ backgroundColor: '#ac2454', color: 'white', textAlign: 'center' }}>
+    חתימה דיגיטלית
+    <IconButton
+      aria-label="close"
+      onClick={closeSignatureDialog}
+      sx={{
+        position: 'absolute',
+        right: 8,
+        top: 8,
+        color: 'white',
+      }}
+    >
+      <Close />
+    </IconButton>
+  </DialogTitle>
+  <DialogContent sx={{ padding: 3 }}>
+    <Typography variant="body1" sx={{ mb: 2, textAlign: 'center' }}>
+      נא לחתום
+    </Typography>
+    <Box 
+      sx={{ 
+        border: '1px solid #ccc', 
+        borderRadius: 2, 
+        height: 200, 
+        backgroundColor: 'white',
+        boxShadow: 'inset 0 0 5px rgba(0,0,0,0.1)'
+      }}
+    >
+      <canvas 
+        ref={canvasRef} 
+        style={{ width: '100%', height: '100%', touchAction: 'none' }}
+      />
+    </Box>
+  </DialogContent>
+  <DialogActions sx={{ padding: 2, justifyContent: 'center', gap: 2 }}>
+    <Button 
+      variant="outlined" 
+      onClick={clearSignature}
+      startIcon={<Cancel />}
+      sx={{ borderColor: '#ac2454', color: '#ac2454' }}
+    >
+      נקה
+    </Button>
+    <Button 
+      variant="contained" 
+      onClick={saveSignature}
+      startIcon={<Save />}
+      sx={{ backgroundColor: '#ac2454', '&:hover': { backgroundColor: '#8e1c44' } }}
+    >
+      שמור חתימה
+    </Button>
+  </DialogActions>
+</Dialog>
+
+{/* אנימציית טעינה בזמן ייצוא PDF */}
+{exportingPdf && (
+  <Box
+    className="exporting-overlay"
+    sx={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(255, 255, 255, 0.8)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 9999,
+      flexDirection: 'column'
+    }}
+  >
+    <CircularProgress size={60} sx={{ color: '#ac2454' }} />
+    <Typography variant="h6" sx={{ mt: 2, color: '#ac2454', fontWeight: 'bold' }}>
+      מייצא דוח מקצועי...
+    </Typography>
+  </Box>
+)}
+
       </Paper>
+
+      {/* דיאלוג החתימה הדיגיטלית */}
+      <Dialog
+        open={signatureDialogOpen}
+        onClose={closeSignatureDialog}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 3,
+            padding: 2,
+            background: 'linear-gradient(to bottom, #fff, #fdf5f8)'
+          }
+        }}
+      >
+        <DialogTitle sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          color: '#ac2454',
+          fontWeight: 'bold'
+        }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Edit sx={{ mr: 1 }} />
+            חתימה דיגיטלית
+          </Box>
+          <IconButton onClick={closeSignatureDialog} size="small" sx={{ color: '#ac2454' }}>
+            <Close />
+          </IconButton>
+        </DialogTitle>
+
+        <Divider sx={{ backgroundColor: '#ac245433' }} />
+
+        <DialogContent>
+          <Typography variant="body2" sx={{ mb: 2, color: '#666', textAlign: 'center' }}>
+            אנא חתום במסגרת למטה באמצעות העכבר או מסך מגע
+          </Typography>
+
+          <Box sx={{
+            border: '2px dashed #ac2454',
+            borderRadius: 2,
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            height: 200,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+            <canvas
+              ref={canvasRef}
+              style={{
+                width: '100%',
+                height: '100%',
+                touchAction: 'none',
+                cursor: 'crosshair'
+              }}
+            />
+            {!signaturePadRef.current && (
+              <Typography
+                variant="body2"
+                sx={{
+                  position: 'absolute',
+                  color: '#ac245466',
+                  pointerEvents: 'none'
+                }}
+              >
+                חתום כאן
+              </Typography>
+            )}
+          </Box>
+        </DialogContent>
+
+        <DialogActions sx={{ justifyContent: 'space-between', px: 3, pb: 2 }}>
+          <StyledButton
+            onClick={clearSignature}
+            variant="outlined"
+            startIcon={<Cancel />}
+            sx={{
+              color: '#666',
+              borderColor: '#666',
+              '&:hover': { borderColor: '#444', color: '#444' }
+            }}
+          >
+            נקה
+          </StyledButton>
+
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <StyledButton
+              onClick={closeSignatureDialog}
+              variant="outlined"
+              sx={{
+                color: '#ac2454',
+                borderColor: '#ac2454',
+                '&:hover': { borderColor: '#8e1c44', color: '#8e1c44' }
+              }}
+            >
+              ביטול
+            </StyledButton>
+
+            <StyledButton
+              onClick={saveSignature}
+              variant="contained"
+              startIcon={<Save />}
+              sx={{
+                backgroundColor: '#ac2454',
+                color: 'white',
+                '&:hover': { backgroundColor: '#8e1c44' }
+              }}
+            >
+              שמור חתימה
+            </StyledButton>
+          </Box>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
+

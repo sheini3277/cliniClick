@@ -34,6 +34,23 @@ export const usersSlice = createSlice({
                 treatmentType: "",
                 password: ""
             }
+        },
+        // פונקציית איפוס מורחבת
+        resetAllUserData: (state) => {
+            state.usersList = [];
+            state.loading = false;
+            state.currentUser = {
+                userId: "",
+                firstName: "",
+                lastName: "",
+                phone: "",
+                email: "",
+                treatmentType: "",
+                password: ""
+            };
+            // איפוס כל שדה נוסף שקיים במצב
+            if (state.token) state.token = null;
+            if (state.route) state.route = null;
         }
     },
     extraReducers: (builder) => {
@@ -82,5 +99,4 @@ export const usersSlice = createSlice({
         });
     }
 })
-export const { findUser, resetUser } = usersSlice.actions;
-
+export const { findUser, resetUser, resetAllUserData } = usersSlice.actions;

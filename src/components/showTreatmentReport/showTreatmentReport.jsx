@@ -7,42 +7,29 @@ import 'jspdf-autotable';
 import './showTreatmentReport.css';
 import logoImage from '../../assets/logo.jsx';
 import { useParams } from 'react-router-dom';
+import { getPatientByIdThunk } from '../../redux/slices/getPatientById';
 
 
-const ShowTreatmentReport = ({ treatmentId }) => {
+const ShowTreatmentReport = () => {
   const dispatch = useDispatch();
-  const { curretntTreatment, loading } = useSelector((state) => state.treatment);
-  const patientDetails1 = useSelector((state) => state.patient.currentPatient);
-  const [patientDetails , setPatientDetails] = useState({});
+  const curretntTreatment = useSelector((state) => state.treatment.curretntTreatment);
+  const loading = useSelector((state) => state.treatment.loading);
+  const patient = useSelector(state => state.patient.currentPatient);
   const treatmentDetails = useSelector((state) => state.treatment.currentPatient);
   const logoRef = useRef(null);
   const pdfContainerRef = useRef(null);
   const param = useParams();
 
   useEffect(() => {
-    if (treatmentId) {
-      dispatch(getOneTreatmentThunk(treatmentId));
-    }
-  }, []);
-  useEffect(() => {
-    if (treatmentId) {
-      dispatch(getOneTreatmentThunk(treatmentId));
+    if (param.treatmentId) {
+      dispatch(getOneTreatmentThunk(param.treatmentId));
     }
   }, []);
 
   useEffect(() => {
-    if (curretntTreatment && curretntTreatment.pationtId) {
-      setPatientDetails({
-        id: param.pationtId,
-        name: param.firstName,
-        phone: "050-1234567",
-        email: "israel@example.com",
-        address: "רחוב הרצל 10, תל אביב",
-        birthDate: "01/01/1980",
-        gender: "זכר",
-        medicalHistory: "אין רגישויות ידועות"
-      });
-    }
+
+    dispatch(getPatientByIdThunk(curretntTreatment.patientId));
+
   }, [curretntTreatment]);
 
   const generateProfessionalPDF = () => {
@@ -56,7 +43,7 @@ const ShowTreatmentReport = ({ treatmentId }) => {
     pdfContainer.style.direction = 'rtl';
     pdfContainer.style.position = 'absolute';
     pdfContainer.style.left = '-9999px';
-    
+
     // הוספת תוכן המסמך הרשמי
     pdfContainer.innerHTML = `
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -83,13 +70,13 @@ const ShowTreatmentReport = ({ treatmentId }) => {
       <div style="margin-bottom: 20px;">
         <h2 style="color: #333; border-bottom: 1px solid #ddd; padding-bottom: 5px; font-size: 18px;">פרטי המטופל</h2>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
-          <div style="font-size: 14px;"><strong>שם מלא:</strong> ${patientDetails?.name || ''}</div>
-          <div style="font-size: 14px;"><strong>מספר זיהוי:</strong> ${patientDetails?.id || ''}</div>
-          <div style="font-size: 14px;"><strong>טלפון:</strong> ${patientDetails?.phone || ''}</div>
-          <div style="font-size: 14px;"><strong>דוא"ל:</strong> ${patientDetails?.email || ''}</div>
-          <div style="font-size: 14px;"><strong>כתובת:</strong> ${patientDetails?.address || ''}</div>
-          <div style="font-size: 14px;"><strong>תאריך לידה:</strong> ${patientDetails?.birthDate || ''}</div>
-          <div style="font-size: 14px;"><strong>מגדר:</strong> ${patientDetails?.gender || ''}</div>
+          <div style="font-size: 14px;"><strong>שם מלא:</strong> ${patient?.firstName || ''}</div>
+          <div style="font-size: 14px;"><strong>מספר זיהוי:</strong> ${patient?.pationtId || ''}</div>
+          <div style="font-size: 14px;"><strong>טלפון:</strong> ${patient?.phone || ''}</div>
+          <div style="font-size: 14px;"><strong>דוא"ל:</strong> ${patient?.email || ''}</div>
+          <div style="font-size: 14px;"><strong>כתובת:</strong> ${patient?.address || ''}</div>
+          <div style="font-size: 14px;"><strong>תאריך לידה:</strong> ${patient?.birthDate || ''}</div>
+          <div style="font-size: 14px;"><strong>מגדר:</strong> ${patient?.gender || ''}</div>
         </div>
       </div>
       
@@ -100,10 +87,9 @@ const ShowTreatmentReport = ({ treatmentId }) => {
           <div style="font-size: 14px;"><strong>שעת הטיפול:</strong> ${curretntTreatment.treatmentTime || 'לא צוין'}</div>
           <div style="font-size: 14px;"><strong>הגיע לטיפול:</strong> ${curretntTreatment.isComing ? 'כן' : 'לא'}</div>
           <div style="font-size: 14px;"><strong>מלווה:</strong> ${curretntTreatment.escort || 'ללא מלווה'}</div>
-          <div style="font-size: 14px;"><strong>שיתוף פעולה:</strong> ${
-            curretntTreatment.cooperation === null ? 'לא צוין' :
-            curretntTreatment.cooperation === true ? 'טוב' : 'חלקי'
-          }</div>
+          <div style="font-size: 14px;"><strong>שיתוף פעולה:</strong> ${curretntTreatment.cooperation === null ? 'לא צוין' :
+        curretntTreatment.cooperation === true ? 'טוב' : 'חלקי'
+      }</div>
           <div style="font-size: 14px;"><strong>תכנון פגישה הבאה:</strong> ${curretntTreatment.nextMeetingPlanning || 'לא נקבע'}</div>
           <div style="font-size: 14px;"><strong>סטטוס תשלום:</strong> ${curretntTreatment.bePaid ? 'שולם' : 'לא שולם'}</div>
         </div>
@@ -126,7 +112,7 @@ const ShowTreatmentReport = ({ treatmentId }) => {
         <div style="width: 45%;">
           <p style="font-size: 14px; margin-bottom: 5px;"><strong>חתימת המטופל/ת:</strong></p>
           <div style="border-bottom: 1px solid #000; height: 40px;"></div>
-          <p style="font-size: 12px; margin-top: 5px;">שם המטופל/ת: ${patientDetails?.name || ''}</p>
+          <p style="font-size: 12px; margin-top: 5px;">שם המטופל/ת: ${patient?.name || ''}</p>
         </div>
       </div>
       
@@ -135,10 +121,10 @@ const ShowTreatmentReport = ({ treatmentId }) => {
         <p>המסמך נחתם דיגיטלית ומאושר לשימוש רשמי</p>
       </div>
     `;
-    
+
     // הוספת האלמנט לדף
     document.body.appendChild(pdfContainer);
-    
+
     // יצירת ה-PDF
     html2canvas(pdfContainer, {
       scale: 2,
@@ -150,7 +136,7 @@ const ShowTreatmentReport = ({ treatmentId }) => {
     }).then(canvas => {
       // הסרת האלמנט מהדף
       document.body.removeChild(pdfContainer);
-      
+
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -160,14 +146,14 @@ const ShowTreatmentReport = ({ treatmentId }) => {
       const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
       const imgX = (pdfWidth - imgWidth * ratio) / 2;
       const imgY = 0;
-      
+
       pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
-      
+
       // הוספת מספור עמודים
       pdf.setFontSize(8);
       pdf.setTextColor(150, 150, 150);
       pdf.text(`עמוד 1 מתוך 1`, pdfWidth / 2, pdfHeight - 5, { align: 'center' });
-      
+
       pdf.save(`דוח_טיפול_${curretntTreatment.treatmentId}_${new Date().toISOString().split('T')[0]}.pdf`);
     }).catch(error => {
       console.error('שגיאה ביצירת ה-PDF:', error);
@@ -184,18 +170,18 @@ const ShowTreatmentReport = ({ treatmentId }) => {
     );
   }
 
-  if (!curretntTreatment || !curretntTreatment.treatmentId) {
+  if (param.treatmentId === null || param.treatmentId === undefined) {
     return <div className="treatment-error">לא נמצאו פרטי טיפול</div>;
   }
 
   return (
     <div className="treatment-details-wrapper">
       <img ref={logoRef} src={logoImage} alt="Logo" style={{ display: 'none' }} />
-      
+
       <div id="treatment-details-container" className="treatment-details-container">
         <div className="treatment-header">
           <h2>פרטי טיפול</h2>
-          <div className="treatment-id">מזהה טיפול: {curretntTreatment.treatmentId}</div>
+          <div className="treatment-id">מזהה טיפול:😊😊👍 {param.treatmentId}</div>
         </div>
 
         <div className="treatment-info-grid">
@@ -224,7 +210,7 @@ const ShowTreatmentReport = ({ treatmentId }) => {
               <span className="info-label">שיתוף פעולה:</span>
               <span className="info-value">{
                 curretntTreatment.cooperation === null ? 'לא צוין' :
-                curretntTreatment.cooperation === true ? 'טוב' : 'חלקי'
+                  curretntTreatment.cooperation === true ? 'טוב' : 'חלקי'
               }</span>
             </div>
             <div className="info-row">
@@ -234,43 +220,43 @@ const ShowTreatmentReport = ({ treatmentId }) => {
             <div className="info-row">
               <span className="info-label">סטטוס תשלום:</span>
               <span className="info-value status-indicator">
-              <span className={`status-dot ${curretntTreatment.bePaid ? 'status-green' : 'status-red'}`}></span>
+                <span className={`status-dot ${curretntTreatment.bePaid ? 'status-green' : 'status-red'}`}></span>
                 {curretntTreatment.bePaid ? 'שולם' : 'לא שולם'}
               </span>
             </div>
           </div>
 
-          {patientDetails && (
+          {patient && (
             <div className="treatment-card">
               <h3>פרטי המטופל</h3>
               <div className="info-row">
                 <span className="info-label">שם:</span>
-                <span className="info-value">{patientDetails.name}</span>
+                <span className="info-value">{patient.firstName}</span>
               </div>
               <div className="info-row">
                 <span className="info-label">טלפון:</span>
-                <span className="info-value">{patientDetails.phone}</span>
+                <span className="info-value">{patient.phone}</span>
               </div>
               <div className="info-row">
                 <span className="info-label">דוא"ל:</span>
-                <span className="info-value">{patientDetails.email}</span>
+                <span className="info-value">{patient.email}</span>
               </div>
               <div className="info-row">
                 <span className="info-label">כתובת:</span>
-                <span className="info-value">{patientDetails.address}</span>
+                <span className="info-value">{patient.address}</span>
               </div>
               <div className="info-row">
                 <span className="info-label">תאריך לידה:</span>
-                <span className="info-value">{patientDetails.birthDate}</span>
+                <span className="info-value">{patient.birthDate}</span>
               </div>
               <div className="info-row">
                 <span className="info-label">מגדר:</span>
-                <span className="info-value">{patientDetails.gender}</span>
+                <span className="info-value">{patient.gender}</span>
               </div>
             </div>
           )}
         </div>
-        
+
         <div className="treatment-notes">
           <h3>הערות והמלצות</h3>
           <div className="notes-content">
@@ -278,7 +264,7 @@ const ShowTreatmentReport = ({ treatmentId }) => {
           </div>
         </div>
       </div>
-      
+
       <div className="treatment-actions">
         <button className="btn-primary" onClick={generateProfessionalPDF}>
           <i className="fas fa-file-pdf"></i> ייצוא דוח מקצועי
