@@ -32,7 +32,7 @@ namespace Bl.Services
             return Get();
         }
 
-        public List<BlActivity> Delete(string aimId)
+        public List<BlActivity> Delete(int aimId)
         {
             dal.Activity.Delete(aimId);
             return Get();

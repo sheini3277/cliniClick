@@ -2,48 +2,104 @@
 using Bl.Models;
 using Dal.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 
 namespace Server.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
     public class aimController : Controller
     {
-        IblAim aims;
+        private readonly IblAim aims;
 
         public aimController(Ibl manager)
         {
             aims = manager.Aim;
         }
+
         [HttpGet]
-        public List<BlAim> Get()
+        public IActionResult Get()
         {
-            return aims.Get();
+            try
+            {
+                var result = aims.Get();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"שגיאת שרת פנימית: {ex.Message}");
+            }
         }
 
         [HttpPost("AddAim")]
-        public List<BlAim> Create(BlAim aim)
+        public IActionResult Create(BlAim aim)
         {
-            return aims.Create(aim);
+            try
+            {
+                var result = aims.Create(aim);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"שגיאת שרת פנימית: {ex.Message}");
+            }
         }
-        [HttpPut("UpdateAim")]
-        public List<BlAim> Update(BlAim aim)
+
+        [HttpPost("AddAims")]
+        public IActionResult CreateList(List<BlAim> aimss)
         {
-            return aims.Update(aim);
+            try
+            {
+                var result = aims.CreateList(aimss);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"שגיאת שרת פנימית: {ex.Message}");
+            }
         }
-        [HttpDelete("Delete")]
-        public List<BlAim> Delete(string aimId)
+
+        [HttpPut("UpdateAim/{aimId}")]
+        public IActionResult Update(BlAim aim)
         {
-           return aims.Delete(aimId);
+            try
+            {
+                var result = aims.Update(aim);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"שגיאת שרת פנימית: {ex.Message}");
+            }
         }
+
+        [HttpDelete("Delete/{aimId}")]
+        public IActionResult Delete(int aimId)
+        {
+            try
+            {
+                var result = aims.Delete(aimId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"שגיאת שרת פנימית: {ex.Message}");
+            }
+        }
+
         [HttpGet("getByPatientId/{patientId}")]
-        public List<BlAim> GetByPatientId(string patientId)
+        public IActionResult GetByPatientId(string patientId)
         {
-            return aims.GetByPatientId(patientId);
+            try
+            {
+                var result = aims.GetByPatientId(patientId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"שגיאת שרת פנימית: {ex.Message}");
+            }
         }
-
-
     }
 }
-

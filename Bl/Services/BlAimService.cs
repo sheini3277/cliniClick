@@ -21,13 +21,28 @@ namespace Bl.Services
         public List<BlAim> Create(BlAim aim)
         {
             dal.Aim.Create(toDal(aim));
+            return GetByPatientId(aim.PaitionId);
+        }
+
+        public List<BlAim> CreateList(List<BlAim> aims)
+        {
+            aims.ForEach(aim => dal.Aim.Create(toDal(aim)));
             return Get();
         }
 
-        public List<BlAim> Delete(string aimId)
+        public List<BlAim> Delete(int aimId)
         {
+            List<Activity> activitiesToDelete = dal.Activity.Get().Where(a => a.ActivityAim == aimId).ToList();
+
+            // מחיקת הפעילויות
+            foreach (Activity activity in activitiesToDelete)
+            {
+                dal.Activity.Delete(activity.ActivityId);
+            }
+            BlAim currentAim = Get().FirstOrDefault(aim => aim.AimId == aimId);
+            string patientId = currentAim?.PaitionId;
             dal.Aim.Delete(aimId);
-            return Get();
+            return GetByPatientId(patientId);
         }
 
         public List<BlAim> Get()
@@ -41,8 +56,10 @@ namespace Bl.Services
         {
             var aList = dal.Aim.Get();
             List<BlAim> list = new();
-            aList.ForEach(a =>
-            list.Add(a.PaitionId == patientId ? toBl(a) : null));
+            aList.ForEach(a => {
+                if (a.PaitionId == patientId)
+                    list.Add(toBl(a));
+            });
             return list;
         }
 

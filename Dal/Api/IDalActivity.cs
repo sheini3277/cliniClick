@@ -15,6 +15,6 @@ namespace Bl.Api
 
         void Create(Dal.Models.Activity activity);
         void Update(Dal.Models.Activity activity);
-        void Delete(string activityId);
+        void Delete(int activityId);
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Bl.Api
 {
-    public interface IblTreatment
+    public interface IblTreatment : Icrud<BlTreatment>
     {
         List<BlTreatment> Get();
         List<BlTreatment> Create(BlTreatment treatment);

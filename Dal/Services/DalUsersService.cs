@@ -19,8 +19,23 @@ namespace Dal.Services
 
         public void Create(User user)
         {
-            dbcontext.Users.Add(user);
-            dbcontext.SaveChanges();
+            try
+            {
+                dbcontext.Users.Add(user);
+                try
+                {
+                    dbcontext.SaveChanges();
+                }
+
+                catch
+                {
+                    dbcontext.Users.Local.Remove(user);
+                }
+            }
+            catch
+            {
+
+            }
         }
 
         public List<User> Get()

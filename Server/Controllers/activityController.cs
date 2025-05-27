@@ -1,48 +1,90 @@
 ﻿using Bl.Api;
 using Bl.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 
 namespace Server.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
     public class activityController : Controller
     {
-        IblActivity activities;
+        private readonly IblActivity activities;
 
         public activityController(Ibl manager)
         {
             activities = manager.Activity;
         }
+
         [HttpGet]
-        public List<BlActivity> Get()
+        public IActionResult Get()
         {
-            return activities.Get();
+            try
+            {
+                var result = activities.Get();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPost("AddActivity")]
-        public List<BlActivity> Create(BlActivity activity)
+        public IActionResult Create(BlActivity activity)
         {
-            return activities.Create(activity);
+            try
+            {
+                var result = activities.Create(activity);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
+
         [HttpPost("AddActivities")]
-        public List<BlActivity> CreateList(List<BlActivity> activitiesList)
+        public IActionResult CreateList(List<BlActivity> activitiesList)
         {
-            return activities.creatListActivities(activitiesList);
+            try
+            {
+                var result = activities.creatListActivities(activitiesList);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
+
         [HttpPut("UpdateActivity")]
-        public List<BlActivity> Update(BlActivity activity)
+        public IActionResult Update(BlActivity activity)
         {
-            return activities.Update(activity);
+            try
+            {
+                var result = activities.Update(activity);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
+
         [HttpDelete("DeleteActivity")]
-        public List<BlActivity> Delete(string activityId)
+        public IActionResult Delete(int activityId)
         {
-            return activities.Delete(activityId);
+            try
+            {
+                var result = activities.Delete(activityId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
-
-
     }
 }
-

@@ -4,53 +4,104 @@ using Bl.Services;
 using Dal.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 
 namespace Server.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
     public class pationtController : ControllerBase
     {
-        IblPationt pationts;
+        private readonly IblPationt pationts;
 
         public pationtController(Ibl manager)
         {
             pationts = manager.Pationt;
         }
+
         [HttpGet]
-        public List<BlPationt> Get()
+        public IActionResult Get()
         {
-            return pationts.Get(); 
+            try
+            {
+                var result = pationts.Get();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"שגיאת שרת פנימית: {ex.Message}");
+            }
         }
 
         [HttpPost("AddPationt")]
-        public List<BlPationt> Create(BlPationt pationt)
+        public IActionResult Create(BlPationt pationt)
         {
-            return pationts.Create(pationt);
-
+            try
+            {
+                var result = pationts.Create(pationt);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"שגיאת שרת פנימית: {ex.Message}");
+            }
         }
+
         [HttpGet("getByUserId/{userId}")]
-        public List<BlPationt> Get(string userId)
+        public IActionResult Get(string userId)
         {
-            return pationts.GetByUserId(userId);
+            try
+            {
+                var result = pationts.GetByUserId(userId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"שגיאת שרת פנימית: {ex.Message}");
+            }
         }
+
         [HttpPut("UpdatePation/{patientId}")]
-        public List<BlPationt> Update(BlPationt pationt)
+        public IActionResult Update(BlPationt pationt)
         {
-             return pationts.Update(pationt);
+            try
+            {
+                var result = pationts.Update(pationt);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"שגיאת שרת פנימית: {ex.Message}");
+            }
         }
-        [HttpDelete("Delete")]
-        public List<BlPationt> Delete(string pationtId)
+
+        [HttpDelete("Delete/{pationtId}")]
+        public IActionResult Delete(string pationtId)
         {
-            return pationts.Delete(pationtId);
+            try
+            {
+                var result = pationts.Delete(pationtId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"שגיאת שרת פנימית: {ex.Message}");
+            }
         }
+
         [HttpGet("getByPatientId/{patientId}")]
-        public BlPationt GetByPatientId(string patientId)
+        public IActionResult GetByPatientId(string patientId)
         {
-            return pationts.GetByPatientId(patientId);
+            try
+            {
+                var result = pationts.GetByPatientId(patientId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"שגיאת שרת פנימית: {ex.Message}");
+            }
         }
-
-
     }
 }

@@ -12,6 +12,6 @@ namespace Bl.Api
         List<T> Get();
         List<T> Create(T item);
         List<T> Update(T item);
-        List<T> Delete(string id);
+        //List<T> Delete(T id);
     }
 }

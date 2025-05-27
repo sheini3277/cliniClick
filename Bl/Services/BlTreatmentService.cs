@@ -31,14 +31,15 @@ namespace Bl.Services
             {
                 throw new Exception("not valid");
             }
-            return Get();
+            return GetByUserId(treatment.UserId);
 
         }
 
         public List<BlTreatment> Delete(int treatmentId)
         {
+            string userId = GetByTreatmentId(treatmentId).UserId;
             dal.Treatment.Delete(treatmentId);
-            return Get();
+            return GetByUserId(userId);
         }
 
         public List<BlTreatment> Get()
@@ -53,10 +54,13 @@ namespace Bl.Services
         {
             var tList = dal.Treatment.Get();
             List<BlTreatment> list = new();
-            tList.ForEach(t =>
-            list.Add(t.UserId == userId ? toBl(t) : null));
+            tList.ForEach(t => {
+                if (t.UserId == userId)
+                    list.Add(toBl(t));
+             });
             return list;
         }
+
         public BlTreatment GetByTreatmentId(int treatmentId)
         {
             var tList = dal.Treatment.Get();
@@ -67,7 +71,7 @@ namespace Bl.Services
         public List<BlTreatment> Update(BlTreatment treatment)
         {
             dal.Treatment.Update(toDal(treatment));
-            return Get();
+            return GetByUserId(treatment.UserId);
         }
         public Treatment toDal(BlTreatment blt)
 

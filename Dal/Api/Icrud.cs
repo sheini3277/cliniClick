@@ -12,6 +12,6 @@ namespace Dal.Api
         List<T> Get();
         void Create(T item);
         void Update(T item);
-        void Delete(string id);
+        //void Delete(string id);
     }
 }

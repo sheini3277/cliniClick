@@ -12,7 +12,8 @@ namespace Bl.Api
         List<BlAim> Get();
         List<BlAim> Create(BlAim aim);
         List<BlAim> Update(BlAim aim);
-        List<BlAim> Delete(string aimId);
+        List<BlAim> Delete(int aimId);
         List<BlAim> GetByPatientId(string patientId);
+        List<BlAim> CreateList(List<BlAim> aims);
     }
 }

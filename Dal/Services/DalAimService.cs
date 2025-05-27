@@ -19,13 +19,27 @@ namespace Dal.Services
         }
         public void Create(Aim aim)
         {
-            dbcontext.Aims.Add(aim);
-            dbcontext.SaveChanges();
+            try
+            { 
+                dbcontext.Aims.Add(aim);
+                try
+                {
+                         dbcontext.SaveChanges();
+                }
+             
+                catch {
+                    dbcontext.Aims.Local.Remove(aim);
+                }
+            }
+            catch {
+            
+            }
+            
         }
 
-        public void Delete(string aimName)
+        public void Delete(int aimId)
         {
-            Aim a = dbcontext.Aims.ToList().Find(x => x.AimName == aimName);
+            Aim a = dbcontext.Aims.ToList().Find(x => x.AimId == aimId);
             dbcontext.Aims.Remove(a);
             dbcontext.SaveChanges();
         }

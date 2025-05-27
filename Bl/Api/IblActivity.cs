@@ -14,7 +14,7 @@ namespace Bl.Api
 
         List<BlActivity> Create(BlActivity activity);
         List<BlActivity> Update(BlActivity activity);
-        List<BlActivity> Delete(string activityId);
+        List<BlActivity> Delete(int activityId);
         List<BlActivity> creatListActivities(List<BlActivity> activities);
     }
 }

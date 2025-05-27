@@ -30,28 +30,56 @@ namespace Bl.Services
         public List<BlPationt> Create(BlPationt pationt)
         {
             dal.Pationt.Create(toDal(pationt));
-            return Get();
+            return GetByUserId(pationt.TherapistId);
         }
 
         public List<BlPationt> GetByUserId(string userId)
         {
             var pList = dal.Pationt.Get();
             List<BlPationt> list = new();
-            pList.ForEach(p =>
-            list.Add(p.TherapistId == userId ? toBl(p) : null));
+            pList.ForEach(p => {
+                if (p.TherapistId == userId)
+                    list.Add(toBl(p));
+                });
             return list;
         }
 
         public List<BlPationt> Update(BlPationt pationt)
         {
             dal.Pationt.Update(toDal(pationt));
-            return Get();
+            return GetByUserId(pationt.TherapistId);
         }
 
         public List<BlPationt> Delete(string pationtId)
         {
+            var patientAims = dal.Aim.Get().Where(aim => aim.PaitionId == pationtId).ToList();
+
+            // עבור כל מטרה, מחיקת הפעילויות הקשורות אליה
+            foreach (var aim in patientAims)
+            {
+                // מציאת כל הפעילויות הקשורות למטרה
+                var activitiesToDelete = dal.Activity.Get().Where(a => a.ActivityAim == aim.AimId).ToList();
+
+                // מחיקת הפעילויות
+                foreach (var activity in activitiesToDelete)
+                {
+                    dal.Activity.Delete(activity.ActivityId);
+                }
+
+                // מחיקת המטרה עצמה
+                dal.Aim.Delete(aim.AimId);
+            }
+
+            // 2. מחיקת כל הטיפולים של המטופל
+            var treatmentsToDelete = dal.Treatment.Get().Where(t => t.PationtId == pationtId).ToList();
+            foreach (var treatment in treatmentsToDelete)
+            {
+                dal.Treatment.Delete(treatment.TreatmentId);
+            }
+            BlPationt currentPatient = Get().FirstOrDefault(p => p.PationtId == pationtId);
+            string userId = currentPatient?.TherapistId;
             dal.Pationt.Delete(pationtId);
-            return Get();
+            return GetByUserId(userId);
         }
 
         public BlPationt GetByPatientId(string patientId)
@@ -60,6 +88,8 @@ namespace Bl.Services
             BlPationt patient = toBl(pList.Find(p => p.PationtId == patientId));
             return patient;
         }
+
+  
         public BlPationt toBl(Pationt pationt)
         {
             if (pationt != null)

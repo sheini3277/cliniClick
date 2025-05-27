@@ -14,7 +14,7 @@ namespace Bl.Api
         List<Aim> Get();
         void Create(Aim aim);
         void Update(Aim aim);
-        void Delete(string aimId);
+        void Delete(int aimId);
 
     }
 }

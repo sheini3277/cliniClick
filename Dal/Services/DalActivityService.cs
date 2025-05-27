@@ -19,12 +19,27 @@ namespace Dal.Services
         }
         public void Create(Activity activity)
         {
-            dbcontext.Activities.Add(activity);
-            dbcontext.SaveChanges();
+            try
+            {
+                dbcontext.Activities.Add(activity);
+                try
+                {
+                    dbcontext.SaveChanges();
+                }
+
+                catch
+                {
+                    dbcontext.Activities.Local.Remove(activity);
+                }
+            }
+            catch
+            {
+
+            }
         }
-        public void Delete(string activity)
+        public void Delete(int activityId)
         {
-            Activity a = dbcontext.Activities.ToList().Find(x => x.Activity1 == activity);
+            Activity a = dbcontext.Activities.ToList().Find(x => x.ActivityId == activityId);
             dbcontext.Activities.Remove(a);
             dbcontext.SaveChanges();
         }
